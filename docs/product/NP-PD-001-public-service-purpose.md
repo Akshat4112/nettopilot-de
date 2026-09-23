@@ -1,6 +1,6 @@
 # NP-PD-001 — Public-service purpose
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-001  
 **Milestone:** M0 Plan  
 **Last updated:** 2026-09-23
@@ -77,7 +77,7 @@ NettoPilot DE should help a user answer these questions:
 
 The service is intended for employees, job seekers and households making employment-income decisions in Germany. It should be particularly useful to newcomers, students entering full-time work, first-time employees, people comparing offers, couples planning household income, and workers for whom a payroll surprise would create financial stress.
 
-Detailed user groups, needs and scenarios are defined separately in **NP-PD-002**.
+Detailed user groups, needs and scenarios are defined in [NP-PD-002 — Primary user groups and needs](NP-PD-002-primary-user-groups.md).
 
 ## Public-service principles
 

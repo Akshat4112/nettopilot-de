@@ -173,7 +173,7 @@ The 0.6-point surcharge applies:
 - only when recognised parent status is absent;
 - on the same capped contribution base as the base contribution.
 
-For a birthday on any day in March, the surcharge begins with April payroll. A childless member aged 23 or younger during the whole payroll month pays the ordinary base employee share.
+For a birthday on any day in March, the surcharge begins with April payroll. A childless member pays the ordinary base employee share through the end of the month in which the 23rd birthday occurs; the surcharge starts in the following month.
 
 Statutory exceptions include members born before 1 January 1940, qualifying military/civil-service cases and recipients specified in SGB XI section 55(3). Those paths are outside the ordinary v1 employee scope. If encountered, mark the case unsupported rather than charging the surcharge.
 

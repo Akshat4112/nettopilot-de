@@ -1,6 +1,6 @@
 # NP-PD-005 — Calculator output specification
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-005  
 **Milestone:** M0 Plan  
 **Depends on:** [NP-PD-004](NP-PD-004-salary-calculator-inputs.md)  
@@ -555,3 +555,8 @@ The frontend must not calculate totals, rates or deltas from formatted strings.
 - [x] Warnings, incomplete, unsupported and error states are defined.
 - [x] Source and version metadata is specified.
 - [x] Individual and simple couple-total boundaries are explicit.
+
+
+## Follow-on specification
+
+Offer-comparison dimensions, compatibility rules and break-even analyses are defined in [NP-PD-006](NP-PD-006-offer-comparison-dimensions.md).

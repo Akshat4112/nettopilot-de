@@ -1,6 +1,6 @@
 # NP-PD-006 — Offer-comparison dimensions specification
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-006  
 **Milestone:** M0 Plan  
 **Depends on:** [NP-PD-002](NP-PD-002-primary-user-groups.md), [NP-PD-004](NP-PD-004-salary-calculator-inputs.md), [NP-PD-005](NP-PD-005-calculator-outputs.md)  
@@ -488,3 +488,8 @@ The frontend must not calculate deltas or break-even values from formatted strin
 - [x] German and English core labels are included.
 - [x] Neutral-summary rules prohibit an objective “best offer” claim.
 - [x] Metadata, privacy, accessibility and engineering requirements are included.
+
+
+## Follow-on specification
+
+Browser-only processing, local storage, analytics, export/import and privacy controls are defined in [NP-PD-007](NP-PD-007-privacy-model.md).

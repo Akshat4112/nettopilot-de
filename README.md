@@ -26,6 +26,7 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-PD-004 — Salary calculator input specification](docs/product/NP-PD-004-salary-calculator-inputs.md)
 - [NP-PD-005 — Calculator output specification](docs/product/NP-PD-005-calculator-outputs.md)
 - [NP-PD-006 — Offer-comparison dimensions specification](docs/product/NP-PD-006-offer-comparison-dimensions.md)
+- [NP-PD-007 — Privacy model](docs/product/NP-PD-007-privacy-model.md)
 
 ## Planned deployment
 

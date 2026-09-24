@@ -1,6 +1,6 @@
 # NP-PD-008 — Launch success measures
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-008  
 **Milestone:** M0 Plan  
 **Depends on:** [NP-PD-001](NP-PD-001-public-service-purpose.md)  
@@ -530,3 +530,8 @@ Implementation should create:
 - [x] Behavioural targets are explicitly provisional pending a baseline.
 - [x] Analytics complies with NP-PD-007 and excludes salary/personal data.
 - [x] Launch readiness cannot average away a failed mandatory gate.
+
+
+## Follow-on standard
+
+The evidence hierarchy, source-record schema and verification workflow for research and calculation assumptions are defined in [NP-RS-001](../research/NP-RS-001-authoritative-source-standard.md).

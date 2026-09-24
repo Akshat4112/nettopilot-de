@@ -35,6 +35,7 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-RS-002 — BMF payroll-tax algorithm research](docs/research/NP-RS-002-bmf-payroll-tax-algorithm.md)
 - [NP-RS-003 — Annual tax parameters for 2026](docs/research/NP-RS-003-annual-tax-parameters.md)
 - [NP-RS-004 — Pension-insurance rules for 2026](docs/research/NP-RS-004-pension-insurance-rules.md)
+- [NP-RS-005 — Unemployment-insurance rules for 2026](docs/research/NP-RS-005-unemployment-insurance-rules.md)
 
 ## Planned deployment
 

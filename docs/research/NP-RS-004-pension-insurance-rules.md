@@ -1,6 +1,6 @@
 # NP-RS-004 — Pension-insurance rules for 2026
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-004  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-001](NP-RS-001-authoritative-source-standard.md)  

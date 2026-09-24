@@ -1,6 +1,6 @@
 # NP-RS-008 — Solidarity-surcharge calculation for 2026
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-008  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-002](NP-RS-002-bmf-payroll-tax-algorithm.md)  

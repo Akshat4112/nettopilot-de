@@ -1,10 +1,11 @@
 # NP-PD-003 — Version-one employment scope
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-003  
 **Milestone:** M0 Plan  
 **Depends on:** NP-PD-001  
-**Last updated:** 2026-09-24
+**Last updated:** 2026-09-24  
+**Follow-on:** [NP-PD-004 — Salary calculator input specification](NP-PD-004-salary-calculator-inputs.md)
 
 ## Purpose
 

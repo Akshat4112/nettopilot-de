@@ -1,6 +1,6 @@
 # NP-RS-003 — Annual tax parameters for 2026
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-003  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-002](NP-RS-002-bmf-payroll-tax-algorithm.md)  
@@ -307,3 +307,8 @@ A later assumptions implementation should create:
 - [x] Social-insurance, solidarity-surcharge and church-tax boundaries are explicit.
 - [x] Effective-date, versioning and fail-closed requirements are defined.
 - [x] Proposed manifest fields and fixture requirements are included.
+
+
+## Follow-on research
+
+- [NP-RS-004 — Pension-insurance rules for 2026](NP-RS-004-pension-insurance-rules.md)

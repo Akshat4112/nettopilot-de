@@ -23,6 +23,7 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-PD-001 — Public-service purpose](docs/product/NP-PD-001-public-service-purpose.md)
 - [NP-PD-002 — Primary user groups and needs](docs/product/NP-PD-002-primary-user-groups.md)
 - [NP-PD-003 — Version-one employment scope](docs/product/NP-PD-003-v1-employment-scope.md)
+- [NP-PD-004 — Salary calculator input specification](docs/product/NP-PD-004-salary-calculator-inputs.md)
 
 ## Planned deployment
 

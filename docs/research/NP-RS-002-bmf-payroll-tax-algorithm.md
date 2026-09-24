@@ -1,6 +1,6 @@
 # NP-RS-002 — BMF payroll-tax algorithm research
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-002  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-001](NP-RS-001-authoritative-source-standard.md)  
@@ -300,3 +300,8 @@ The next implementation-oriented tasks should produce:
 - [x] Validation, fixture and monitoring requirements are defined.
 - [x] The 24 June 2026 special-case notice is captured without silently broadening scope.
 - [x] Implementation handoff requirements are stated.
+
+
+## Follow-on research
+
+- [NP-RS-003 — Annual tax parameters for 2026](NP-RS-003-annual-tax-parameters.md)

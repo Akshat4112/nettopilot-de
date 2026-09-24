@@ -1,6 +1,6 @@
 # NP-PD-002 — Primary user groups and needs
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-002  
 **Milestone:** M0 Plan  
 **Depends on:** NP-PD-001  
@@ -63,7 +63,7 @@ The following input categories recur across the primary groups. This is a user-n
 - supported child or care-insurance inputs where applicable;
 - any supported exemptions or special employment settings.
 
-Exact fields and authoritative sources are defined by later scope, research and calculation-specification tasks.
+The supported employment boundary is defined in [NP-PD-003 — Version-one employment scope](NP-PD-003-v1-employment-scope.md). Exact fields and authoritative sources are defined by later input, research and calculation-specification tasks.
 
 ### Comparison preferences
 

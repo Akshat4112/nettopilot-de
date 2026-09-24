@@ -1,6 +1,6 @@
 # NP-RS-001 — Authoritative-source standard
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-001  
 **Milestone:** M1 Research  
 **Depends on:** [NP-PD-003](NP-PD-003-v1-employment-scope.md)  
@@ -720,3 +720,8 @@ Implementation should create:
 - [x] German and English citation presentation preserves the German authority.
 - [x] Initial publisher routing is validated against official sources.
 - [x] The policy does not itself approve any tax-year parameter.
+
+
+## Follow-on research
+
+- [NP-RS-002 — BMF payroll-tax algorithm research](NP-RS-002-bmf-payroll-tax-algorithm.md)

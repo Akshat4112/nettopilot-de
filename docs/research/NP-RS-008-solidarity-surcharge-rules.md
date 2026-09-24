@@ -216,8 +216,8 @@ The algebraic crossover is:
 
 Reference crossover bases:
 
-- basic path: EUR 37,839.0625;
-- splitting path: EUR 75,678.1250.
+- basic path: EUR 37,838.28125;
+- splitting path: EUR 75,676.5625.
 
 These are explanatory reference values, not separately rounded legal constants. Exact payroll results follow the PAP's tax-base precision and cent truncation.
 
@@ -305,8 +305,8 @@ These fixtures begin with a verified JBMG or threshold-testing base. They do not
 | EUR 0 | Zero | EUR 0.00 | Not applicable | EUR 0.00 |
 | EUR 20,350 | Zero | EUR 1,119.25 | EUR 0.00 | EUR 0.00 |
 | EUR 25,000 | Taper | EUR 1,375.00 | EUR 553.35 | EUR 553.35 |
-| EUR 37,839 | Taper edge | EUR 2,081.145 | EUR 2,081.191 | EUR 2,081.14 after cent truncation |
-| EUR 37,840 | Full-rate | EUR 2,081.20 | EUR 2,081.31 | EUR 2,081.20 |
+| EUR 37,838 | Taper | EUR 2,081.09 | EUR 2,081.072 | EUR 2,081.07 after cent truncation |
+| EUR 37,839 | Full-rate | EUR 2,081.145 | EUR 2,081.191 | EUR 2,081.14 after cent truncation |
 | EUR 40,000 | Full-rate | EUR 2,200.00 | EUR 2,338.35 | EUR 2,200.00 |
 
 For a monthly wage-payment period, the EUR 25,000 annual-base fixture allocates EUR 46.11 per month because EUR 553.35 × 100 / 12 is floored to 4,611 cents.
@@ -317,7 +317,8 @@ For a monthly wage-payment period, the EUR 25,000 annual-base fixture allocates 
 | ---: | --- | ---: | ---: | ---: |
 | EUR 40,700 | Zero | EUR 2,238.50 | EUR 0.00 | EUR 0.00 |
 | EUR 50,000 | Taper | EUR 2,750.00 | EUR 1,106.70 | EUR 1,106.70 |
-| EUR 75,679 | Full-rate | EUR 4,162.345 | EUR 4,162.501 | EUR 4,162.34 after cent truncation |
+| EUR 75,676 | Taper | EUR 4,162.18 | EUR 4,162.144 | EUR 4,162.14 after cent truncation |
+| EUR 75,677 | Full-rate | EUR 4,162.235 | EUR 4,162.263 | EUR 4,162.23 after cent truncation |
 
 ### 11.3 Other-remuneration gate
 

@@ -69,6 +69,7 @@ The following are not approved by this task:
 | DE-ELSTER-ELSTAM-FAQ | [ELSTER — employee ELStAM FAQ](https://www.elster.de/eportal/start?themaGlobal=help_arbeitnehmer_eop) | Establishment-state availability of church markers and binding ELStAM behavior | Current | Verified |
 | DE-BB-KIST | [Brandenburg tax administration — church tax](https://finanzamt.brandenburg.de/fa/de/steuern/steuerinformationen/kirchensteuer/) | 9% rate, establishment principle, cross-state example, child treatment | Current | Verified |
 | DE-BW-KIST | [Serviceportal Baden-Württemberg — church membership and tax](https://www.service-bw.de/zufi/leistungen/248) | General 8% rate, ELStAM basis and Bad Wimpfen exception | Current | Verified |
+| DE-BW-KIST-2026 | [Baden-Württemberg Ministry of Finance — 2026 church-tax resolutions, FM3-S 2442-3/38, BStBl 2026 I p. 869](https://datenbank.nwb.de/Dokument/1097618/) | 2026 8% general rate and 9% Roman Catholic Bad Wimpfen payroll-establishment exception | 2026 | Verified official notice reproduction |
 | DE-BY-KIST | [Bavarian tax administration — church-tax rate in payroll guidance](https://finanzamt.bayern.de/Informationen/Steuerinfos/Haeufig_gestellte_Fragen/Geringfuegige_Beschaeftigung/default.php) | Bavaria 8% state rate | Current | Corroborating |
 | DE-NI-KIST-RG-11 | [Lower Saxony church-tax framework, section 11](https://voris.wolterskluwer-online.de/browse/document/3ba2a2c8-2db4-350b-872c-4eebef004766) | Downward rounding to full cents | Current | Corroborating state law |
 

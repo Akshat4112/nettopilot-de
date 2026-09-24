@@ -29,6 +29,10 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-PD-007 — Privacy model](docs/product/NP-PD-007-privacy-model.md)
 - [NP-PD-008 — Launch success measures](docs/product/NP-PD-008-launch-success-measures.md)
 
+## Research documentation
+
+- [NP-RS-001 — Authoritative-source standard](docs/research/NP-RS-001-authoritative-source-standard.md)
+
 ## Planned deployment
 
 The public application is planned as a static GitHub Pages project at:

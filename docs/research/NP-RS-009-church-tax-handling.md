@@ -111,17 +111,21 @@ The rate registry must store one explicit record per state even when values are 
 
 ### 3.1 Baden-Württemberg exception
 
-Baden-Württemberg's official guidance states a general rate of 8%, but 9% applies to Roman Catholic members resident in Bad Wimpfen, postcode 74206, including post-office-box and bulk-recipient postcodes.
+The 2026 Baden-Württemberg church-tax resolution preserves a special payroll-establishment case for Bad Wimpfen, postcode 74206, including post-office-box and bulk-recipient postcodes. A payroll establishment in that area applies 9% for Roman Catholic church wage tax; the ordinary Baden-Württemberg rate remains 8% for other supported cases.
 
-The current v1 input contract does not contain denomination plus the location detail required to decide this exception reliably. Therefore:
+The current v1 input contract does not contain the establishment postcode and exception confirmation needed to decide this reliably. Therefore:
 
-- the calculator must disclose the exception when BW is selected;
-- if the user's case may be Roman Catholic Bad Wimpfen, the church-tax result is **unsupported**, not 8%;
-- a future exact path requires an explicit exception question or an authoritative ELStAM/payroll value;
+- the calculator must ask whether the payroll establishment is in postcode area 74206 when BW is selected;
+- if yes, it must ask the user to confirm whether the Roman Catholic 9% payroll exception applies, using a neutral `applies / does_not_apply / unknown` control;
+- `applies` selects 9%;
+- `does_not_apply` selects 8%;
+- `unknown` produces an incomplete result, not an assumed 8%;
 - the exception must not be inferred from a free-text city field;
-- Stuttgart and other ordinary BW payroll cases continue to use 8%.
+- a BW payroll establishment outside 74206 uses 8%;
+- an employee who lives in Bad Wimpfen but is paid from a payroll establishment elsewhere in BW is withheld at that establishment's rate; final assessment may reconcile a residence-based difference;
+- Stuttgart and other ordinary BW payroll establishments continue to use 8%.
 
-This exception is residence-based in the state guidance, while ordinary payroll withholding uses the establishment principle. Engineering must not collapse those concepts into one unlabeled "state" value.
+Engineering must not collapse payroll-establishment location and employee residence into one unlabeled state value.
 
 ## 4. Establishment principle
 
@@ -344,7 +348,7 @@ Return when any required value is unknown, including:
 
 Return for:
 
-- Bad Wimpfen Roman Catholic exception without authoritative payroll value;
+- Bad Wimpfen exception when the user cannot confirm whether it applies;
 - a religious-community treatment not represented by a payroll-applicable ELStAM marker;
 - special or general church money;
 - church-tax capping;
@@ -366,7 +370,7 @@ Return for:
 
 BW-specific warning:
 
-- “Baden-Württemberg generally uses 8%. A Roman Catholic Bad Wimpfen case may use 9% and is not calculated by this version.”
+- “Baden-Württemberg generally uses 8%. A payroll establishment in Bad Wimpfen (74206) uses 9% for the Roman Catholic payroll exception; confirm whether it applies.”
 
 ## 14. Bilingual labels
 
@@ -402,7 +406,8 @@ NP-PD-004 currently contains the state and liability concepts needed for a basic
 | `tax.churchTaxStatus` | Required | `liable`, `not_liable`, `unknown` |
 | `tax.payrollEstablishmentState` | Required for liable result | One of 16 codes |
 | `tax.childAllowanceFactor` | Required for liable exact result | PAP-supported precision |
-| `tax.churchTaxExceptionStatus` | Required when BW exception could apply | `not_applicable`, `applies`, `unknown` |
+| `tax.payrollEstablishmentPostcode` | Required when BW is selected | Valid German postcode; use only for the explicit exception gate |
+| `tax.churchTaxExceptionStatus` | Required when establishment postcode is 74206 | `applies`, `does_not_apply`, `unknown` |
 | PAP R | Derived control | 0 for not liable; non-zero only after liable admission |
 | PAP BK | Engine output | Integer cents |
 | PAP BKS | Engine output | Integer cents |

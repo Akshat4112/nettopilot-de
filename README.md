@@ -32,6 +32,7 @@ The project is currently in product definition. Calculation rules, supported cas
 ## Research documentation
 
 - [NP-RS-001 — Authoritative-source standard](docs/research/NP-RS-001-authoritative-source-standard.md)
+- [NP-RS-002 — BMF payroll-tax algorithm research](docs/research/NP-RS-002-bmf-payroll-tax-algorithm.md)
 
 ## Planned deployment
 

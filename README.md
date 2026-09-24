@@ -36,6 +36,7 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-RS-003 — Annual tax parameters for 2026](docs/research/NP-RS-003-annual-tax-parameters.md)
 - [NP-RS-004 — Pension-insurance rules for 2026](docs/research/NP-RS-004-pension-insurance-rules.md)
 - [NP-RS-005 — Unemployment-insurance rules for 2026](docs/research/NP-RS-005-unemployment-insurance-rules.md)
+- [NP-RS-006 — Statutory health-insurance rules for 2026](docs/research/NP-RS-006-statutory-health-insurance-rules.md)
 
 ## Planned deployment
 

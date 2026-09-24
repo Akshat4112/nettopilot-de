@@ -1,6 +1,6 @@
 # NP-PD-007 — Privacy model
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-007  
 **Milestone:** M0 Plan  
 **Depends on:** [NP-PD-003](NP-PD-003-v1-employment-scope.md)  
@@ -516,3 +516,8 @@ Core calculation code must not depend on analytics, consent or a remote service.
 - [x] Shared-device, extension, export and supply-chain threats are documented.
 - [x] Verification includes canary and outbound-request tests.
 - [x] Future accounts/cloud storage require a new design.
+
+
+## Follow-on specification
+
+Privacy-safe product metrics, quality gates and launch-readiness evidence are defined in [NP-PD-008](NP-PD-008-launch-success-measures.md).

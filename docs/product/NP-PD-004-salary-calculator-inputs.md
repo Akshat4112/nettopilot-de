@@ -1,10 +1,11 @@
 # NP-PD-004 — Salary calculator input specification
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-PD-004  
 **Milestone:** M0 Plan  
 **Depends on:** [NP-PD-003](NP-PD-003-v1-employment-scope.md)  
-**Last updated:** 2026-09-24
+**Last updated:** 2026-09-24  
+**Follow-on:** [NP-PD-005 — Calculator output specification](NP-PD-005-calculator-outputs.md)
 
 ## Purpose
 

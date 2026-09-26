@@ -1,0 +1,555 @@
+{
+  "schemaVersion": "1.0.0",
+  "fixtureSetId": "de-payroll-reference-2026-v1",
+  "calculationYear": 2026,
+  "verifiedOn": "2026-09-26",
+  "currency": "EUR",
+  "moneyUnit": "integer_cents",
+  "purpose": "Independent reference inputs and expected outputs for validating the NettoPilot DE 2026 calculation engine.",
+  "verificationTiers": {
+    "official_exact": "Expected output is copied from an official published check table.",
+    "source_derived_exact": "Expected output is derived only from accepted sourced formulas with the documented rounding rule.",
+    "admission_gate": "Expected product state validates a supported, incomplete, or unsupported boundary; no invented numeric result."
+  },
+  "sources": {
+    "DE-BMF-PAP-2026-A2": {
+      "title": "BMF final 2026 manual wage-tax table program, Annex 2, check tables on pages 21-22",
+      "url": "https://www.bundesfinanzministerium.de/Content/DE/Downloads/Steuern/Steuerarten/Lohnsteuer/Programmablaufplan/2025-11-12-PAP-2026-anlage-2.pdf?__blob=publicationFile&v=2"
+    },
+    "NP-RS-004": {
+      "path": "docs/research/NP-RS-004-pension-insurance-rules.md"
+    },
+    "NP-RS-005": {
+      "path": "docs/research/NP-RS-005-unemployment-insurance-rules.md"
+    },
+    "NP-RS-006": {
+      "path": "docs/research/NP-RS-006-statutory-health-insurance-rules.md"
+    },
+    "NP-RS-007": {
+      "path": "docs/research/NP-RS-007-long-term-care-insurance-rules.md"
+    },
+    "NP-RS-008": {
+      "path": "docs/research/NP-RS-008-solidarity-surcharge-rules.md"
+    },
+    "NP-RS-009": {
+      "path": "docs/research/NP-RS-009-church-tax-handling.md"
+    },
+    "NP-RS-010": {
+      "path": "docs/research/NP-RS-010-private-health-insurance-treatment.md"
+    },
+    "NP-RS-011": {
+      "path": "docs/research/NP-RS-011-bonuses-one-time-payments.md"
+    }
+  },
+  "scenarios": [
+    {
+      "id": "BMF-GEN-030K-I",
+      "family": "payroll_tax",
+      "verificationTier": "official_exact",
+      "description": "General annual wage-tax check-table row, class I, low income.",
+      "inputs": {
+        "oracleMode": "bmf_annual_table",
+        "grossReferenceCents": 3000000,
+        "tableType": "general",
+        "taxClass": 1,
+        "kvzPercent": "2.90",
+        "malvkrvpkv": 0
+      },
+      "expected": {
+        "annualWageTaxCents": 229900
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "DE-BMF-PAP-2026-A2"
+      ]
+    },
+    {
+      "id": "BMF-GEN-050K-II",
+      "family": "payroll_tax",
+      "verificationTier": "official_exact",
+      "description": "General annual wage-tax check-table row, class II.",
+      "inputs": {
+        "oracleMode": "bmf_annual_table",
+        "grossReferenceCents": 5000000,
+        "tableType": "general",
+        "taxClass": 2,
+        "kvzPercent": "2.90",
+        "malvkrvpkv": 0
+      },
+      "expected": {
+        "annualWageTaxCents": 558000
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "DE-BMF-PAP-2026-A2"
+      ]
+    },
+    {
+      "id": "BMF-GEN-060K-III",
+      "family": "payroll_tax",
+      "verificationTier": "official_exact",
+      "description": "General annual wage-tax check-table row, class III splitting path.",
+      "inputs": {
+        "oracleMode": "bmf_annual_table",
+        "grossReferenceCents": 6000000,
+        "tableType": "general",
+        "taxClass": 3,
+        "kvzPercent": "2.90",
+        "malvkrvpkv": 0
+      },
+      "expected": {
+        "annualWageTaxCents": 491800
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "DE-BMF-PAP-2026-A2"
+      ]
+    },
+    {
+      "id": "BMF-GEN-100K-IV",
+      "family": "payroll_tax",
+      "verificationTier": "official_exact",
+      "description": "General annual wage-tax check-table row, class IV, high income.",
+      "inputs": {
+        "oracleMode": "bmf_annual_table",
+        "grossReferenceCents": 10000000,
+        "tableType": "general",
+        "taxClass": 4,
+        "kvzPercent": "2.90",
+        "malvkrvpkv": 0
+      },
+      "expected": {
+        "annualWageTaxCents": 2342600
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "DE-BMF-PAP-2026-A2"
+      ]
+    },
+    {
+      "id": "BMF-GEN-040K-V",
+      "family": "payroll_tax",
+      "verificationTier": "official_exact",
+      "description": "General annual wage-tax check-table row, class V special class algorithm.",
+      "inputs": {
+        "oracleMode": "bmf_annual_table",
+        "grossReferenceCents": 4000000,
+        "tableType": "general",
+        "taxClass": 5,
+        "kvzPercent": "2.90",
+        "malvkrvpkv": 0
+      },
+      "expected": {
+        "annualWageTaxCents": 882400
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "DE-BMF-PAP-2026-A2"
+      ]
+    },
+    {
+      "id": "BMF-GEN-070K-VI",
+      "family": "payroll_tax",
+      "verificationTier": "official_exact",
+      "description": "General annual wage-tax check-table row, class VI.",
+      "inputs": {
+        "oracleMode": "bmf_annual_table",
+        "grossReferenceCents": 7000000,
+        "tableType": "general",
+        "taxClass": 6,
+        "kvzPercent": "2.90",
+        "malvkrvpkv": 0
+      },
+      "expected": {
+        "annualWageTaxCents": 1944300
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "DE-BMF-PAP-2026-A2"
+      ]
+    },
+    {
+      "id": "BMF-SPECIAL-060K-I",
+      "family": "payroll_tax_adapter",
+      "verificationTier": "official_exact",
+      "description": "BMF special table with no social-insurance branch; adapter validation only, not an admitted ordinary v1 employment scenario.",
+      "inputs": {
+        "oracleMode": "bmf_annual_table",
+        "grossReferenceCents": 6000000,
+        "tableType": "special",
+        "taxClass": 1,
+        "malvkrvpkv": 1
+      },
+      "expected": {
+        "annualWageTaxCents": 1375100,
+        "productAdmission": "unsupported"
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "DE-BMF-PAP-2026-A2"
+      ]
+    },
+    {
+      "id": "SOLI-BASIC-THRESHOLD",
+      "family": "solidarity_surcharge",
+      "verificationTier": "source_derived_exact",
+      "inputs": {
+        "annualAssessmentBaseCents": 2035000,
+        "thresholdPath": "basic"
+      },
+      "expected": {
+        "annualSolidaritySurchargeCents": 0
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-008"
+      ]
+    },
+    {
+      "id": "SOLI-BASIC-TAPER",
+      "family": "solidarity_surcharge",
+      "verificationTier": "source_derived_exact",
+      "inputs": {
+        "annualAssessmentBaseCents": 2500000,
+        "thresholdPath": "basic"
+      },
+      "expected": {
+        "annualSolidaritySurchargeCents": 55335
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-008"
+      ]
+    },
+    {
+      "id": "SOLI-BASIC-FULL",
+      "family": "solidarity_surcharge",
+      "verificationTier": "source_derived_exact",
+      "inputs": {
+        "annualAssessmentBaseCents": 4000000,
+        "thresholdPath": "basic"
+      },
+      "expected": {
+        "annualSolidaritySurchargeCents": 220000
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-008"
+      ]
+    },
+    {
+      "id": "SI-STAT-4000-BW-CHILDLESS",
+      "family": "social_insurance",
+      "verificationTier": "source_derived_exact",
+      "description": "Ordinary full month, statutory insurance, published-average GKV rate, childless employee over 23 outside Saxony.",
+      "inputs": {
+        "monthlyLiablePayCents": 400000,
+        "contributionDays": 30,
+        "state": "BW",
+        "healthStatus": "statutory_mandatory_general",
+        "additionalHealthRatePercent": "2.90",
+        "parentStatus": "childless",
+        "qualifyingChildren": 0
+      },
+      "expected": {
+        "rvBaseCents": 400000,
+        "kvPvBaseCents": 400000,
+        "employee": {
+          "pensionCents": 37200,
+          "unemploymentCents": 5200,
+          "healthCents": 35000,
+          "careCents": 9600,
+          "totalCents": 87000
+        },
+        "employer": {
+          "pensionCents": 37200,
+          "unemploymentCents": 5200,
+          "healthCents": 35000,
+          "careCents": 7200,
+          "totalCents": 84600
+        }
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-004",
+        "NP-RS-005",
+        "NP-RS-006",
+        "NP-RS-007"
+      ]
+    },
+    {
+      "id": "SI-STAT-BBG-BW-PARENT",
+      "family": "social_insurance",
+      "verificationTier": "source_derived_exact",
+      "description": "Health/care ceiling, recognised parent with one qualifying child outside Saxony.",
+      "inputs": {
+        "monthlyLiablePayCents": 581250,
+        "contributionDays": 30,
+        "state": "BW",
+        "healthStatus": "statutory_mandatory_general",
+        "additionalHealthRatePercent": "2.90",
+        "parentStatus": "parent",
+        "qualifyingChildren": 1
+      },
+      "expected": {
+        "rvBaseCents": 581250,
+        "kvPvBaseCents": 581250,
+        "employee": {
+          "pensionCents": 54056,
+          "unemploymentCents": 7556,
+          "healthCents": 50859,
+          "careCents": 10463,
+          "totalCents": 122934
+        },
+        "employer": {
+          "pensionCents": 54056,
+          "unemploymentCents": 7556,
+          "healthCents": 50859,
+          "careCents": 10463,
+          "totalCents": 122934
+        }
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-004",
+        "NP-RS-005",
+        "NP-RS-006",
+        "NP-RS-007"
+      ]
+    },
+    {
+      "id": "SI-STAT-BBG-SN-CHILDLESS",
+      "family": "social_insurance",
+      "verificationTier": "source_derived_exact",
+      "description": "Health/care ceiling and Saxony care split for a childless employee over 23.",
+      "inputs": {
+        "monthlyLiablePayCents": 581250,
+        "contributionDays": 30,
+        "state": "SN",
+        "healthStatus": "statutory_mandatory_general",
+        "additionalHealthRatePercent": "2.90",
+        "parentStatus": "childless",
+        "qualifyingChildren": 0
+      },
+      "expected": {
+        "rvBaseCents": 581250,
+        "kvPvBaseCents": 581250,
+        "employee": {
+          "pensionCents": 54056,
+          "unemploymentCents": 7556,
+          "healthCents": 50859,
+          "careCents": 16856,
+          "totalCents": 129327
+        },
+        "employer": {
+          "pensionCents": 54056,
+          "unemploymentCents": 7556,
+          "healthCents": 50859,
+          "careCents": 7556,
+          "totalCents": 120027
+        }
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-004",
+        "NP-RS-005",
+        "NP-RS-006",
+        "NP-RS-007"
+      ]
+    },
+    {
+      "id": "SI-STAT-10000-BW-PARENT2",
+      "family": "social_insurance",
+      "verificationTier": "source_derived_exact",
+      "description": "Pay above both assessment ceilings with the two-child care discount.",
+      "inputs": {
+        "monthlyLiablePayCents": 1000000,
+        "contributionDays": 30,
+        "state": "BW",
+        "healthStatus": "statutory_mandatory_general",
+        "additionalHealthRatePercent": "2.90",
+        "parentStatus": "parent",
+        "qualifyingChildren": 2
+      },
+      "expected": {
+        "rvBaseCents": 845000,
+        "kvPvBaseCents": 581250,
+        "employee": {
+          "pensionCents": 78585,
+          "unemploymentCents": 10985,
+          "healthCents": 50859,
+          "careCents": 9009,
+          "totalCents": 149438
+        },
+        "employer": {
+          "pensionCents": 78585,
+          "unemploymentCents": 10985,
+          "healthCents": 50859,
+          "careCents": 10463,
+          "totalCents": 150892
+        }
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-004",
+        "NP-RS-005",
+        "NP-RS-006",
+        "NP-RS-007"
+      ]
+    },
+    {
+      "id": "PKV-SUBSIDY-CAP-BW",
+      "family": "private_insurance",
+      "verificationTier": "source_derived_exact",
+      "inputs": {
+        "assessableEmploymentIncomeMonthlyCents": 600000,
+        "state": "BW",
+        "subsidyEligibleHealthPremiumMonthlyCents": 120000,
+        "subsidyEligibleCarePremiumMonthlyCents": 24000
+      },
+      "expected": {
+        "employerHealthSubsidyCents": 50859,
+        "employerCareSubsidyCents": 10463
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-010"
+      ]
+    },
+    {
+      "id": "PKV-SUBSIDY-LOW-INCOME-BW",
+      "family": "private_insurance",
+      "verificationTier": "source_derived_exact",
+      "inputs": {
+        "assessableEmploymentIncomeMonthlyCents": 400000,
+        "state": "BW",
+        "subsidyEligibleHealthPremiumMonthlyCents": 120000,
+        "subsidyEligibleCarePremiumMonthlyCents": 24000
+      },
+      "expected": {
+        "employerHealthSubsidyCents": 35000,
+        "employerCareSubsidyCents": 7200
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-010"
+      ]
+    },
+    {
+      "id": "CHURCH-ROUND-08",
+      "family": "church_tax_component",
+      "verificationTier": "source_derived_exact",
+      "description": "Component rounding fixture only; does not activate a state whose governing source gate is incomplete.",
+      "inputs": {
+        "churchAssessmentBaseCents": 12345,
+        "rateBasisPoints": 800
+      },
+      "expected": {
+        "churchTaxCents": 987
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-009"
+      ]
+    },
+    {
+      "id": "CHURCH-ROUND-09",
+      "family": "church_tax_component",
+      "verificationTier": "source_derived_exact",
+      "description": "Component rounding fixture only; does not activate a state whose governing source gate is incomplete.",
+      "inputs": {
+        "churchAssessmentBaseCents": 12345,
+        "rateBasisPoints": 900
+      },
+      "expected": {
+        "churchTaxCents": 1111
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-009"
+      ]
+    },
+    {
+      "id": "BONUS-JULY-FULL-LIABLE",
+      "family": "one_time_social_insurance",
+      "verificationTier": "source_derived_exact",
+      "description": "EUR 5,000 July cash bonus after seven EUR 4,000 recurring months; full bonus fits both proportional annual ceilings.",
+      "inputs": {
+        "paymentMonth": 7,
+        "socialInsuranceDays": 210,
+        "priorRecurringPayThroughPaymentMonthCents": 2800000,
+        "priorOneTimeLiablePayCents": 0,
+        "currentBonusCents": 500000,
+        "state": "BW",
+        "parentStatus": "childless",
+        "additionalHealthRatePercent": "2.90"
+      },
+      "expected": {
+        "kvPvProportionalCeilingCents": 4068750,
+        "rvAvProportionalCeilingCents": 5915000,
+        "kvPvHeadroomBeforeBonusCents": 1268750,
+        "rvAvHeadroomBeforeBonusCents": 3115000,
+        "kvPvLiableBonusCents": 500000,
+        "rvAvLiableBonusCents": 500000,
+        "employee": {
+          "pensionCents": 46500,
+          "unemploymentCents": 6500,
+          "healthCents": 43750,
+          "careCents": 12000,
+          "totalCents": 108750
+        },
+        "employer": {
+          "pensionCents": 46500,
+          "unemploymentCents": 6500,
+          "healthCents": 43750,
+          "careCents": 9000,
+          "totalCents": 105750
+        }
+      },
+      "toleranceCents": 0,
+      "sources": [
+        "NP-RS-011",
+        "NP-RS-004",
+        "NP-RS-005",
+        "NP-RS-006",
+        "NP-RS-007"
+      ]
+    },
+    {
+      "id": "BONUS-MARCH-PRIOR-YEAR-UNKNOWN",
+      "family": "admission",
+      "verificationTier": "admission_gate",
+      "inputs": {
+        "paymentMonth": 3,
+        "currentBonusCents": 500000,
+        "sameEmployerPriorYear": "unknown"
+      },
+      "expected": {
+        "resultState": "incomplete",
+        "normalNumericResult": false,
+        "reasonCode": "march_clause_context_missing"
+      },
+      "sources": [
+        "NP-RS-011"
+      ]
+    },
+    {
+      "id": "CHURCH-STATE-SOURCE-GATE",
+      "family": "admission",
+      "verificationTier": "admission_gate",
+      "inputs": {
+        "churchTaxStatus": "liable",
+        "payrollEstablishmentState": "BE",
+        "stateRateVerification": "incomplete"
+      },
+      "expected": {
+        "churchTaxResultState": "incomplete",
+        "normalChurchTaxAmount": false,
+        "reasonCode": "state_rate_or_rounding_source_unverified"
+      },
+      "sources": [
+        "NP-RS-009"
+      ]
+    }
+  ]
+}

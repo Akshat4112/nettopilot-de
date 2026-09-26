@@ -1,0 +1,226 @@
+{
+  "schemaVersion": "1.0.0",
+  "assumptionSetId": "de-payroll-2026-v0.1.0",
+  "calculationYear": 2026,
+  "jurisdiction": "DE",
+  "description": "Non-production example showing the NP-RS-013 data contract with two verified health-insurance parameters.",
+  "completeness": "partial_example",
+  "lifecycle": {
+    "status": "draft",
+    "releaseVersion": "0.1.0",
+    "verifiedAt": "2026-09-26T00:00:00Z",
+    "reviewers": [
+      {
+        "name": "NP-RS-013 working example",
+        "role": "researcher",
+        "reviewedAt": "2026-09-26T00:00:00Z"
+      }
+    ],
+    "productionActivationAllowed": false,
+    "approvedAt": null,
+    "retiredAt": null
+  },
+  "validity": {
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  "engineCompatibility": {
+    "minimumEngineVersion": "0.1.0",
+    "maximumEngineVersionExclusive": "1.0.0"
+  },
+  "supersedes": null,
+  "contentDigest": null,
+  "sources": [
+    {
+      "sourceId": "DE-SGBV-241",
+      "publisherName": "Bundesministerium der Justiz / Bundesamt für Justiz",
+      "publisherType": "authority",
+      "sourceTier": 2,
+      "titleDe": "§ 241 SGB V — Allgemeiner Beitragssatz",
+      "titleEn": "Section 241 SGB V — general contribution rate",
+      "documentType": "law",
+      "officialUrl": "https://www.gesetze-im-internet.de/sgb_5/__241.html",
+      "retrievedUrl": "https://www.gesetze-im-internet.de/sgb_5/__241.html",
+      "language": "de",
+      "jurisdiction": "DE",
+      "ruleCategory": "social.health.general_rate",
+      "calculationYears": [
+        2026
+      ],
+      "effectivePeriod": {
+        "effectiveFrom": "2026-01-01",
+        "effectiveTo": "2026-12-31"
+      },
+      "publicationDate": null,
+      "documentVersion": "consolidated version verified for 2026",
+      "finality": "final",
+      "retrievedAt": "2026-09-26T00:00:00Z",
+      "verifiedAt": "2026-09-26T00:00:00Z",
+      "locator": "§ 241 SGB V",
+      "evidenceRole": "governing",
+      "verificationStatus": "verified",
+      "archiveReason": "Canonical consolidated-law URL retained; repository evidence archive is a later implementation task.",
+      "reviewers": [
+        {
+          "name": "NP-RS-013 working example",
+          "role": "researcher",
+          "reviewedAt": "2026-09-26T00:00:00Z"
+        }
+      ],
+      "notes": "Accepted by NP-RS-006."
+    },
+    {
+      "sourceId": "DE-BMG-GKV-CONTRIBUTIONS-2026",
+      "publisherName": "Bundesministerium für Gesundheit",
+      "publisherType": "ministry",
+      "sourceTier": 4,
+      "titleDe": "Beiträge der gesetzlichen Krankenversicherung",
+      "titleEn": "Statutory health-insurance contributions",
+      "documentType": "faq",
+      "officialUrl": "https://www.bundesgesundheitsministerium.de/beitraege",
+      "retrievedUrl": "https://www.bundesgesundheitsministerium.de/beitraege",
+      "language": "de",
+      "jurisdiction": "DE",
+      "ruleCategory": "social.health.average_additional_rate",
+      "calculationYears": [
+        2026
+      ],
+      "effectivePeriod": {
+        "effectiveFrom": "2026-01-01",
+        "effectiveTo": "2026-12-31"
+      },
+      "publicationDate": null,
+      "documentVersion": "2026 page state",
+      "finality": "final",
+      "retrievedAt": "2026-09-26T00:00:00Z",
+      "verifiedAt": "2026-09-26T00:00:00Z",
+      "locator": "2026 durchschnittlicher Zusatzbeitragssatz",
+      "evidenceRole": "governing",
+      "verificationStatus": "verified",
+      "archiveReason": "Canonical ministry URL retained; repository evidence archive is a later implementation task.",
+      "reviewers": [
+        {
+          "name": "NP-RS-013 working example",
+          "role": "researcher",
+          "reviewedAt": "2026-09-26T00:00:00Z"
+        }
+      ],
+      "notes": "Accepted by NP-RS-006."
+    }
+  ],
+  "parameters": [
+    {
+      "parameterId": "health.2026.general_rate",
+      "category": "social.health.rate",
+      "value": {
+        "kind": "rate",
+        "decimal": "0.146",
+        "basisPoints": 1460
+      },
+      "unit": "ratio",
+      "effectivePeriod": {
+        "effectiveFrom": "2026-01-01",
+        "effectiveTo": "2026-12-31"
+      },
+      "jurisdiction": "DE",
+      "applicability": {
+        "supported": true,
+        "conditions": [
+          "ordinary employee path with statutory sick-pay entitlement"
+        ]
+      },
+      "sourceRefs": [
+        {
+          "sourceId": "DE-SGBV-241",
+          "locator": "§ 241 SGB V",
+          "role": "governing"
+        }
+      ],
+      "derivation": "Direct statutory rate; no numeric transformation.",
+      "rounding": {
+        "mode": "none",
+        "scale": 3,
+        "stage": "Rate is combined with the selected additional rate before monetary rounding."
+      },
+      "verification": {
+        "status": "verified",
+        "verifiedAt": "2026-09-26T00:00:00Z",
+        "reviewers": [
+          {
+            "name": "NP-RS-013 working example",
+            "role": "researcher",
+            "reviewedAt": "2026-09-26T00:00:00Z"
+          }
+        ],
+        "notes": "Matches accepted NP-RS-006."
+      },
+      "supersedesParameterVersion": null,
+      "changeNote": "Initial schema example."
+    },
+    {
+      "parameterId": "health.2026.published_average_additional_rate",
+      "category": "social.health.rate",
+      "value": {
+        "kind": "rate",
+        "decimal": "0.029",
+        "basisPoints": 290
+      },
+      "unit": "ratio",
+      "effectivePeriod": {
+        "effectiveFrom": "2026-01-01",
+        "effectiveTo": "2026-12-31"
+      },
+      "jurisdiction": "DE",
+      "applicability": {
+        "supported": true,
+        "conditions": [
+          "fallback only when the user does not provide an insurer-specific rate"
+        ]
+      },
+      "sourceRefs": [
+        {
+          "sourceId": "DE-BMG-GKV-CONTRIBUTIONS-2026",
+          "locator": "2026 durchschnittlicher Zusatzbeitragssatz",
+          "role": "governing"
+        }
+      ],
+      "derivation": "Published 2.9 percent converted exactly to decimal ratio 0.029.",
+      "rounding": {
+        "mode": "none",
+        "scale": 3,
+        "stage": "Preserve exact rate; monetary rounding occurs in the health-contribution procedure."
+      },
+      "verification": {
+        "status": "verified",
+        "verifiedAt": "2026-09-26T00:00:00Z",
+        "reviewers": [
+          {
+            "name": "NP-RS-013 working example",
+            "role": "researcher",
+            "reviewedAt": "2026-09-26T00:00:00Z"
+          }
+        ],
+        "notes": "Fallback result must be labelled estimated."
+      },
+      "supersedesParameterVersion": null,
+      "changeNote": "Initial schema example."
+    }
+  ],
+  "changeLog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-09-26",
+      "classification": "initial",
+      "summary": "Illustrates the NP-RS-013 schema. It is deliberately incomplete and cannot be activated in production.",
+      "affectedParameterIds": [
+        "health.2026.general_rate",
+        "health.2026.published_average_additional_rate"
+      ],
+      "sourceIds": [
+        "DE-SGBV-241",
+        "DE-BMG-GKV-CONTRIBUTIONS-2026"
+      ],
+      "issueOrPullRequest": "NP-RS-013"
+    }
+  ]
+}

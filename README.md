@@ -39,6 +39,7 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-RS-006 — Statutory health-insurance rules for 2026](docs/research/NP-RS-006-statutory-health-insurance-rules.md)
 - [NP-RS-007 — Long-term-care insurance rules for 2026](docs/research/NP-RS-007-long-term-care-insurance-rules.md)
 - [NP-RS-008 — Solidarity-surcharge calculation for 2026](docs/research/NP-RS-008-solidarity-surcharge-rules.md)
+- [NP-RS-009 — Church-tax handling for 2026](docs/research/NP-RS-009-church-tax-handling.md)
 
 ## Planned deployment
 

@@ -1,6 +1,6 @@
 # NP-RS-013 — Versioned assumptions data
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-013  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-003](NP-RS-003-annual-tax-parameters.md) through [NP-RS-011](NP-RS-011-bonuses-one-time-payments.md)  

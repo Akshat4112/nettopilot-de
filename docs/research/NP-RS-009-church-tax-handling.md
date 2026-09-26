@@ -1,6 +1,6 @@
 # NP-RS-009 — Church-tax handling for 2026
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-009  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-002](NP-RS-002-bmf-payroll-tax-algorithm.md)  

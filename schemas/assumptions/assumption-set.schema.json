@@ -1,0 +1,876 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://akshat4112.github.io/nettopilot-de/schemas/assumptions/assumption-set.schema.json",
+  "title": "NettoPilot DE assumption set",
+  "description": "Versioned, source-traceable payroll assumptions. Released sets are immutable and are loaded locally by calculation year and effective date.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "assumptionSetId",
+    "calculationYear",
+    "jurisdiction",
+    "lifecycle",
+    "validity",
+    "engineCompatibility",
+    "sources",
+    "parameters",
+    "changeLog"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*\\.[0-9]+\\.[0-9]+$"
+    },
+    "assumptionSetId": {
+      "type": "string",
+      "pattern": "^de-payroll-[0-9]{4}-v[1-9][0-9]*\\.[0-9]+\\.[0-9]+$"
+    },
+    "calculationYear": {
+      "type": "integer",
+      "minimum": 2020,
+      "maximum": 2100
+    },
+    "jurisdiction": {
+      "const": "DE"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "completeness": {
+      "enum": [
+        "partial_example",
+        "module_complete",
+        "year_complete"
+      ]
+    },
+    "lifecycle": {
+      "$ref": "#/$defs/lifecycle"
+    },
+    "validity": {
+      "$ref": "#/$defs/effectivePeriod"
+    },
+    "engineCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimumEngineVersion",
+        "maximumEngineVersionExclusive"
+      ],
+      "properties": {
+        "minimumEngineVersion": {
+          "$ref": "#/$defs/semver"
+        },
+        "maximumEngineVersionExclusive": {
+          "$ref": "#/$defs/semver"
+        }
+      }
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^de-payroll-[0-9]{4}-v[1-9][0-9]*\\.[0-9]+\\.[0-9]+$"
+    },
+    "contentDigest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/sourceRecord"
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/parameter"
+      }
+    },
+    "changeLog": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/changeRecord"
+      }
+    }
+  },
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "dateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effectivePeriod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effectiveFrom",
+        "effectiveTo"
+      ],
+      "properties": {
+        "effectiveFrom": {
+          "$ref": "#/$defs/date"
+        },
+        "effectiveTo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "role",
+        "reviewedAt"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "researcher",
+            "calculation_reviewer",
+            "release_approver"
+          ]
+        },
+        "reviewedAt": {
+          "$ref": "#/$defs/dateTime"
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "releaseVersion",
+        "verifiedAt",
+        "reviewers",
+        "productionActivationAllowed"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "draft",
+            "in_review",
+            "approved",
+            "retired"
+          ]
+        },
+        "releaseVersion": {
+          "$ref": "#/$defs/semver"
+        },
+        "verifiedAt": {
+          "$ref": "#/$defs/dateTime"
+        },
+        "reviewers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/reviewer"
+          }
+        },
+        "productionActivationAllowed": {
+          "type": "boolean"
+        },
+        "approvedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "retiredAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "sourceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "publisherName",
+        "publisherType",
+        "sourceTier",
+        "titleDe",
+        "documentType",
+        "officialUrl",
+        "language",
+        "jurisdiction",
+        "ruleCategory",
+        "calculationYears",
+        "effectivePeriod",
+        "publicationDate",
+        "retrievedAt",
+        "verifiedAt",
+        "locator",
+        "evidenceRole",
+        "verificationStatus",
+        "reviewers"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[A-Z0-9][A-Z0-9._-]+$"
+        },
+        "publisherName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisherType": {
+          "enum": [
+            "legislature",
+            "ministry",
+            "authority",
+            "self_government_body",
+            "insurer",
+            "court",
+            "secondary"
+          ]
+        },
+        "sourceTier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "titleDe": {
+          "type": "string",
+          "minLength": 1
+        },
+        "titleEn": {
+          "type": "string"
+        },
+        "documentType": {
+          "enum": [
+            "law",
+            "ordinance",
+            "gazette",
+            "pap",
+            "letter",
+            "circular",
+            "dataset",
+            "table",
+            "faq",
+            "brochure",
+            "calculator",
+            "other"
+          ]
+        },
+        "officialUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "retrievedUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ruleCategory": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "calculationYears": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 2020,
+            "maximum": 2100
+          }
+        },
+        "effectivePeriod": {
+          "$ref": "#/$defs/effectivePeriod"
+        },
+        "publicationDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "documentVersion": {
+          "type": "string"
+        },
+        "finality": {
+          "enum": [
+            "final",
+            "amended",
+            "corrected",
+            "draft",
+            "proposed",
+            "withdrawn"
+          ]
+        },
+        "retrievedAt": {
+          "$ref": "#/$defs/dateTime"
+        },
+        "verifiedAt": {
+          "$ref": "#/$defs/dateTime"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRole": {
+          "enum": [
+            "governing",
+            "implementation",
+            "corroborating",
+            "explanation",
+            "cross_check"
+          ]
+        },
+        "verificationStatus": {
+          "enum": [
+            "candidate",
+            "verified",
+            "conflict",
+            "superseded",
+            "withdrawn"
+          ]
+        },
+        "contentSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "archivePath": {
+          "type": "string"
+        },
+        "archiveReason": {
+          "type": "string"
+        },
+        "reviewers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/reviewer"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "contentSha256",
+            "archivePath"
+          ]
+        },
+        {
+          "required": [
+            "archiveReason"
+          ]
+        }
+      ]
+    },
+    "rounding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "scale",
+        "stage"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "none",
+            "half_up",
+            "half_even",
+            "floor",
+            "ceiling",
+            "truncate"
+          ]
+        },
+        "scale": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "stage": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "supported",
+        "conditions"
+      ],
+      "properties": {
+        "supported": {
+          "type": "boolean"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "unsupportedReasonCode": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]+$"
+        }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "locator",
+        "role"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[A-Z0-9][A-Z0-9._-]+$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "governing",
+            "implementation",
+            "corroborating",
+            "explanation",
+            "cross_check"
+          ]
+        }
+      }
+    },
+    "typedValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "integer"
+            },
+            "value": {
+              "type": "integer"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "decimal"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "minorUnits",
+            "currency",
+            "scale"
+          ],
+          "properties": {
+            "kind": {
+              "const": "money"
+            },
+            "minorUnits": {
+              "type": "integer"
+            },
+            "currency": {
+              "const": "EUR"
+            },
+            "scale": {
+              "const": 2
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "decimal"
+          ],
+          "properties": {
+            "kind": {
+              "const": "rate"
+            },
+            "decimal": {
+              "type": "string",
+              "pattern": "^(?:0|1)(?:\\.[0-9]+)?$"
+            },
+            "basisPoints": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "enum"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "boolean"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "procedureId",
+            "inputs"
+          ],
+          "properties": {
+            "kind": {
+              "const": "formula"
+            },
+            "procedureId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_.-]+$"
+            },
+            "inputs": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_.-]+$"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "columns",
+            "rows"
+          ],
+          "properties": {
+            "kind": {
+              "const": "table"
+            },
+            "columns": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "verifiedAt",
+        "reviewers"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "candidate",
+            "verified",
+            "conflict",
+            "superseded",
+            "withdrawn"
+          ]
+        },
+        "verifiedAt": {
+          "$ref": "#/$defs/dateTime"
+        },
+        "reviewers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/reviewer"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parameterId",
+        "category",
+        "value",
+        "unit",
+        "effectivePeriod",
+        "jurisdiction",
+        "applicability",
+        "sourceRefs",
+        "derivation",
+        "rounding",
+        "verification",
+        "changeNote"
+      ],
+      "properties": {
+        "parameterId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "category": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "value": {
+          "$ref": "#/$defs/typedValue"
+        },
+        "unit": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_./%-]*$"
+        },
+        "effectivePeriod": {
+          "$ref": "#/$defs/effectivePeriod"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applicability": {
+          "$ref": "#/$defs/applicability"
+        },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "derivation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rounding": {
+          "$ref": "#/$defs/rounding"
+        },
+        "verification": {
+          "$ref": "#/$defs/verification"
+        },
+        "supersedesParameterVersion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "changeNote": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "changeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "date",
+        "classification",
+        "summary",
+        "affectedParameterIds",
+        "sourceIds"
+      ],
+      "properties": {
+        "version": {
+          "$ref": "#/$defs/semver"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "classification": {
+          "enum": [
+            "initial",
+            "editorial",
+            "source_metadata",
+            "parameter_change",
+            "algorithm_change",
+            "correction",
+            "emergency"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affectedParameterIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_.-]+$"
+          }
+        },
+        "sourceIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z0-9][A-Z0-9._-]+$"
+          }
+        },
+        "issueOrPullRequest": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "approved"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "productionActivationAllowed": {
+                "const": true
+              },
+              "approvedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "reviewers": {
+                "minItems": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "completeness": {
+            "const": "partial_example"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "productionActivationAllowed": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

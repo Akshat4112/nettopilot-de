@@ -22,9 +22,9 @@ These values may differ. The application must not derive the tax-eligible or sub
 
 For 2026:
 
-- the health-insurance employer subsidy is generally half of the qualifying actual contribution, capped at **EUR 508.59 per month**;
-- the private mandatory-care subsidy is generally half of the qualifying actual contribution, capped at **EUR 104.63 per month** outside Saxony;
-- in Saxony the PPV cap is **EUR 75.56 per month**;
+- the health-insurance employer subsidy is generally half of the qualifying actual contribution and is also capped by the employer comparison amount calculated from the month's assessable employment remuneration; **EUR 508.59** is the maximum only when remuneration reaches the 2026 monthly ceiling;
+- the private mandatory-care subsidy is generally half of the qualifying actual contribution and is also capped by the employer comparison amount calculated from the month's assessable employment remuneration; **EUR 104.63** is the maximum outside Saxony when remuneration reaches the ceiling;
+- in Saxony the maximum PPV cap is **EUR 75.56 per month** when remuneration reaches the ceiling;
 - the health cap is based on the 2026 monthly health/care assessment ceiling of **EUR 5,812.50**, the 14.6% general GKV rate and the 2.9% official average additional rate;
 - the PPV cap uses the employer share of 1.8% outside Saxony and 1.3% in Saxony;
 - childless surcharges and child discounts do not change the employer share or the PPV subsidy cap;
@@ -65,7 +65,7 @@ An exact v1 estimate is supported when all of the following are true:
 - the monthly employer-subsidy-eligible contribution is known or the actual subsidy is copied from payroll;
 - the monthly basic health and mandatory-care amount for the tax allowance is known from ELStAM, insurer information or payroll;
 - the actual tax-free employer subsidy is known or can be calculated without an exception;
-- the employer's payroll-establishment state is known for the Saxony PPV rule;
+- the payroll-relevant place-of-employment state is known for the Saxony PPV rule;
 - contribution changes are represented as separate monthly segments.
 
 The calculator must not infer subsidy eligibility solely because gross salary exceeds the ordinary annual earnings threshold. A private-insured employee can be exempt, grandfathered or in another legal position. The v1 UI requires a confirmation from payroll, the employer or the insurance record.
@@ -76,29 +76,30 @@ The calculator must not infer subsidy eligibility solely because gross salary ex
 
 | Field | Type and unit | Validation | Purpose |
 | --- | --- | --- | --- |
-| `insurance.system` | enum | `private` | Select private path |
-| `insurance.privateCoverageConfirmed` | boolean | Must be true | Confirms exclusive PKV plus PPV |
-| `insurance.employerSubsidyEligibility` | enum | `eligible / not_eligible / unknown` | Controls subsidy result |
-| `insurance.privateTotalHealthMonthly` | money, EUR/month | >= 0; cent precision | Actual PKV health premium paid |
-| `insurance.privateTotalCareMonthly` | money, EUR/month | >= 0; cent precision | Actual PPV premium paid |
-| `insurance.privateTaxEligibleMonthly` | money, EUR/month | >= 0; cent precision | ELStAM/basic health plus mandatory-care amount for PAP PKPV |
-| `insurance.privateSubsidyEligibleHealthMonthly` | money, EUR/month | >= 0; cent precision | Qualifying health contribution used for subsidy limit |
-| `insurance.privateSubsidyEligibleCareMonthly` | money, EUR/month | >= 0; cent precision | Qualifying PPV contribution used for subsidy limit |
-| `employment.payrollEstablishmentState` | state code | One of 16 codes | Selects Saxony PPV cap |
-| `insurance.valueSource` | enum | `elstam / payslip / insurer_notice / user_estimate` | Provenance and result quality |
+| `social.healthInsuranceType` | enum | `private` | Select private path |
+| `social.privateHealth.coverageConfirmed` | boolean | Must be true | Confirms exclusive PKV plus PPV |
+| `social.privateHealth.employerSubsidyEligibility` | enum | `eligible / not_eligible / unknown` | Controls subsidy result |
+| `social.privateHealth.totalHealthPremiumMonthly` | money, EUR/month | >= 0; cent precision | Existing canonical total PKV health premium |
+| `social.privateHealth.totalCarePremiumMonthly` | money, EUR/month | >= 0; cent precision | Existing canonical total PPV premium |
+| `social.privateHealth.payrollBasicCoverageAmountMonthly` | money, EUR/month | >= 0; cent precision | Existing canonical ELStAM/basic health plus mandatory-care amount for PAP PKPV |
+| `social.privateHealth.subsidyEligibleHealthPremiumMonthly` | money, EUR/month | >= 0; cent precision | New split under the accepted private-health namespace; qualifying health contribution used for the subsidy limit |
+| `social.privateHealth.subsidyEligibleCarePremiumMonthly` | money, EUR/month | >= 0; cent precision | New split under the accepted private-health namespace; qualifying PPV contribution used for the subsidy limit |
+| `social.careInsuranceEmploymentState` | state code | One of 16 codes | Payroll-relevant place of employment under SGB XI section 58; selects Saxony PPV treatment and is not the church-tax payroll-establishment state |
+| `social.privateHealth.valueSource` | enum | `elstam / payslip / insurer_notice / user_estimate` | Provenance and result quality |
+| `social.privateHealth.assessableEmploymentIncomeMonthly` | money, EUR/month | >= 0; cent precision | Employment remuneration relevant to the statutory comparison cap for the month |
 
 ### 3.2 Optional fields
 
 | Field | Type | Behavior |
 | --- | --- | --- |
-| `insurance.actualEmployerHealthSubsidyMonthly` | EUR/month | If provided from a payslip, use after validation and do not overwrite with a guided estimate |
-| `insurance.actualEmployerCareSubsidyMonthly` | EUR/month | Same for PPV |
-| `insurance.privateOptionalExtrasMonthly` | EUR/month | Display/cash-cost breakdown only; excluded from tax and subsidy logic unless the official supplied values already include an eligible part |
-| `insurance.privateDependentsEligibleHealthMonthly` | EUR/month | Included only after the user confirms the relatives would qualify for statutory family insurance |
-| `insurance.privateDependentsEligibleCareMonthly` | EUR/month | Same confirmation requirement |
-| `insurance.effectiveFromMonth` | YYYY-MM | Starts a contribution segment |
-| `insurance.effectiveToMonth` | YYYY-MM or null | Ends a contribution segment |
-| `insurance.unknownOrDisputedElstam` | boolean | Makes the tax result incomplete and shows correction guidance |
+| `social.privateHealth.actualEmployerHealthSubsidyMonthly` | EUR/month | If provided from a payslip, use after validation and do not overwrite with a guided estimate |
+| `social.privateHealth.actualEmployerCareSubsidyMonthly` | EUR/month | Same for PPV |
+| `social.privateHealth.optionalExtrasMonthly` | EUR/month | Display/cash-cost breakdown only; excluded from tax and subsidy logic unless the official supplied values already include an eligible part |
+| `social.privateHealth.eligibleDependentsHealthPremiumMonthly` | EUR/month | Included only after the user confirms the relatives would qualify for statutory family insurance |
+| `social.privateHealth.eligibleDependentsCarePremiumMonthly` | EUR/month | Same confirmation requirement |
+| `social.privateHealth.effectiveFromMonth` | YYYY-MM | Starts a contribution segment |
+| `social.privateHealth.effectiveToMonth` | YYYY-MM or null | Ends a contribution segment |
+| `social.privateHealth.unknownOrDisputedElstam` | boolean | Makes the tax result incomplete and shows correction guidance |
 
 ### 3.3 Two input modes
 
@@ -125,15 +126,19 @@ The application must never ask for diagnosis, health status, medical history, cl
 Use exact decimal arithmetic:
 
 ```
-health_cap_unrounded =
-  EUR 5,812.50 × ((14.6% + 2.9%) / 2)
+health_comparison_base =
+  min(assessable_employment_income_monthly, EUR 5,812.50)
 
-health_cap_monthly = EUR 508.59
+health_cap_unrounded =
+  health_comparison_base × ((14.6% + 2.9%) / 2)
+
+health_cap_monthly = round_contribution_to_cent(health_cap_unrounded)
+// Maximum at the ceiling: EUR 508.59
 
 estimated_employer_health_subsidy =
   min(
     50% × subsidy_eligible_health_contribution,
-    EUR 508.59
+    health_cap_monthly
   )
 ```
 
@@ -144,15 +149,21 @@ The employee's actual subsidy cannot exceed the qualifying contribution actually
 Outside Saxony:
 
 ```
-care_cap_unrounded = EUR 5,812.50 × 1.8%
-care_cap_monthly = EUR 104.63
+care_comparison_base =
+  min(assessable_employment_income_monthly, EUR 5,812.50)
+care_cap_unrounded = care_comparison_base × 1.8%
+care_cap_monthly = round_contribution_to_cent(care_cap_unrounded)
+// Maximum at the ceiling: EUR 104.63
 ```
 
 In Saxony:
 
 ```
-care_cap_unrounded = EUR 5,812.50 × 1.3%
-care_cap_monthly = EUR 75.56
+care_comparison_base =
+  min(assessable_employment_income_monthly, EUR 5,812.50)
+care_cap_unrounded = care_comparison_base × 1.3%
+care_cap_monthly = round_contribution_to_cent(care_cap_unrounded)
+// Maximum at the ceiling: EUR 75.56
 ```
 
 Then:
@@ -177,9 +188,9 @@ Contributions for relatives who would not qualify for family insurance must not 
 
 ### 4.4 Salary below the ceiling
 
-For ordinary private-insured employees with a valid statutory subsidy claim, the comparison amount is based on the employment remuneration subject to the legal rule and not always automatically the full ceiling. The common v1 path uses the ceiling when the employee is above the ordinary 2026 insurance threshold of EUR 77,400.
+For every supported month, calculate the statutory comparison amount from the lesser of the month's assessable employment remuneration and EUR 5,812.50. The full EUR 508.59/EUR 104.63/EUR 75.56 values are maximum caps, not unconditional flat caps.
 
-If the salary is below that threshold, exact entitlement and comparison treatment require an exemption or special-status fact. The calculator must request confirmation and return incomplete when that fact is unknown.
+If salary is below the ordinary 2026 insurance threshold, exact subsidy entitlement still requires a confirmed exemption or other supported legal status. When eligibility is confirmed and the month’s assessable employment remuneration is known, apply the remuneration-based formulas above. Return incomplete when either fact is unknown.
 
 ## 5. Payroll-tax treatment
 
@@ -265,7 +276,8 @@ Use when a required value is unknown, including:
 - tax-eligible ELStAM amount;
 - subsidy-eligible amount;
 - actual subsidy when the legal estimate is not admitted;
-- payroll-establishment state;
+- payroll-relevant place-of-employment state;
+- assessable employment remuneration for the month;
 - an unresolved insurer/ELStAM discrepancy.
 
 ### Unsupported
@@ -330,13 +342,13 @@ In accordance with NP-PD-007:
 - process all values in the browser;
 - never send premiums, insurer name, tariff, subsidy, coverage status or result amounts to analytics;
 - do not request medical details;
-- do not include private-insurance values in public share links by default;
+- prohibit all v1 scenario-bearing share links and never place private-insurance values in URLs, fragments or public links; adding any scenario link requires the separate privacy and threat review mandated by NP-PD-007;
 - explain local saved-scenario behavior;
 - provide clear and delete controls;
 - use accessible currency inputs and error associations;
 - do not use color alone to distinguish total, tax-eligible and subsidy-eligible amounts.
 
-Privacy-safe analytics may record only that the private-insurance section ended in complete, estimated, incomplete or unsupported state.
+Analytics must not emit a private-insurance event, insurance-path property or private-section terminal state. Only the generic allowlisted calculator terminal event from NP-PD-008 may be emitted, without insurance type, premiums, subsidies, state, result values or path-specific status.
 
 ## 11. Versioned parameters
 
@@ -361,7 +373,8 @@ Required fixtures include:
 
 - subsidy-eligible health premium below and above twice the cap;
 - PPV below and above twice the applicable cap;
-- non-Saxony and Saxony employer states;
+- non-Saxony and Saxony payroll-relevant employment states;
+- remuneration below and at the monthly assessment ceiling;
 - employee with and without qualifying dependents;
 - optional extras that affect cash cost but not PKPV;
 - total premium different from tax-eligible and subsidy-eligible values;
@@ -384,10 +397,11 @@ Boundary examples:
 
 | Case | Health eligible | Care eligible | State | Expected estimated subsidy |
 | --- | ---: | ---: | --- | --- |
-| Low contribution | EUR 600.00 | EUR 120.00 | BW | EUR 300.00 health + EUR 60.00 care |
-| Health capped | EUR 1,200.00 | EUR 120.00 | BW | EUR 508.59 health + EUR 60.00 care |
-| Both capped | EUR 1,200.00 | EUR 240.00 | BW | EUR 508.59 health + EUR 104.63 care |
-| Saxony care cap | EUR 1,200.00 | EUR 200.00 | SN | EUR 508.59 health + EUR 75.56 care |
+| Low contribution at ceiling income | EUR 600.00 | EUR 120.00 | BW | EUR 300.00 health + EUR 60.00 care |
+| Health capped at ceiling income | EUR 1,200.00 | EUR 120.00 | BW | EUR 508.59 health + EUR 60.00 care |
+| Both capped at ceiling income | EUR 1,200.00 | EUR 240.00 | BW | EUR 508.59 health + EUR 104.63 care |
+| Saxony care cap at ceiling income | EUR 1,200.00 | EUR 200.00 | SN employment | EUR 508.59 health + EUR 75.56 care |
+| Below-ceiling remuneration | EUR 1,200.00 | EUR 240.00 | BW employment, EUR 4,000 assessable pay | EUR 350.00 health + EUR 72.00 care |
 
 Fixtures must be compared with the final 2026 BMF PAP and at least one approved payroll reference.
 
@@ -415,7 +429,8 @@ Implementation should provide:
 - [x] Editable private contribution inputs are defined.
 - [x] Total, subsidy-eligible and tax-eligible amounts are separated.
 - [x] 2026 health and PPV employer-subsidy formulas and caps are recorded.
-- [x] The Saxony PPV difference is defined.
+- [x] The Saxony PPV difference uses payroll-relevant place of employment.
+- [x] Subsidy comparison caps use monthly assessable employment remuneration.
 - [x] Family-contribution boundaries are documented.
 - [x] The 2026 ELStAM process and PAP mappings are specified.
 - [x] Cash-flow and employer-cost outputs avoid double counting.

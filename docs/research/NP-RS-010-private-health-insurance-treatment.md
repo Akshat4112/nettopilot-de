@@ -1,6 +1,6 @@
 # NP-RS-010 — Private health-insurance treatment for 2026
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-010  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-006](NP-RS-006-statutory-health-insurance-rules.md)  

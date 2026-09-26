@@ -1,6 +1,6 @@
 # NP-RS-012 — Official reference scenarios for 2026
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-012  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-002](NP-RS-002-bmf-payroll-tax-algorithm.md), [NP-RS-004](NP-RS-004-pension-insurance-rules.md) through [NP-RS-011](NP-RS-011-bonuses-one-time-payments.md)  

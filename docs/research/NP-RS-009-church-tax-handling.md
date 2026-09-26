@@ -18,9 +18,9 @@ The engine shall:
 2. use **BK** for recurring pay and **BKS** for supported other remuneration;
 3. preserve the child-allowance adjustment required by EStG section 51a;
 4. apply the rate for the employer's **lohnsteuerliche Betriebsstätte** (payroll tax establishment), not the employee's home or physical work location;
-5. apply **8%** in Bavaria and, subject to the exception below, Baden-Württemberg;
-6. apply **9%** in the other fourteen federal states;
-7. truncate the computed deduction downward to full cents;
+5. retain the commonly published 8%/9% state rates as research candidates, but enable no state in the production assumption set until that state's governing 2026 rate and final-cent treatment have both passed NP-RS-001 verification;
+6. fail closed when either state-specific evidence record is absent or expired;
+7. apply the verified state-specific final-cent rule only after that source gate passes;
 8. keep recurring-pay and other-remuneration components separate;
 9. return an incomplete or unsupported state instead of inventing church membership, establishment state, denomination eligibility or an exception result.
 
@@ -40,7 +40,8 @@ An exact v1 result is supported when all of the following are true:
 - a liable user confirms that the ELStAM church-tax marker applies for that establishment state;
 - the payroll child-allowance factor is known;
 - the underlying recurring-pay or other-remuneration BMF path is complete;
-- no location-, denomination- or marriage-specific exception requires data outside the v1 input contract.
+- no location-, denomination- or marriage-specific exception requires data outside the v1 input contract;
+- the selected state has approved, effective 2026 source records for both its governing rate and its final-cent treatment.
 
 The following are not approved by this task:
 
@@ -71,7 +72,9 @@ The following are not approved by this task:
 | DE-BW-KIST | [Serviceportal Baden-Württemberg — church membership and tax](https://www.service-bw.de/zufi/leistungen/248) | General 8% rate, ELStAM basis and Bad Wimpfen exception | Current | Verified |
 | DE-BW-KIST-2026 | [Baden-Württemberg Ministry of Finance — 2026 church-tax resolutions, FM3-S 2442-3/38, BStBl 2026 I p. 869](https://datenbank.nwb.de/Dokument/1097618/) | 2026 8% general rate and 9% Roman Catholic Bad Wimpfen payroll-establishment exception | 2026 | Verified official notice reproduction |
 | DE-BY-KIST | [Bavarian tax administration — church-tax rate in payroll guidance](https://finanzamt.bayern.de/Informationen/Steuerinfos/Haeufig_gestellte_Fragen/Geringfuegige_Beschaeftigung/default.php) | Bavaria 8% state rate | Current | Corroborating |
-| DE-NI-KIST-RG-11 | [Lower Saxony church-tax framework, section 11](https://voris.wolterskluwer-online.de/browse/document/3ba2a2c8-2db4-350b-872c-4eebef004766) | Downward rounding to full cents | Current | Corroborating state law |
+| DE-NI-KIST-RG-11 | [Lower Saxony church-tax framework, section 11](https://voris.wolterskluwer-online.de/browse/document/3ba2a2c8-2db4-350b-872c-4eebef004766) | Downward rounding to full cents in Lower Saxony only | Current | Corroborating state law |
+| DE-BMF-TAX-AZ-2025 | [Federal Ministry of Finance — Taxes from A to Z, 2025](https://www.bundesfinanzministerium.de/Content/DE/Downloads/Broschueren_Bestellservice/steuern-von-a-z.pdf?__blob=publicationFile&v=7) | Federal overview that rates vary between 8% and 9%; not a state governing instrument | General background | Corroborating only |
+| DE-BE-KIST-SERVICE | [Berlin service portal — church-tax assessment](https://service.berlin.de/dienstleistung/326175/) | Berlin 9% rate | Current | Corroborating; 2026 governing resolution and rounding still required |
 
 The product shall use the final BMF plan for the assessment base. It shall not reproduce the assessment base from a third-party salary table.
 
@@ -81,34 +84,34 @@ The ordinary payroll rate is selected by the federal state of the employer's loh
 
 | Payroll-establishment state | Code | v1 rate | v1 handling |
 | --- | --- | ---: | --- |
-| Baden-Württemberg | BW | 8% | Supported subject to exception control |
-| Bavaria | BY | 8% | Supported |
-| Berlin | BE | 9% | Supported |
-| Brandenburg | BB | 9% | Supported |
-| Bremen | HB | 9% | Supported |
-| Hamburg | HH | 9% | Supported |
-| Hesse | HE | 9% | Supported |
-| Mecklenburg-Vorpommern | MV | 9% | Supported |
-| Lower Saxony | NI | 9% | Supported |
-| North Rhine-Westphalia | NW | 9% | Supported |
-| Rhineland-Palatinate | RP | 9% | Supported |
-| Saarland | SL | 9% | Supported |
-| Saxony | SN | 9% | Supported |
-| Saxony-Anhalt | ST | 9% | Supported |
-| Schleswig-Holstein | SH | 9% | Supported |
-| Thuringia | TH | 9% | Supported |
+| Baden-Württemberg | BW | 8% candidate | Blocked until the 2026 rate record and BW final-cent rule are both verified; exception control also required |
+| Bavaria | BY | 8% candidate | Blocked until the 2026 governing rate and final-cent records are verified |
+| Berlin | BE | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Brandenburg | BB | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Bremen | HB | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Hamburg | HH | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Hesse | HE | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Mecklenburg-Vorpommern | MV | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Lower Saxony | NI | 9% candidate | Blocked until the 2026 governing rate record is verified; rounding evidence is state-specific |
+| North Rhine-Westphalia | NW | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Rhineland-Palatinate | RP | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Saarland | SL | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Saxony | SN | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Saxony-Anhalt | ST | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Schleswig-Holstein | SH | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
+| Thuringia | TH | 9% candidate | Blocked until the 2026 governing resolution and final-cent record are verified |
 
 Canonical parameters:
 
 | Parameter ID | Value | Unit | Effective period |
 | --- | ---: | --- | --- |
-| church_wage_tax.2026.BW.general_rate | 0.08 | ratio | 2026 |
-| church_wage_tax.2026.BY.general_rate | 0.08 | ratio | 2026 |
-| church_wage_tax.2026.other_states.general_rate | 0.09 | ratio | 2026 |
+| church_wage_tax.2026.BW.general_rate_candidate | 0.08 | ratio | 2026; not production-approved |
+| church_wage_tax.2026.BY.general_rate_candidate | 0.08 | ratio | 2026; not production-approved |
+| church_wage_tax.2026.other_states.general_rate_candidate | 0.09 | ratio | 2026; not production-approved |
 | church_wage_tax.2026.output_unit | integer cent | unit | 2026 |
-| church_wage_tax.2026.rounding | truncate downward | rule | 2026 |
+| church_wage_tax.2026.rounding | no nationwide fallback | rule | 2026 |
 
-The rate registry must store one explicit record per state even when values are equal. This permits source, reviewer, effective-date and future-change metadata to differ.
+The rate registry must store one explicit record per state even when values are equal. Each record needs its own governing 2026 source and final-cent rule. A federal overview, another state's law, or an uncited common rate may corroborate research but must never activate a production path.
 
 ### 3.1 Baden-Württemberg exception
 
@@ -201,7 +204,7 @@ Child treatment:
 
 ## 7. Calculation
 
-For a supported liable scenario:
+For a liable scenario that has passed the state-specific rate-and-rounding source gate:
 
 ```
 recurring_church_tax_cents =
@@ -219,14 +222,16 @@ Where:
 
 - `establishment_rate` is 0.08 or 0.09;
 - BK and BKS come directly from the final 2026 PAP;
-- `floor` means fractions of a cent are discarded for non-negative supported values;
+- the final-cent operation is taken from the approved rule for the selected state; `floor` is used only where that state's governing evidence explicitly requires downward truncation;
 - no intermediate conversion through binary floating point is allowed.
 
 Implementation with integer arithmetic:
 
 ```
-rate_basis_points = 800 or 900
-church_tax_cents = floor(base_cents × rate_basis_points / 10_000)
+rate_basis_points = approved_state_rate_basis_points
+church_tax_cents = apply_approved_state_cent_rule(
+  base_cents × rate_basis_points / 10_000
+)
 ```
 
 Do not:
@@ -235,7 +240,7 @@ Do not:
 - multiply displayed net pay;
 - apply the rate to solidarity surcharge;
 - add BK and BKS before separately preserving their components;
-- half-up round a fractional cent;
+- apply a nationwide rounding fallback or borrow another state's cent rule;
 - apply a residence-state rate to the payroll result;
 - use an approximate annual value to reconstruct monthly withholding.
 
@@ -349,7 +354,7 @@ Return when any required value is unknown, including:
 
 Return for:
 
-- Bad Wimpfen exception when the user cannot confirm whether it applies;
+- a selected state without approved 2026 governing rate and final-cent source records;
 - a religious-community treatment not represented by a payroll-applicable ELStAM marker;
 - special or general church money;
 - church-tax capping;
@@ -494,8 +499,8 @@ An uncited fallback rate is prohibited.
 Required fixtures include:
 
 - liable, not-liable and unknown status;
-- each of the sixteen establishment states;
-- 8% and 9% calculations;
+- each of the sixteen establishment states, asserting that the source gate blocks it until both required state records are approved;
+- 8% and 9% calculations only for state fixtures whose governing 2026 rate and cent rule have been approved;
 - employee residence different from establishment state;
 - zero and positive BK;
 - fractional-cent truncation;
@@ -520,12 +525,12 @@ At least one gross-to-net fixture for each rate class must be compared with an a
 Implementation should provide:
 
 1. the final 2026 PAP adapter from NP-RS-002;
-2. a versioned sixteen-state rate registry;
+2. a versioned sixteen-state rate registry with independent rate and final-cent source gates;
 3. explicit payroll-establishment input semantics;
 4. tri-state liability handling;
 5. exact integer-cent arithmetic;
 6. separate BK and BKS calculations;
-7. downward cent truncation;
+7. state-specific final-cent handling with no nationwide fallback;
 8. monthly segmentation;
 9. BW exception admission control;
 10. fail-closed handling of unknown values;
@@ -539,7 +544,8 @@ Implementation should provide:
 - [x] The final 2026 BMF path is identified.
 - [x] BK and BKS assessment bases are defined.
 - [x] EStG section 51a child treatment is documented.
-- [x] Rates for all sixteen federal states are recorded.
+- [x] Candidate rates for all sixteen federal states are recorded.
+- [ ] Each state has an approved 2026 governing rate and final-cent source record; production remains fail-closed until this evidence is complete.
 - [x] The payroll-establishment principle is explicit.
 - [x] Liability and unknown-state behavior are defined.
 - [x] Downward cent truncation is specified.

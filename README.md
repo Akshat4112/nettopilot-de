@@ -46,8 +46,17 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-RS-013 — Versioned assumptions data](docs/research/NP-RS-013-versioned-assumptions-data.md)
 - [NP-RS-014 — Annual maintenance process](docs/research/NP-RS-014-annual-maintenance-process.md)
 
+## Repository workflow
+
+Changes are developed on task-scoped branches and merged into `main` through pull requests. The foundation check verifies that the repository's required governance files remain present. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [repository-foundation specification](docs/foundation/NP-FND-001-repository-foundation.md).
+
 ## Planned deployment
+
 
 The public application is planned as a static GitHub Pages project at:
 
 `https://akshat4112.github.io/nettopilot-de/`
+
+## License
+
+NettoPilot DE is open-source software available under the [MIT License](LICENSE).

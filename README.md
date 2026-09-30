@@ -6,7 +6,9 @@ NettoPilot DE is designed to help employees and job seekers understand what a gr
 
 ## Project status
 
-The project is currently in product definition. Calculation rules, supported cases and technical foundations will be added through reviewed, task-scoped changes.
+The project has entered engineering foundation work. A strict React, TypeScript
+and Vite application shell is available; calculation rules and user-facing
+calculator flows will be added through reviewed, task-scoped changes.
 
 ## Product principles
 
@@ -49,6 +51,23 @@ The project is currently in product definition. Calculation rules, supported cas
 ## Repository workflow
 
 Changes are developed on task-scoped branches and merged into `main` through pull requests. The foundation check verifies that the repository's required governance files remain present. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [repository-foundation specification](docs/foundation/NP-FND-001-repository-foundation.md).
+
+## Local development
+
+Requirements: Node.js 22.12 or newer and npm 10 or newer.
+
+```bash
+npm ci
+npm run dev
+```
+
+Create a verified production build with:
+
+```bash
+npm run build
+```
+
+See [NP-FND-002 — React, TypeScript, and Vite scaffold](docs/foundation/NP-FND-002-application-scaffold.md) for the current application contract and deferred foundation work.
 
 ## Planned deployment
 

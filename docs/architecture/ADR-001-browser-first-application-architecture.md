@@ -143,18 +143,36 @@ Concrete types are introduced and tested by their owning implementation tasks.
 ```ts
 interface AssumptionSetRepository {
   listSupportedYears(): readonly CalculationYear[]
-  load(year: CalculationYear): Promise<AssumptionSetLoadResult>
+  load(request: AssumptionSetRequest): Promise<AssumptionSetLoadResult>
+}
+
+interface AssumptionSetRequest {
+  calculationYear: CalculationYear
+  calculationDate: IsoDate
+  engineVersion: EngineVersion
 }
 
 type AssumptionSetLoadResult =
-  | { status: 'ready'; value: AssumptionSet }
-  | { status: 'unsupported-year'; year: number }
+  | {
+      status: 'ready'
+      value: AssumptionSet
+      warnings: readonly AssumptionWarning[]
+    }
+  | { status: 'unavailable'; request: AssumptionSetRequest }
+  | { status: 'ambiguous'; candidateSetIds: readonly string[] }
+  | { status: 'affected-rule-stale'; ruleIds: readonly string[] }
+  | { status: 'incompatible'; engineVersion: EngineVersion }
   | { status: 'invalid-set'; issues: readonly ContractIssue[] }
 ```
 
-The loaded set contains calculation year, schema version, rule version, source
-record references and verification metadata. Consumers never select “nearest”
-year data when an exact supported year is unavailable.
+Resolution uses the requested calculation year, effective date and engine
+version together. The repository returns `ready` only when exactly one approved,
+production-enabled set covers the date, is compatible with the engine, passes
+its digest and schema checks, and resolves every required parameter. A future
+recorded change may be represented by a typed warning while the current set
+remains applicable. Already-effective stale rules, zero/multiple eligible sets,
+invalid sets and incompatible engines fail closed. Consumers never select the
+“latest” or “nearest” package.
 
 ### Validation and scope admission
 
@@ -300,16 +318,22 @@ edited.
 Every normal calculation result exposes enough metadata to reproduce its rule
 context:
 
-- calculation year;
-- assumption-set identifier and version;
-- calculation-contract/engine version;
-- applicable source-record identifiers;
+- calculation year and requested effective date;
+- assumption-set identifier, release version and schema version;
+- verified canonical-file content digest;
+- calculation-engine, input-contract, output-contract and scope versions;
+- source-manifest version, applicable source-record identifiers and source
+  effective dates;
+- every parameter identifier used and its resolved effective period;
+- applicable procedure and rounding-policy identifiers;
 - calculation timestamp supplied by the outer application when needed for
   display, not used as a formula input;
-- warnings for provisional, superseded or compatibility states.
+- stable warnings, excluded components and result-quality state.
 
-Version metadata travels with exports and saved inputs according to NP-PD-007.
-It does not permit a stale or unverifiable set to be silently treated as current.
+This provenance tuple is part of `SalaryCalculationResult`, not an optional UI
+annotation. Version metadata travels with exports and saved inputs according to
+NP-PD-007. It does not permit a stale, ambiguous, incompatible or unverifiable
+set to be silently treated as current.
 
 ## Privacy and network boundary
 

@@ -1,6 +1,6 @@
 # NP-FND-001 — Repository foundation
 
-**Status:** Implemented in repository; main-branch protection pending  
+**Status:** Proposed for review  
 **Task:** NP-FND-001  
 **Milestone:** M2 Foundation  
 **Depends on:** NP-PD-003  
@@ -18,7 +18,7 @@ NettoPilot DE uses a dedicated GitHub repository with the minimum files and cont
 - a pull-request template;
 - a lightweight repository-foundation status check.
 
-The remaining main-branch protection setting in this document is part of the task definition and must be verified before NP-FND-001 is marked Done.
+The repository foundation and required GitHub settings have been implemented and verified.
 
 ## Repository-file contract
 
@@ -34,7 +34,7 @@ The remaining main-branch protection setting in this document is part of the tas
 
 ## Required repository settings
 
-The repository owner must configure and verify the remaining protection setting after this pull request is merged.
+The repository settings below were configured and verified on 2026-09-30.
 
 ### 1. Public visibility
 
@@ -48,7 +48,7 @@ Verification:
 
 ### 2. Protect `main`
 
-In **Settings → Rules → Rulesets**, create an active branch ruleset targeting the default branch `main`.
+The active **Protect main** ruleset (ID `24246755`) targets the default branch `main`.
 
 Required rules:
 
@@ -81,6 +81,6 @@ All normal changes use a task-scoped branch and pull request. Approved changes a
 - [x] Contribution, ownership and pull-request guidance are present.
 - [x] Foundation status check is defined.
 - [x] Repository visibility is verified as public.
-- [ ] Active protection for `main` is verified.
+- [x] Active protection for `main` is verified.
 
-NP-FND-001 remains blocked until active protection for `main` is completed and verified.
+NP-FND-001 is ready for review in PR #23.

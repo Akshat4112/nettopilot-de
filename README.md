@@ -69,6 +69,14 @@ npm run build
 
 See [NP-FND-002 — React, TypeScript, and Vite scaffold](docs/foundation/NP-FND-002-application-scaffold.md) for the current application contract and deferred foundation work.
 
+Verify the GitHub Pages base path and deep-link refresh contract with:
+
+```bash
+npm run verify:pages
+```
+
+See [NP-FND-003 — GitHub Pages base path and refresh routing](docs/foundation/NP-FND-003-github-pages-base-path.md) for the URL and fallback-routing contract.
+
 ## Planned deployment
 
 

@@ -1,3 +1,5 @@
+import { APP_BASE_PATH } from './config/app'
+
 const principles = [
   'Transparent estimates',
   'Browser-only by default',
@@ -8,7 +10,11 @@ export function App() {
   return (
     <div className="app-shell">
       <header className="site-header">
-        <a className="brand" href="/" aria-label="NettoPilot DE home">
+        <a
+          className="brand"
+          href={APP_BASE_PATH}
+          aria-label="NettoPilot DE home"
+        >
           NettoPilot <span>DE</span>
         </a>
         <span className="status">Foundation preview</span>

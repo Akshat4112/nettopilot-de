@@ -44,6 +44,7 @@ The project is currently in product definition. Calculation rules, supported cas
 - [NP-RS-011 — Bonuses and one-time payments for 2026](docs/research/NP-RS-011-bonuses-one-time-payments.md)
 - [NP-RS-012 — Official reference scenarios for 2026](docs/research/NP-RS-012-official-reference-scenarios.md)
 - [NP-RS-013 — Versioned assumptions data](docs/research/NP-RS-013-versioned-assumptions-data.md)
+- [NP-RS-014 — Annual maintenance process](docs/research/NP-RS-014-annual-maintenance-process.md)
 
 ## Planned deployment
 

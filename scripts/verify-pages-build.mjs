@@ -23,7 +23,10 @@ assert.match(
 const routingAssetMatch = notFoundHtml.match(
   /href="\/nettopilot-de\/(assets\/pages-routing-[^"]+\.js)"/,
 )
-assert.ok(routingAssetMatch, 'The fallback page must preload the routing bundle.')
+assert.ok(
+  routingAssetMatch,
+  'The fallback page must preload the routing bundle.',
+)
 
 const routingModule = await import(
   pathToFileURL(`dist/${routingAssetMatch[1]}`).href
@@ -31,17 +34,19 @@ const routingModule = await import(
 const routingFunctions = Object.values(routingModule).filter(
   (value) => typeof value === 'function',
 )
-assert.equal(routingFunctions.length, 2, 'The routing bundle must expose two helpers.')
-
-const requestedUrl = new URL(
-  `${deepPath}?lang=en#summary`,
-  projectOrigin,
+assert.equal(
+  routingFunctions.length,
+  2,
+  'The routing bundle must expose two helpers.',
 )
+
+const requestedUrl = new URL(`${deepPath}?lang=en#summary`, projectOrigin)
 const redirectResults = routingFunctions.map((routingFunction) =>
   routingFunction(requestedUrl),
 )
 const redirectedUrl = redirectResults.find((result) => result instanceof URL)
-const createPagesRedirect = routingFunctions[redirectResults.indexOf(redirectedUrl)]
+const createPagesRedirect =
+  routingFunctions[redirectResults.indexOf(redirectedUrl)]
 const restorePagesRoute = routingFunctions.find(
   (routingFunction) => routingFunction !== createPagesRedirect,
 )

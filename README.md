@@ -77,6 +77,10 @@ npm run verify:pages
 
 See [NP-FND-003 — GitHub Pages base path and refresh routing](docs/foundation/NP-FND-003-github-pages-base-path.md) for the URL and fallback-routing contract.
 
+## Architecture documentation
+
+- [ADR-001 — Browser-first application architecture](docs/architecture/ADR-001-browser-first-application-architecture.md)
+
 ## Planned deployment
 
 

@@ -1,6 +1,6 @@
 # NP-RS-014 — Annual maintenance process
 
-**Status:** Proposed for review  
+**Status:** Accepted  
 **Task:** NP-RS-014  
 **Milestone:** M1 Research  
 **Depends on:** [NP-RS-013](NP-RS-013-versioned-assumptions-data.md)  

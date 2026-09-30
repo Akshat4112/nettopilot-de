@@ -300,7 +300,7 @@ The new release must run at least one fixture from every previously supported ye
 | State | Condition | Calculation behaviour |
 | --- | --- | --- |
 | Current | Exactly one approved compatible set covers the requested date | Calculate normally and show year/version |
-| Update pending | Final or likely change is recorded but not yet effective or approved | Continue only with still-applicable set; show dated notice |
+| Update pending | A recorded change has not yet reached its effective date; approval may still be pending | Continue only with the currently applicable set; show the future effective date and dated notice |
 | Affected rule stale | A known change is already effective but the applicable set is not approved | Block affected result; do not use old value |
 | Year unavailable | No approved set covers the requested year/date | Block calculation |
 | Assumptions ambiguous | Multiple sets or parameter segments qualify | Block calculation and report internal configuration error |
@@ -362,7 +362,7 @@ Rules:
 
 1. open a change record and classify the source;
 2. verify effective date and transitional rules;
-3. create a new assumption-set version or compatible dated parameter segment;
+3. create a new immutable assumption-set version containing the compatible dated parameter segment; never add a segment to an already approved set;
 4. add before/after boundary fixtures;
 5. run the full affected-module suite plus extended conformance;
 6. publish and activate by requested calculation date;

@@ -1,0 +1,34 @@
+# Contributing to NettoPilot DE
+
+Thank you for helping build a transparent, privacy-respecting German salary calculator.
+
+## Workflow
+
+1. Start from an up-to-date `main` branch.
+2. Create a task-scoped branch such as `np-fnd-002-vite-scaffold`.
+3. Keep the change focused on one tracker task.
+4. Open a pull request using the repository template.
+5. Resolve review conversations and required checks before merging.
+6. Squash-merge approved changes into `main`.
+
+Direct pushes, force pushes and branch deletion on `main` should be blocked by the repository ruleset.
+
+## Pull-request expectations
+
+A pull request should:
+
+- reference its NettoPilot task ID;
+- explain the user or engineering outcome;
+- list verification performed;
+- update affected documentation and bilingual copy;
+- use authoritative sources for regulated payroll rules;
+- avoid uncited tax or social-insurance constants;
+- preserve browser-only processing and avoid real salary or personal data in tests, logs and analytics.
+
+## Data and fixtures
+
+Use synthetic or officially published reference cases only. Never commit identifiable payslips, salary scenarios, credentials, secrets or analytics payloads containing financial inputs or results.
+
+## Licensing
+
+By contributing, you agree that your contribution is licensed under the repository's [MIT License](LICENSE).

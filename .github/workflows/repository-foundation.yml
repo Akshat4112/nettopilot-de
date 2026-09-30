@@ -1,0 +1,52 @@
+name: Repository foundation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: foundation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  foundation:
+    name: Foundation files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Verify repository foundation
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_files=(
+            README.md
+            LICENSE
+            .gitignore
+            CONTRIBUTING.md
+            .github/CODEOWNERS
+            .github/pull_request_template.md
+          )
+
+          for path in "${required_files[@]}"; do
+            if [[ ! -s "$path" ]]; then
+              echo "::error file=$path::Required repository file is missing or empty."
+              exit 1
+            fi
+          done
+
+          grep -Fq "MIT License" LICENSE
+          grep -Fq "## License" README.md
+          grep -Fq "* @Akshat4112" .github/CODEOWNERS

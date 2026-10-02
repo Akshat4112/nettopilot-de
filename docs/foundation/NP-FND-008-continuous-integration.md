@@ -23,7 +23,7 @@ The `CI` workflow runs for:
 
 Only the newest run for a workflow/ref pair remains active. Superseded runs are
 cancelled to avoid wasting runner time. Every job has an explicit timeout, uses a
-clean GitHub-hosted Ubuntu runner, installs Node.js 22.12.0, and restores only the
+clean GitHub-hosted Ubuntu runner, installs Node.js 22.13.0, and restores only the
 npm download cache. Dependencies are always installed from `package-lock.json`
 with `npm ci`.
 

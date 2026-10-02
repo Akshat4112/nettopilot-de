@@ -57,7 +57,7 @@ Changes are developed on task-scoped branches and merged into `main` through pul
 
 ## Local development
 
-Requirements: Node.js 22.12 or newer and npm 10 or newer.
+Requirements: Node.js 22.13 or newer and npm 10 or newer.
 
 ```bash
 npm ci
@@ -126,6 +126,12 @@ The deployment workflow starts only after the `CI` workflow succeeds on `main`,
 or through an explicit manual run from `main`. See
 [NP-FND-009 — GitHub Pages deployment](docs/foundation/NP-FND-009-github-pages-deployment.md)
 for the deployment, permission, concurrency, and rollback contract.
+
+Automated weekly dependency updates cover npm and GitHub Actions. Direct versions
+remain exact, lockfile changes are reviewed with their manifest changes, and
+high-severity audit findings fail CI. See
+[NP-FND-010 — Dependency and security maintenance](docs/foundation/NP-FND-010-dependency-security-maintenance.md)
+and [SECURITY.md](SECURITY.md).
 
 ## License
 

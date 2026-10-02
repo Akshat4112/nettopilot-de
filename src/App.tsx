@@ -38,8 +38,8 @@ export function App() {
           <aside className="notice" aria-label="Application status">
             <strong>The calculation engine is not available yet.</strong>
             <span>
-              This verified shell establishes the application foundation for
-              the next implementation tasks.
+              This verified shell establishes the application foundation for the
+              next implementation tasks.
             </span>
           </aside>
         </section>

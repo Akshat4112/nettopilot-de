@@ -77,12 +77,22 @@ npm run verify:pages
 
 See [NP-FND-003 — GitHub Pages base path and refresh routing](docs/foundation/NP-FND-003-github-pages-base-path.md) for the URL and fallback-routing contract.
 
+Run the complete local quality gate with:
+
+```bash
+npm run check
+```
+
+Individual commands are available as `npm run format:check`, `npm run lint`,
+`npm run typecheck`, and `npm run verify:pages`. See
+[NP-FND-005 — Code-quality tooling](docs/foundation/NP-FND-005-code-quality-tooling.md)
+for the enforced standards and architecture-boundary rules.
+
 ## Architecture documentation
 
 - [ADR-001 — Browser-first application architecture](docs/architecture/ADR-001-browser-first-application-architecture.md)
 
 ## Planned deployment
-
 
 The public application is planned as a static GitHub Pages project at:
 

@@ -45,6 +45,28 @@ export type {
 } from './types'
 
 export { validateIndividualSalaryScenario } from './validation'
+export {
+  ExactDecimal,
+  addDecimals,
+  addEuroCents,
+  compareDecimals,
+  decimal,
+  divideDecimals,
+  euroAmountToCents,
+  euroCentsToAmount,
+  formatEuroCents,
+  fromEuroCents,
+  multiplyByPercentage,
+  multiplyCentsByPercentage,
+  multiplyDecimals,
+  percentToRatio,
+  quantizeDecimal,
+  subtractDecimals,
+  subtractEuroCents,
+  sumEuroCents,
+  toEuroCents,
+} from './precision'
+export type { CentConversionMode, EuroCents, RoundingMode } from './precision'
 export type {
   LocalizedValidationMessage,
   SalaryValidationIssue,

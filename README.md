@@ -92,6 +92,18 @@ for the enforced standards and architecture-boundary rules, and
 [NP-FND-006 — Unit and component test foundation](docs/foundation/NP-FND-006-test-foundation.md)
 for the deterministic testing and coverage contract.
 
+Install Chromium and run the production browser smoke suite with:
+
+```bash
+npm run test:e2e:install
+npm run test:e2e
+```
+
+See
+[NP-FND-007 — Playwright smoke-testing foundation](docs/foundation/NP-FND-007-playwright-smoke-testing.md)
+for deterministic browser settings, artifacts, and the deferred calculation and
+offer-comparison contracts.
+
 ## Architecture documentation
 
 - [ADR-001 — Browser-first application architecture](docs/architecture/ADR-001-browser-first-application-architecture.md)

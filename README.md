@@ -1,6 +1,7 @@
 # NettoPilot DE
 
 [![CI](https://github.com/Akshat4112/nettopilot-de/actions/workflows/ci.yml/badge.svg)](https://github.com/Akshat4112/nettopilot-de/actions/workflows/ci.yml)
+[![Deploy GitHub Pages](https://github.com/Akshat4112/nettopilot-de/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Akshat4112/nettopilot-de/actions/workflows/deploy-pages.yml)
 
 A free, bilingual and privacy-respecting German salary calculator and job-offer comparison tool.
 
@@ -115,11 +116,16 @@ for the required checks, artifact policy, and maintenance contract.
 
 - [ADR-001 — Browser-first application architecture](docs/architecture/ADR-001-browser-first-application-architecture.md)
 
-## Planned deployment
+## Deployment
 
-The public application is planned as a static GitHub Pages project at:
+Validated `main` builds are deployed as a static GitHub Pages project at:
 
-`https://akshat4112.github.io/nettopilot-de/`
+[https://akshat4112.github.io/nettopilot-de/](https://akshat4112.github.io/nettopilot-de/)
+
+The deployment workflow starts only after the `CI` workflow succeeds on `main`,
+or through an explicit manual run from `main`. See
+[NP-FND-009 — GitHub Pages deployment](docs/foundation/NP-FND-009-github-pages-deployment.md)
+for the deployment, permission, concurrency, and rollback contract.
 
 ## License
 

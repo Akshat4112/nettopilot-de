@@ -9,8 +9,8 @@
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md \"*.html\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md \"*.html\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" .github/dependabot.yml eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md CONTRIBUTING.md SECURITY.md \"*.html\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" .github/dependabot.yml eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md CONTRIBUTING.md SECURITY.md \"*.html\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -52,7 +52,7 @@
     "vitest": "5.0.3"
   },
   "engines": {
-    "node": ">=22.12.0",
+    "node": "^22.13.0 || ^24.0.0 || >=26.0.0",
     "npm": ">=10"
   }
 }

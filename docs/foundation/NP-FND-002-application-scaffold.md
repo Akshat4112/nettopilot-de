@@ -19,7 +19,7 @@ GitHub Pages configuration assigned to later foundation tasks.
 | Concern | Decision |
 | --- | --- |
 | Package manager | npm with committed `package-lock.json` |
-| Node.js | `>=22.12.0` |
+| Node.js | `^22.13.0 || ^24.0.0 || >=26.0.0` |
 | npm | `>=10` |
 | UI runtime | React 19 |
 | Language | TypeScript with `strict`, unchecked-index and exact-optional-property checks |

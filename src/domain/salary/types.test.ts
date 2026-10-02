@@ -7,6 +7,7 @@ import type {
   IndividualSalaryScenarioInput,
   IsoDate,
   RegistryOptionId,
+  SalaryAlternativeInput,
   ScenarioLabel,
 } from './types'
 
@@ -145,5 +146,37 @@ describe('salary-domain types', () => {
     expect(unknown.compensation.regularAdditionalCash.amount.amount).toBe(
       '5000.00',
     )
+  })
+
+  it('restricts salary alternatives to compensation and comparison overrides', () => {
+    const salaryIncrease = {
+      current: {
+        ...baseScenario,
+        social: {
+          pensionStatus: option('compulsory'),
+          unemploymentStatus: option('compulsory'),
+          careInsuranceChildStatus: 'childless',
+          childrenUnderRelevantAge: 0,
+          health: {
+            healthInsuranceType: 'statutory',
+            additionalRateMode: 'published_average',
+          },
+        },
+      },
+      alternative: {
+        scenarioLabel: 'After raise' as ScenarioLabel,
+        compensation: {
+          baseSalary: {
+            period: 'annual',
+            grossAmount: euro('90000.00'),
+            paymentsPerYear: 12,
+          },
+        },
+      },
+    } satisfies SalaryAlternativeInput
+
+    expect(
+      salaryIncrease.alternative.compensation.baseSalary.grossAmount.amount,
+    ).toBe('90000.00')
   })
 })

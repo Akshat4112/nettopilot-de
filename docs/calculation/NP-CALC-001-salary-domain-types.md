@@ -68,7 +68,9 @@ remain presentation data.
 
 ## Scenario containers
 
-- `SalaryAlternativeInput` keeps current and alternative calculations explicit.
+- `SalaryAlternativeInput` keeps the current scenario explicit and limits the
+  alternative to compensation and comparison overrides. Calculation year,
+  scope, tax, and social-insurance assumptions remain shared.
 - `OfferComparisonInput` requires exactly two scenarios through a tuple.
 - `CoupleScenarioInput` keeps `personA` and `personB` independent.
 

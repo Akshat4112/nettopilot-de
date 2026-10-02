@@ -213,9 +213,20 @@ export interface IndividualSalaryScenarioInput {
   readonly comparison: ComparisonInput
 }
 
+export interface SalaryAlternativeOverrides {
+  readonly scenarioLabel?: ScenarioLabel
+  readonly compensation?: Partial<CompensationInput>
+  readonly comparison?: Partial<ComparisonInput>
+}
+
+/**
+ * A salary-increase scenario shares its personal, tax, insurance, scope, and
+ * calculation-year assumptions with the current scenario. Only compensation
+ * and comparison fields may be overridden.
+ */
 export interface SalaryAlternativeInput {
   readonly current: IndividualSalaryScenarioInput
-  readonly alternative: IndividualSalaryScenarioInput
+  readonly alternative: SalaryAlternativeOverrides
 }
 
 export interface OfferComparisonInput {

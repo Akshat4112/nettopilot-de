@@ -33,6 +33,7 @@ export type {
   RegularAdditionalCash,
   ResolvedScenarioMetadata,
   SalaryAlternativeInput,
+  SalaryAlternativeOverrides,
   ScenarioLabel,
   ScopeAdmissionInput,
   SemverString,
@@ -42,3 +43,12 @@ export type {
   UnknownHealthInsuranceInput,
   WageTaxInput,
 } from './types'
+
+export { validateIndividualSalaryScenario } from './validation'
+export type {
+  LocalizedValidationMessage,
+  SalaryValidationIssue,
+  SalaryValidationResult,
+  SalaryValidationRules,
+  ValidationIssueCode,
+} from './validation'

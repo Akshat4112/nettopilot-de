@@ -62,7 +62,8 @@ The ESLint configuration implements the dependency direction from ADR-001:
 
 - domain, assumptions, validation, comparison and application modules cannot
   import outward areas that they do not own;
-- inner modules cannot import React/React DOM or access browser globals;
+- inner modules cannot import React/React DOM or access any global exposed by
+  the browser environment;
 - platform adapters cannot import calculation internals or financial state;
 - presentation modules consume application contracts instead of domain
   implementations.

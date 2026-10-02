@@ -19,7 +19,15 @@ export default mergeConfig(
         provider: 'v8',
         reportsDirectory: 'coverage',
         reporter: ['text', 'html', 'lcov'],
-        include: ['src/App.tsx', 'src/config/**/*.ts', 'src/pages-routing.ts'],
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: [
+          'src/**/*.test.{ts,tsx}',
+          'src/test/**',
+          'src/main.tsx',
+          'src/pages-redirect.ts',
+          'src/pages-restore.ts',
+          'src/vite-env.d.ts',
+        ],
         thresholds: {
           branches: 90,
           functions: 90,

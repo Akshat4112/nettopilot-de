@@ -84,9 +84,13 @@ npm run check
 ```
 
 Individual commands are available as `npm run format:check`, `npm run lint`,
-`npm run typecheck`, and `npm run verify:pages`. See
+`npm run typecheck`, `npm test`, `npm run test:coverage`, and
+`npm run verify:pages`. Use `npm run test:watch` during test-driven local
+development. See
 [NP-FND-005 — Code-quality tooling](docs/foundation/NP-FND-005-code-quality-tooling.md)
-for the enforced standards and architecture-boundary rules.
+for the enforced standards and architecture-boundary rules, and
+[NP-FND-006 — Unit and component test foundation](docs/foundation/NP-FND-006-test-foundation.md)
+for the deterministic testing and coverage contract.
 
 ## Architecture documentation
 

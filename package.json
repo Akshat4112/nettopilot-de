@@ -9,8 +9,8 @@
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md \"*.html\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md \"*.html\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md \"*.html\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md \"*.html\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -19,6 +19,7 @@
     "test:e2e": "npm run build && playwright test --project=chromium",
     "test:e2e:headed": "npm run build && playwright test --headed --project=chromium",
     "test:e2e:ui": "npm run build && playwright test --ui --project=chromium",
+    "audit:dependencies": "npm audit --audit-level=high",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run test:e2e:list && npm run verify:pages",
     "preview": "vite preview",
     "verify:pages": "npm run build && node scripts/verify-pages-build.mjs"

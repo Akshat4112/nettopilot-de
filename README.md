@@ -1,5 +1,7 @@
 # NettoPilot DE
 
+[![CI](https://github.com/Akshat4112/nettopilot-de/actions/workflows/ci.yml/badge.svg)](https://github.com/Akshat4112/nettopilot-de/actions/workflows/ci.yml)
+
 A free, bilingual and privacy-respecting German salary calculator and job-offer comparison tool.
 
 NettoPilot DE is designed to help employees and job seekers understand what a gross salary could mean in everyday life, see the major deductions behind an estimated net result, and compare offers using salary, bonuses, benefits, vacation and working hours.
@@ -103,6 +105,11 @@ See
 [NP-FND-007 — Playwright smoke-testing foundation](docs/foundation/NP-FND-007-playwright-smoke-testing.md)
 for deterministic browser settings, artifacts, and the deferred calculation and
 offer-comparison contracts.
+
+Pull requests and updates to `main` run the same quality checks in GitHub Actions,
+plus a clean Chromium smoke test and a high-severity dependency audit. See
+[NP-FND-008 — Continuous integration](docs/foundation/NP-FND-008-continuous-integration.md)
+for the required checks, artifact policy, and maintenance contract.
 
 ## Architecture documentation
 

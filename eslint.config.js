@@ -6,17 +6,16 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 const browserGlobals = globals.browser
+const restrictedBrowserGlobals = Object.keys(browserGlobals)
+  .sort()
+  .map((name) => ({
+    name,
+    message:
+      'Inner architecture modules must remain independent of browser APIs.',
+  }))
 
 const reactAndBrowserRestrictions = {
-  'no-restricted-globals': [
-    'error',
-    'document',
-    'fetch',
-    'indexedDB',
-    'localStorage',
-    'navigator',
-    'window',
-  ],
+  'no-restricted-globals': ['error', ...restrictedBrowserGlobals],
   'no-restricted-imports': [
     'error',
     {

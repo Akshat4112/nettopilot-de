@@ -58,8 +58,10 @@ npm run check
 npm run audit:dependencies
 ```
 
-The minimum Node.js version is 22.13.0 because the current ESLint 10 dependency
-line requires Node.js 22.13 or newer. CI and Pages builds use the same minimum.
+The supported Node.js range is `^22.13.0 || ^24.0.0 || >=26.0.0`. This is the
+compatible intersection of the current ESLint and Vitest runtime requirements;
+Node.js 23 and 25 are intentionally excluded. CI and Pages builds use Node.js
+22.13.0 from that supported range.
 
 ## Vulnerability policy
 

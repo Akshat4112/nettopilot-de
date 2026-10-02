@@ -57,7 +57,7 @@ Changes are developed on task-scoped branches and merged into `main` through pul
 
 ## Local development
 
-Requirements: Node.js 22.13 or newer and npm 10 or newer.
+Requirements: Node.js 22.13–22.x, 24.x, or 26 and newer, plus npm 10 or newer.
 
 ```bash
 npm ci

@@ -199,6 +199,69 @@ describe('validated salary input schema', () => {
     )
   })
 
+  it('rejects fields from inactive health-insurance paths', () => {
+    const statutory = validScenario()
+    ;(
+      statutory.social.health as Record<string, unknown>
+    ).totalHealthPremiumMonthly = {
+      amount: '650',
+      currency: 'EUR',
+    }
+    expect(validationErrors(statutory)).toContainEqual(
+      expect.objectContaining({
+        path: 'social.health.totalHealthPremiumMonthly',
+        code: 'inconsistent_fields',
+      }),
+    )
+
+    const privateInsurance = validScenario()
+    privateInsurance.social.health = {
+      healthInsuranceType: 'private',
+      totalHealthPremiumMonthly: { amount: '650', currency: 'EUR' },
+      totalCarePremiumMonthly: { amount: '90', currency: 'EUR' },
+      employerContributionKnown: false,
+      additionalRateMode: 'published_average',
+    } as never
+    expect(validationErrors(privateInsurance)).toContainEqual(
+      expect.objectContaining({ path: 'social.health.additionalRateMode' }),
+    )
+
+    const unknown = validScenario()
+    unknown.social.health = {
+      healthInsuranceType: 'unknown',
+      totalCarePremiumMonthly: { amount: '90', currency: 'EUR' },
+    } as never
+    expect(validationErrors(unknown)).toContainEqual(
+      expect.objectContaining({
+        path: 'social.health.totalCarePremiumMonthly',
+      }),
+    )
+  })
+
+  it('rejects whitespace-only and untrimmed labels', () => {
+    const input = validScenario()
+    input.context.scenarioLabel = '   '
+    first(input.compensation.oneOffPayments).label = ' Annual bonus '
+    first(input.comparison.benefits).label = '   '
+
+    expect(validationErrors(input)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: 'context.scenarioLabel',
+          code: 'out_of_range',
+        }),
+        expect.objectContaining({
+          path: 'compensation.oneOffPayments.0.label',
+          code: 'invalid_value',
+        }),
+        expect.objectContaining({
+          path: 'comparison.benefits.0.label',
+          code: 'out_of_range',
+        }),
+      ]),
+    )
+  })
+
   it('returns localized field errors and never returns a partial value', () => {
     const input = validScenario() as MutableScenario
     ;(input as Record<string, unknown>).context = null
@@ -448,6 +511,15 @@ describe('validated salary input schema', () => {
         'comparison.benefits',
       ]),
     )
+
+    const oversized = validScenario()
+    oversized.compensation.oneOffPayments = Array.from(
+      { length: 130_000 },
+      () => first(oversized.compensation.oneOffPayments),
+    )
+    const oversizedErrors = validationErrors(oversized)
+    expect(oversizedErrors).toHaveLength(1)
+    expect(first(oversizedErrors).path).toBe('compensation.oneOffPayments')
   })
 
   it('requires a zero amount when recurring cash is explicitly none', () => {

@@ -94,6 +94,7 @@ const annualCompensation = (compensation: RecordValue): string | undefined => {
   const regular = compensation.regularAdditionalCash
   const oneOffs = compensation.oneOffPayments
   if (!isRecord(base) || !isRecord(regular) || !Array.isArray(oneOffs)) return
+  if (oneOffs.length > 12) return
 
   const amounts: { value: string; multiplier: bigint }[] = []
   const baseAmount = isRecord(base.grossAmount) && base.grossAmount.amount
@@ -266,10 +267,9 @@ export const validateIndividualSalaryScenario = (
   ): void => {
     if (value === undefined) return
     const candidate = requiredString(value, path)
-    if (
-      candidate !== undefined &&
-      (candidate.length < 1 || candidate.length > maximum)
-    ) {
+    if (candidate === undefined) return
+    const trimmed = candidate.trim()
+    if (trimmed.length < 1 || trimmed.length > maximum) {
       errors.push(
         issue(
           path,
@@ -278,6 +278,63 @@ export const validateIndividualSalaryScenario = (
           `Verwenden Sie 1 bis ${String(maximum)} Zeichen.`,
         ),
       )
+    } else if (candidate !== trimmed) {
+      errors.push(
+        issue(
+          path,
+          'invalid_value',
+          'Remove leading or trailing whitespace.',
+          'Entfernen Sie Leerzeichen am Anfang oder Ende.',
+        ),
+      )
+    }
+  }
+
+  const requiredLabel = (
+    value: unknown,
+    path: string,
+    maximum: number,
+  ): void => {
+    const candidate = requiredString(value, path)
+    if (candidate === undefined) return
+    const trimmed = candidate.trim()
+    if (trimmed.length < 1 || trimmed.length > maximum) {
+      errors.push(
+        issue(
+          path,
+          'out_of_range',
+          `Use 1 to ${String(maximum)} visible characters.`,
+          `Verwenden Sie 1 bis ${String(maximum)} sichtbare Zeichen.`,
+        ),
+      )
+    } else if (candidate !== trimmed) {
+      errors.push(
+        issue(
+          path,
+          'invalid_value',
+          'Remove leading or trailing whitespace.',
+          'Entfernen Sie Leerzeichen am Anfang oder Ende.',
+        ),
+      )
+    }
+  }
+
+  const rejectInactiveFields = (
+    value: RecordValue,
+    path: string,
+    activeFields: readonly string[],
+  ): void => {
+    for (const field of Object.keys(value)) {
+      if (!activeFields.includes(field)) {
+        errors.push(
+          issue(
+            `${path}.${field}`,
+            'inconsistent_fields',
+            'Remove this field because it does not apply to the selected option.',
+            'Entfernen Sie dieses Feld, da es für die ausgewählte Option nicht gilt.',
+          ),
+        )
+      }
     }
   }
 
@@ -442,7 +499,7 @@ export const validateIndividualSalaryScenario = (
         ),
       )
     }
-    compensation.oneOffPayments.forEach((rawPayment, index) => {
+    compensation.oneOffPayments.slice(0, 12).forEach((rawPayment, index) => {
       const path = `compensation.oneOffPayments.${String(index)}`
       const payment = requiredRecord(rawPayment, path)
       euro(payment.amount, `${path}.amount`, '0.01')
@@ -558,6 +615,11 @@ export const validateIndividualSalaryScenario = (
       ['published_average', 'insurer_specific'],
     )
     if (rateMode === 'insurer_specific') {
+      rejectInactiveFields(health, 'social.health', [
+        'healthInsuranceType',
+        'additionalRateMode',
+        'additionalContributionRate',
+      ])
       const rate = requiredRecord(
         health.additionalContributionRate,
         'social.health.additionalContributionRate',
@@ -571,8 +633,23 @@ export const validateIndividualSalaryScenario = (
       enumValue(rate.unit, 'social.health.additionalContributionRate.unit', [
         'percent',
       ])
+    } else if (rateMode === 'published_average') {
+      rejectInactiveFields(health, 'social.health', [
+        'healthInsuranceType',
+        'additionalRateMode',
+      ])
     }
   } else if (healthType === 'private') {
+    rejectInactiveFields(health, 'social.health', [
+      'healthInsuranceType',
+      'totalHealthPremiumMonthly',
+      'totalCarePremiumMonthly',
+      'payrollBasicCoverageAmountMonthly',
+      'employerContributionKnown',
+      ...(health.employerContributionKnown === true
+        ? ['employerContributionMonthly']
+        : []),
+    ])
     const healthPremium = euro(
       health.totalHealthPremiumMonthly,
       'social.health.totalHealthPremiumMonthly',
@@ -654,6 +731,8 @@ export const validateIndividualSalaryScenario = (
         ),
       )
     }
+  } else if (healthType === 'unknown') {
+    rejectInactiveFields(health, 'social.health', ['healthInsuranceType'])
   }
 
   const comparison = requiredRecord(root.comparison, 'comparison')
@@ -676,19 +755,10 @@ export const validateIndividualSalaryScenario = (
           'Fügen Sie höchstens 20 Leistungen hinzu.',
         ),
       )
-    comparison.benefits.forEach((rawBenefit, index) => {
+    comparison.benefits.slice(0, 20).forEach((rawBenefit, index) => {
       const path = `comparison.benefits.${String(index)}`
       const benefit = requiredRecord(rawBenefit, path)
-      const label = requiredString(benefit.label, `${path}.label`)
-      if (label !== undefined && label.length > 120)
-        errors.push(
-          issue(
-            `${path}.label`,
-            'out_of_range',
-            'Use 1 to 120 characters.',
-            'Verwenden Sie 1 bis 120 Zeichen.',
-          ),
-        )
+      requiredLabel(benefit.label, `${path}.label`, 120)
       if (benefit.employerValueAnnual !== undefined)
         euro(
           benefit.employerValueAnnual,

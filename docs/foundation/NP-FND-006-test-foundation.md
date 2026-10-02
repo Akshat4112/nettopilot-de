@@ -49,11 +49,12 @@ component-test entry point for later interactive controls.
 
 ## Coverage policy
 
-The current maintained runtime surface has a 90% minimum for branches,
-functions, lines and statements. Entry scripts that only connect already-tested
-modules to the browser are excluded. Coverage is a regression signal, not a
-substitute for reference scenarios, boundary analysis or user-journey tests.
-The included runtime surface must grow with future implementation tasks.
+The complete maintained runtime surface has a 90% minimum for branches,
+functions, lines and statements. A broad `src/**/*.{ts,tsx}` rule automatically
+includes future runtime modules. Tests, shared test helpers and entry scripts
+that only connect already-tested modules to the browser are explicitly
+excluded. Coverage is a regression signal, not a substitute for reference
+scenarios, boundary analysis or user-journey tests.
 
 ## Scope boundaries
 

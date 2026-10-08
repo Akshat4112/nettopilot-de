@@ -67,6 +67,23 @@ export {
   toEuroCents,
 } from './precision'
 export type { CentConversionMode, EuroCents, RoundingMode } from './precision'
+export {
+  addExactEuroQuotients,
+  exactEuroQuotientToCents,
+  exactEuroQuotientToDecimal,
+  normalizeCompensation,
+  sumExactEuroQuotients,
+  sumExactEuroQuotientsToCents,
+} from './frequency'
+export type {
+  ExactEuroQuotient,
+  NormalizedAnnualCompensation,
+  NormalizedCompensation,
+  NormalizedMonthlyCompensation,
+  NormalizedOneOffPayment,
+  NormalizedRecurringComponent,
+  PayrollMonth,
+} from './frequency'
 export type {
   LocalizedValidationMessage,
   SalaryValidationIssue,

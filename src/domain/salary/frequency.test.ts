@@ -8,9 +8,11 @@ import type {
   ScenarioLabel,
 } from './types'
 import {
+  addExactEuroQuotients,
   exactEuroQuotientToCents,
   exactEuroQuotientToDecimal,
   normalizeCompensation,
+  sumExactEuroQuotientsToCents,
 } from './frequency'
 
 const euro = (amount: string): EuroAmount => ({
@@ -67,6 +69,25 @@ describe('pay-frequency normalization', () => {
     expect(exactEuroQuotientToCents(monthly, 'half_up')).toBe(833333n)
     expect(exactText(normalized.recurring.baseSalary.annual)).toBe('100000.00')
     expect(exactText(normalized.annual.totalGross)).toBe('100000.00')
+  })
+
+  it('sums exact monthly quotients before applying cent rounding', () => {
+    const base = normalizeCompensation(baseInput('100000.00', 'annual'))
+      .recurring.baseSalary.monthly
+    const additional = normalizeCompensation(baseInput('10000.00', 'annual'))
+      .recurring.baseSalary.monthly
+
+    expect(exactEuroQuotientToCents(base, 'half_up')).toBe(833333n)
+    expect(exactEuroQuotientToCents(additional, 'half_up')).toBe(83333n)
+    expect(sumExactEuroQuotientsToCents([base, additional], 'half_up')).toBe(
+      916667n,
+    )
+    expect(
+      exactEuroQuotientToCents(
+        addExactEuroQuotients(base, additional),
+        'half_up',
+      ),
+    ).toBe(916667n)
   })
 
   it('normalizes guaranteed recurring cash into the conservative totals', () => {

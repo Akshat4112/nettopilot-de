@@ -14,7 +14,6 @@ import {
   decimal,
   divideDecimals,
   multiplyDecimals,
-  sumEuroCents,
   toEuroCents,
 } from './precision'
 
@@ -141,8 +140,7 @@ export const exactEuroQuotientToCents = (
 export const sumExactEuroQuotientsToCents = (
   values: readonly ExactEuroQuotient[],
   mode: RoundingMode,
-): EuroCents =>
-  sumEuroCents(values.map((value) => exactEuroQuotientToCents(value, mode)))
+): EuroCents => exactEuroQuotientToCents(sumExactEuroQuotients(values), mode)
 
 const normalizeRecurringAmount = (
   amount: EuroAmount,

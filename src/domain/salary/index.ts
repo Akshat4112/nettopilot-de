@@ -84,6 +84,12 @@ export type {
   NormalizedRecurringComponent,
   PayrollMonth,
 } from './frequency'
+export {
+  type PapInput,
+  type PapPrepared,
+  prepareTaxablePay,
+  buildPapInput,
+} from './taxable-pay'
 export type {
   LocalizedValidationMessage,
   SalaryValidationIssue,

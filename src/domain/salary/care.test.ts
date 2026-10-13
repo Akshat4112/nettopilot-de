@@ -382,6 +382,35 @@ describe('annual social care contribution', () => {
     })
   })
 
+  it.each([
+    [
+      { insurancePath: 'private' },
+      'unsupported',
+      'private_insurance_separate_path',
+    ],
+    [{ employmentState: 'unknown' }, 'incomplete', 'unknown_employment_state'],
+    [{ birthDate: undefined }, 'incomplete', 'missing_birth_date'],
+  ] as const)(
+    'returns an unavailable result for normalized input %o',
+    (overrides, state, reason) => {
+      const result = calculateCareFromNormalizedCompensation2026(
+        normalizeCompensation(compensation('5000', 'monthly')),
+        {
+          insurancePath: 'statutory',
+          employmentState: 'other',
+          payrollYear: 2026,
+          birthDate: '1990-06-15',
+          parentStatus: 'parent',
+          calculationYear: 2026,
+          ...overrides,
+        },
+        Array<number>(12).fill(1),
+      )
+
+      expect(result).toMatchObject({ state, reason })
+    },
+  )
+
   it.each<CareEmploymentState>(['saxony', 'other'])(
     'keeps annual state allocation stable for %s',
     (employmentState) => {

@@ -81,7 +81,7 @@ describe('2026 statutory pension contribution', () => {
   it.each([
     [1, 28_167, 2_620],
     [15, 422_500, 39_293],
-    [29, 816_833, 75_965],
+    [29, 816_833, 75_966],
     [30, 845_000, 78_585],
   ])(
     'prorates the ceiling for %i contribution days',

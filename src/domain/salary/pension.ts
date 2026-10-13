@@ -199,12 +199,24 @@ export const calculatePensionContribution2026 = (
         return unavailable(input, 'incomplete', 'exemption_not_validated')
       return contributionResult(input, 0n, 0n, 1n, false)
     case 'general_statutory_mandatory': {
-      const appliedCeiling = divideHalfUp(
-        MONTHLY_CEILING_CENTS * BigInt(input.contributionDays),
+      const exactCeilingNumerator =
+        MONTHLY_CEILING_CENTS * BigInt(input.contributionDays)
+      const liablePayNumerator = liablePay * CONTRIBUTION_MONTH_DAYS
+      const ceilingReached = liablePayNumerator > exactCeilingNumerator
+      const baseNumerator = ceilingReached
+        ? exactCeilingNumerator
+        : liablePayNumerator
+      const reportedCeiling = divideHalfUp(
+        exactCeilingNumerator,
         CONTRIBUTION_MONTH_DAYS,
       )
-      const base = liablePay < appliedCeiling ? liablePay : appliedCeiling
-      return contributionResult(input, base, appliedCeiling)
+      return contributionResult(
+        input,
+        baseNumerator,
+        reportedCeiling,
+        CONTRIBUTION_MONTH_DAYS,
+        ceilingReached,
+      )
     }
   }
 }

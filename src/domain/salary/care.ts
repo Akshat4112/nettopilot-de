@@ -492,6 +492,16 @@ export const calculateCareFromNormalizedCompensation2026 = (
     monthlyQualifyingChildren?.length !== 12
   )
     return unavailable('incomplete', 'missing_qualifying_child_count')
+
+  const normalizedInputValidation = validateSupportedInput({
+    ...input,
+    liablePayCents: 0,
+    contributionDays: 30,
+    payrollMonth: 1,
+    qualifyingChildren: monthlyQualifyingChildren?.[0],
+  })
+  if ('state' in normalizedInputValidation) return normalizedInputValidation
+
   if (
     compensation.months.some(
       (month) =>

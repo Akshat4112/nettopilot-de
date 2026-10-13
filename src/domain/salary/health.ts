@@ -63,8 +63,7 @@ export interface HealthContributionResult {
     'DE-BVV-1-2',
   ]
   readonly coverageStatus:
-    | 'statutory_mandatory_general'
-    | 'statutory_voluntary_employee'
+    'statutory_mandatory_general' | 'statutory_voluntary_employee'
   readonly resultQuality: 'insurer_exact' | 'published_average_estimate'
   readonly contributionDays: number
   readonly liablePayCents: number
@@ -239,8 +238,7 @@ const contributionResult = (
       'DE-BVV-1-2',
     ],
     coverageStatus: input.coverageStatus as
-      | 'statutory_mandatory_general'
-      | 'statutory_voluntary_employee',
+      'statutory_mandatory_general' | 'statutory_voluntary_employee',
     resultQuality:
       input.additionalRate.mode === 'insurer_specific'
         ? 'insurer_exact'
@@ -395,10 +393,9 @@ export const calculateAnnualStatutoryHealthContribution2026 = (
   monthlyLiablePayCents: readonly number[],
   monthlyRateInputs: readonly HealthAdditionalRateInput[],
   coverageStatus:
-    | 'statutory_mandatory_general'
-    | 'statutory_voluntary_employee',
-  voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' =
-    'unknown_or_present',
+    'statutory_mandatory_general' | 'statutory_voluntary_employee',
+  voluntaryOtherIncomeStatus:
+    'none' | 'unknown_or_present' = 'unknown_or_present',
 ): AnnualHealthContributionResult => {
   if (monthlyLiablePayCents.length !== 12 || monthlyRateInputs.length !== 12)
     throw new RangeError(
@@ -429,8 +426,7 @@ export const calculateAnnualStatutoryHealthContribution2026 = (
 const exactMonthlyContribution = (
   pay: ExactEuroQuotient,
   coverageStatus:
-    | 'statutory_mandatory_general'
-    | 'statutory_voluntary_employee',
+    'statutory_mandatory_general' | 'statutory_voluntary_employee',
   additionalRate: HealthAdditionalRateInput,
   voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present',
 ): HealthContributionResult => {
@@ -470,10 +466,9 @@ export const calculateHealthFromNormalizedCompensation2026 = (
   compensation: NormalizedCompensation,
   monthlyRateInputs: readonly HealthAdditionalRateInput[],
   coverageStatus:
-    | 'statutory_mandatory_general'
-    | 'statutory_voluntary_employee',
-  voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' =
-    'unknown_or_present',
+    'statutory_mandatory_general' | 'statutory_voluntary_employee',
+  voluntaryOtherIncomeStatus:
+    'none' | 'unknown_or_present' = 'unknown_or_present',
 ): AnnualHealthContributionResult | HealthUnavailableResult => {
   if (monthlyRateInputs.length !== 12)
     throw new RangeError(

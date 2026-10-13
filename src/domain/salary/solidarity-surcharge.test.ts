@@ -62,8 +62,16 @@ describe('2026 recurring-pay solidarity surcharge', () => {
   })
 
   it('selects the lower result across the taper crossover', () => {
-    expect(recurring(3_783_823).zone).toBe('taper')
-    expect(recurring(3_783_832).zone).toBe('full_rate')
+    expect(recurring(3_783_828).zone).toBe('taper')
+    expect(recurring(3_783_829).zone).toBe('full_rate')
+  })
+
+  it('preserves fractional annual cents until weekly allocation', () => {
+    const result = recurring(2_036_300, 'weekly')
+
+    expect(result.zone).toBe('taper')
+    expect(result.annualSurchargeCents).toBe(154)
+    expect(result.surchargeCents).toBe(3)
   })
 
   it('truncates fractions of a cent', () => {

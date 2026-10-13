@@ -75,7 +75,7 @@ describe('2026 statutory health contribution', () => {
   })
 
   it.each([
-    ['1.7', 31_100],
+    ['1.7', 32_600],
     ['2.9', 35_000],
     ['4.2', 37_600],
   ])('supports an exact insurer-specific rate of %s percent', (rate, share) => {
@@ -142,19 +142,22 @@ describe('2026 statutory health contribution', () => {
     })
   })
 
-  it('requires other-income certainty for voluntary pay below the ceiling', () => {
-    expect(
-      calculateStatutoryHealthContribution2026(
-        ordinaryInput(400_000, {
-          coverageStatus: 'statutory_voluntary_employee',
-          voluntaryOtherIncomeStatus: 'unknown_or_present',
-        }),
-      ),
-    ).toMatchObject({
-      state: 'incomplete',
-      reason: 'voluntary_other_income_unknown',
-    })
-  })
+  it(
+    'requires other-income certainty for voluntary pay below the ceiling',
+    () => {
+      expect(
+        calculateStatutoryHealthContribution2026(
+          ordinaryInput(400_000, {
+            coverageStatus: 'statutory_voluntary_employee',
+            voluntaryOtherIncomeStatus: 'unknown_or_present',
+          }),
+        ),
+      ).toMatchObject({
+        state: 'incomplete',
+        reason: 'voluntary_other_income_unknown',
+      })
+    },
+  )
 
   it.each([
     ['unknown', 'incomplete', 'unknown_coverage_status'],
@@ -166,13 +169,16 @@ describe('2026 statutory health contribution', () => {
     ['student', 'unsupported', 'student_unsupported'],
     ['pensioner', 'unsupported', 'pensioner_unsupported'],
     ['cross_border', 'unsupported', 'cross_border_unsupported'],
-  ] as const)('fails closed for %s coverage', (coverageStatus, state, reason) => {
-    expect(
-      calculateStatutoryHealthContribution2026(
-        ordinaryInput(400_000, { coverageStatus }),
-      ),
-    ).toMatchObject({ state, reason })
-  })
+  ] as const)(
+    'fails closed for %s coverage',
+    (coverageStatus, state, reason) => {
+      expect(
+        calculateStatutoryHealthContribution2026(
+          ordinaryInput(400_000, { coverageStatus }),
+        ),
+      ).toMatchObject({ state, reason })
+    },
+  )
 
   it('rejects invalid rates and numeric boundaries', () => {
     expect(() =>
@@ -245,7 +251,7 @@ describe('annual statutory health contribution', () => {
 
     expect(result.months[5]?.additionalRatePercent).toBe('2.5')
     expect(result.months[6]?.additionalRatePercent).toBe('3.5')
-    expect(result.contribution.employeeCents).toBe(420_000)
+    expect(result.contribution.employeeCents).toBe(422_400)
   })
 
   it('requires twelve pay and rate entries', () => {

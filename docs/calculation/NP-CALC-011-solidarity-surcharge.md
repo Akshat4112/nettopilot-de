@@ -24,8 +24,9 @@ final surcharge arithmetic so the rule is reusable and independently testable.
 - At or below the applicable threshold: zero surcharge.
 - Above the threshold: the lower of 5.5% of the assessment base and 11.9% of
   the amount above the threshold.
-- Fractions of a cent are discarded before the annual amount is allocated to
-  the selected payroll period.
+- The exact lower rate candidate is preserved through period allocation;
+  fractions of a cent are discarded only at the annual or selected-period
+  output boundary.
 
 Each result identifies the applied zone, threshold, rates, annual amount,
 period amount, sources, calculation year, and assumption-set version.

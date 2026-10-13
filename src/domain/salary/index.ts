@@ -129,3 +129,20 @@ export type {
   PensionUnavailableReason,
   PensionUnavailableResult,
 } from './pension'
+
+export {
+  calculateAnnualStatutoryHealthContribution2026,
+  calculateHealthFromNormalizedCompensation2026,
+  calculateStatutoryHealthContribution2026,
+} from './health'
+export type {
+  AnnualHealthContributionResult,
+  HealthAdditionalRateInput,
+  HealthContributionAmount,
+  HealthContributionInput,
+  HealthContributionResult,
+  HealthCoverageStatus,
+  HealthResult,
+  HealthUnavailableReason,
+  HealthUnavailableResult,
+} from './health'

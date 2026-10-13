@@ -99,3 +99,18 @@ export type {
 } from './validation'
 export { calculatePayrollTax2026 } from './payroll-tax'
 export type { PayrollTaxResult, PayrollTaxTrace } from './payroll-tax'
+export {
+  calculateAnnualPensionContribution2026,
+  calculatePensionContribution2026,
+  calculatePensionFromNormalizedCompensation2026,
+} from './pension'
+export type {
+  AnnualPensionContributionResult,
+  PensionContributionAmount,
+  PensionContributionInput,
+  PensionContributionResult,
+  PensionCoverageStatus,
+  PensionResult,
+  PensionUnavailableReason,
+  PensionUnavailableResult,
+} from './pension'

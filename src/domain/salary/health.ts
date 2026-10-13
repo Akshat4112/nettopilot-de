@@ -352,7 +352,6 @@ export const calculateStatutoryHealthContribution2026 = (
     reportedCeiling,
     ceilingReached,
   )
-  }
 }
 
 const aggregateAnnualResult = (

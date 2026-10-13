@@ -100,6 +100,18 @@ export type {
 export { calculatePayrollTax2026 } from './payroll-tax'
 export type { PayrollTaxResult, PayrollTaxTrace } from './payroll-tax'
 export {
+  calculateOtherRemunerationSolidaritySurcharge2026,
+  calculateSolidaritySurcharge2026,
+} from './solidarity-surcharge'
+export type {
+  OtherRemunerationSolidaritySurchargeInput,
+  OtherRemunerationSolidaritySurchargeResult,
+  SolidaritySurchargeInput,
+  SolidaritySurchargePaymentPeriod,
+  SolidaritySurchargeResult,
+  SolidaritySurchargeZone,
+} from './solidarity-surcharge'
+export {
   calculateAnnualPensionContribution2026,
   calculatePensionContribution2026,
   calculatePensionFromNormalizedCompensation2026,

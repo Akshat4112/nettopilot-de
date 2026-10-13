@@ -235,6 +235,33 @@ describe('annual unemployment contribution', () => {
     })
   })
 
+  it('carries validated exemption evidence through normalized calculations', () => {
+    const normalized = normalizeCompensation(compensation('60000', 'annual'))
+    const withoutEvidence = calculateUnemploymentFromNormalizedCompensation2026(
+      normalized,
+      'exempt_validated',
+    )
+    const validated = calculateUnemploymentFromNormalizedCompensation2026(
+      normalized,
+      'exempt_validated',
+      true,
+    )
+
+    expect(withoutEvidence).toMatchObject({
+      state: 'incomplete',
+      reason: 'exemption_evidence_required',
+    })
+    expect(validated.state).toBe('calculated')
+    if (validated.state !== 'calculated') return
+    expect(validated.months).toHaveLength(12)
+    expect(validated.contributionBaseCents).toBe(0)
+    expect(validated.contribution).toEqual({
+      employeeCents: 0,
+      employerCents: 0,
+      totalCents: 0,
+    })
+  })
+
   it('does not silently include normalized one-off compensation', () => {
     const input: CompensationInput = {
       ...compensation('5000', 'monthly'),

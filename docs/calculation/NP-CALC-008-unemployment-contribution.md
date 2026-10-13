@@ -30,6 +30,10 @@ not treat annual salary as one contribution event. The normalization adapter
 uses exact recurring-pay quotients from NP-CALC-004 and preserves fractional
 monthly cents through the contribution calculation.
 
+The normalized-compensation adapter accepts exemption-evidence validation
+explicitly. A validated exemption produces twelve traceable zero-contribution
+months; the same status without evidence remains incomplete.
+
 One-off compensation returns an incomplete state until the specialised
 year-to-date allocation rules from NP-RS-011 are implemented.
 

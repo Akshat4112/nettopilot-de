@@ -1,4 +1,8 @@
-import type { ExactEuroQuotient, NormalizedCompensation } from './frequency'
+import {
+  exactEuroQuotientToCents,
+  type ExactEuroQuotient,
+  type NormalizedCompensation,
+} from './frequency'
 
 export type UnemploymentCoverageStatus =
   | 'mandatory_standard'
@@ -328,6 +332,7 @@ const calculateExactMonthlyUnemploymentContribution = (
 export const calculateUnemploymentFromNormalizedCompensation2026 = (
   compensation: NormalizedCompensation,
   coverageStatus: UnemploymentCoverageStatus,
+  exemptionEvidenceValidated = false,
 ): AnnualUnemploymentContributionResult | UnemploymentUnavailableResult => {
   const hasOneOff = compensation.months.some(
     (month) =>
@@ -346,12 +351,31 @@ export const calculateUnemploymentFromNormalizedCompensation2026 = (
       'one_off_allocation_required',
     )
 
+  if (coverageStatus === 'exempt_validated' && exemptionEvidenceValidated) {
+    const months = compensation.months.map((month) => {
+      const result = calculateUnemploymentContribution2026({
+        liablePayCents: Number(
+          exactEuroQuotientToCents(month.totalRecurringGross, 'half_up'),
+        ),
+        contributionDays: 30,
+        coverageStatus,
+        calculationYear: 2026,
+        exemptionEvidenceValidated,
+      })
+      if (result.state !== 'calculated')
+        throw new Error('Validated annual exemption was not calculated')
+      return result
+    })
+    return aggregateAnnualResult(months)
+  }
+
   if (coverageStatus !== 'mandatory_standard')
     return calculateUnemploymentContribution2026({
       liablePayCents: 0,
       contributionDays: 30,
       coverageStatus,
       calculationYear: 2026,
+      exemptionEvidenceValidated,
     }) as UnemploymentUnavailableResult
 
   const months = compensation.months.map((month) =>

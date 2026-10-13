@@ -290,6 +290,32 @@ describe('annual statutory health contribution', () => {
     })
   })
 
+  it('fails closed for normalized voluntary pay without income confirmation', () => {
+    const result = calculateHealthFromNormalizedCompensation2026(
+      normalizeCompensation(compensation('5000', 'monthly')),
+      Array<HealthAdditionalRateInput>(12).fill(published),
+      'statutory_voluntary_employee',
+    )
+
+    expect(result).toMatchObject({
+      state: 'incomplete',
+      reason: 'voluntary_other_income_unknown',
+    })
+  })
+
+  it('calculates normalized voluntary pay after income confirmation', () => {
+    const result = calculateHealthFromNormalizedCompensation2026(
+      normalizeCompensation(compensation('5000', 'monthly')),
+      Array<HealthAdditionalRateInput>(12).fill(published),
+      'statutory_voluntary_employee',
+      'none',
+    )
+
+    expect(result.state).toBe('calculated')
+    if (result.state !== 'calculated') return
+    expect(result.months).toHaveLength(12)
+  })
+
   it('returns incomplete for normalized one-off compensation', () => {
     const input: CompensationInput = {
       ...compensation('5000', 'monthly'),

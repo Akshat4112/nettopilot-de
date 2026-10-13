@@ -68,9 +68,12 @@ describe('2026 statutory health contribution', () => {
     expect(result.estimateWarning).toBe(true)
     expect(result.additionalRatePercent).toBe('2.9')
     expect(result.combinedRatePercent).toBe('17.5')
+    expect(result.employeeRatePercent).toBe('8.75')
+    expect(result.employerRatePercent).toBe('8.75')
     expect(result.contribution.employeeCents).toBe(share)
     expect(result.contribution.employerCents).toBe(share)
     expect(result.contribution.totalCents).toBe(share * 2)
+    expect(result.memberTotalCents).toBe(share * 2)
     expect(result.contributionBaseCents).toBe(Math.min(pay, 581_250))
   })
 
@@ -142,22 +145,19 @@ describe('2026 statutory health contribution', () => {
     })
   })
 
-  it(
-    'requires other-income certainty for voluntary pay below the ceiling',
-    () => {
-      expect(
-        calculateStatutoryHealthContribution2026(
-          ordinaryInput(400_000, {
-            coverageStatus: 'statutory_voluntary_employee',
-            voluntaryOtherIncomeStatus: 'unknown_or_present',
-          }),
-        ),
-      ).toMatchObject({
-        state: 'incomplete',
-        reason: 'voluntary_other_income_unknown',
-      })
-    },
-  )
+  it('requires other-income certainty for voluntary pay below the ceiling', () => {
+    expect(
+      calculateStatutoryHealthContribution2026(
+        ordinaryInput(400_000, {
+          coverageStatus: 'statutory_voluntary_employee',
+          voluntaryOtherIncomeStatus: 'unknown_or_present',
+        }),
+      ),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'voluntary_other_income_unknown',
+    })
+  })
 
   it.each([
     ['unknown', 'incomplete', 'unknown_coverage_status'],
@@ -252,6 +252,16 @@ describe('annual statutory health contribution', () => {
     expect(result.months[5]?.additionalRatePercent).toBe('2.5')
     expect(result.months[6]?.additionalRatePercent).toBe('3.5')
     expect(result.contribution.employeeCents).toBe(422_400)
+  })
+
+  it('fails closed when voluntary other-income status is omitted', () => {
+    expect(() =>
+      calculateAnnualStatutoryHealthContribution2026(
+        Array<number>(12).fill(400_000),
+        Array<HealthAdditionalRateInput>(12).fill(published),
+        'statutory_voluntary_employee',
+      ),
+    ).toThrow('incomplete')
   })
 
   it('requires twelve pay and rate entries', () => {

@@ -10,7 +10,7 @@
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" .github/dependabot.yml eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md CONTRIBUTING.md SECURITY.md \"*.html\"",
-    "format:check": "prettier --write src/domain/salary/health.ts src/domain/salary/health.test.ts && git diff -- src/domain/salary/health.ts src/domain/salary/health.test.ts && false",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/workflows/*.yml\" .github/dependabot.yml eslint.config.js vite.config.ts vitest.config.ts playwright.config.ts package.json \"tsconfig*.json\" README.md CONTRIBUTING.md SECURITY.md \"*.html\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

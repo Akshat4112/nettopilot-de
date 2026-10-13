@@ -104,6 +104,21 @@ export {
   calculatePensionContribution2026,
   calculatePensionFromNormalizedCompensation2026,
 } from './pension'
+export {
+  calculateAnnualUnemploymentContribution2026,
+  calculateUnemploymentContribution2026,
+  calculateUnemploymentFromNormalizedCompensation2026,
+} from './unemployment'
+export type {
+  AnnualUnemploymentContributionResult,
+  UnemploymentContributionAmount,
+  UnemploymentContributionInput,
+  UnemploymentContributionResult,
+  UnemploymentCoverageStatus,
+  UnemploymentResult,
+  UnemploymentUnavailableReason,
+  UnemploymentUnavailableResult,
+} from './unemployment'
 export type {
   AnnualPensionContributionResult,
   PensionContributionAmount,

@@ -398,7 +398,8 @@ export const calculateAnnualStatutoryHealthContribution2026 = (
   coverageStatus:
     | 'statutory_mandatory_general'
     | 'statutory_voluntary_employee',
-  voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' = 'none',
+  voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' =
+    'unknown_or_present',
 ): AnnualHealthContributionResult => {
   if (monthlyLiablePayCents.length !== 12 || monthlyRateInputs.length !== 12)
     throw new RangeError(
@@ -472,7 +473,8 @@ export const calculateHealthFromNormalizedCompensation2026 = (
   coverageStatus:
     | 'statutory_mandatory_general'
     | 'statutory_voluntary_employee',
-  voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' = 'none',
+  voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' =
+    'unknown_or_present',
 ): AnnualHealthContributionResult | HealthUnavailableResult => {
   if (monthlyRateInputs.length !== 12)
     throw new RangeError(

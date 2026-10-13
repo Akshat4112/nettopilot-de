@@ -6,6 +6,11 @@
  * floating-point value enters a tax calculation.
  */
 import type { PapInput } from './taxable-pay'
+import {
+  calculateOtherRemunerationSolidaritySurcharge2026,
+  calculateSolidaritySurcharge2026,
+  type SolidaritySurchargePaymentPeriod,
+} from './solidarity-surcharge'
 
 interface Rat {
   n: bigint
@@ -239,24 +244,13 @@ const allocateAnnualCents = (annualEuro: Rat, lzz: PapInput['LZZ']): bigint => {
   return truncInt(div(cents, r(360)))
 }
 
-const soli = (
-  assessmentTaxEuro: Rat,
-  kztab: 1 | 2,
+const paymentPeriod = (
   lzz: PapInput['LZZ'],
-): bigint => {
-  const threshold = r(20_350 * kztab)
-  if (cmp(assessmentTaxEuro, threshold) <= 0) return 0n
-  const full = quantize(
-    div(mul(assessmentTaxEuro, dec('5.5')), r(100)),
-    2,
-    'down',
-  )
-  const taper = quantize(
-    div(mul(sub(assessmentTaxEuro, threshold), dec('11.9')), r(100)),
-    2,
-    'down',
-  )
-  return allocateAnnualCents(min(full, taper), lzz)
+): SolidaritySurchargePaymentPeriod => {
+  if (lzz === 1) return 'annual'
+  if (lzz === 2) return 'monthly'
+  if (lzz === 3) return 'weekly'
+  return 'daily'
 }
 
 const format = (value: Rat, scale = 2) => {
@@ -274,7 +268,12 @@ export const calculatePayrollTax2026 = (input: PapInput): PayrollTaxResult => {
   const assessment =
     input.ZKF > 0 ? annualTax(input, annualGross, true) : regular
   const wageTax = allocateAnnualCents(regular.taxEuro, input.LZZ)
-  const regularSoli = soli(assessment.taxEuro, assessment.kztab, input.LZZ)
+  const regularSoli = calculateSolidaritySurcharge2026({
+    annualAssessmentBaseCents: safeNumber(integer(assessment.taxEuro) * 100n),
+    tariffMultiplier: assessment.kztab,
+    paymentPeriod: paymentPeriod(input.LZZ),
+    calculationYear: 2026,
+  }).surchargeCents
   const regularChurchBase =
     input.R > 0 ? allocateAnnualCents(assessment.taxEuro, input.LZZ) : 0n
 
@@ -303,8 +302,16 @@ export const calculatePayrollTax2026 = (input: PapInput): PayrollTaxResult => {
     if (otherTax < 0n) otherTax = 0n
     const afterAssessment =
       input.ZKF > 0 ? annualTax({ ...input, LZZ: 1 }, afterGross, true) : after
-    if (cmp(afterAssessment.taxEuro, r(20_350 * afterAssessment.kztab)) > 0)
-      otherSoli = truncInt(div(mul(r(otherTax), dec('5.5')), r(100)))
+    otherSoli = BigInt(
+      calculateOtherRemunerationSolidaritySurcharge2026({
+        annualAssessmentBaseAfterPaymentCents: safeNumber(
+          integer(afterAssessment.taxEuro) * 100n,
+        ),
+        wageTaxOnOtherRemunerationCents: safeNumber(otherTax),
+        tariffMultiplier: afterAssessment.kztab,
+        calculationYear: 2026,
+      }).surchargeCents,
+    )
     if (input.R > 0) otherChurchBase = otherTax
   }
 
@@ -312,7 +319,7 @@ export const calculatePayrollTax2026 = (input: PapInput): PayrollTaxResult => {
     calculationYear: 2026,
     sourceId: 'DE-BMF-PAP-2026-A1',
     wageTaxCents: safeNumber(wageTax),
-    solidaritySurchargeCents: safeNumber(regularSoli),
+    solidaritySurchargeCents: regularSoli,
     churchTaxAssessmentBaseCents: safeNumber(regularChurchBase),
     otherRemunerationWageTaxCents: safeNumber(otherTax),
     otherRemunerationSolidaritySurchargeCents: safeNumber(otherSoli),

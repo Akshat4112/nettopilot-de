@@ -91,18 +91,18 @@ const thresholdFor = (tariffMultiplier: 1 | 2): bigint =>
   BASIC_THRESHOLD_CENTS * BigInt(tariffMultiplier)
 
 const allocateToPeriod = (
-  annualCents: bigint,
+  annualCandidateNumerator: bigint,
   period: SolidaritySurchargePaymentPeriod,
 ): bigint => {
   switch (period) {
     case 'annual':
-      return annualCents
+      return annualCandidateNumerator / RATE_DENOMINATOR
     case 'monthly':
-      return annualCents / 12n
+      return annualCandidateNumerator / (RATE_DENOMINATOR * 12n)
     case 'weekly':
-      return (annualCents * 7n) / 360n
+      return (annualCandidateNumerator * 7n) / (RATE_DENOMINATOR * 360n)
     case 'daily':
-      return annualCents / 360n
+      return annualCandidateNumerator / (RATE_DENOMINATOR * 360n)
   }
 }
 
@@ -123,17 +123,17 @@ export const calculateSolidaritySurcharge2026 = (
   const threshold = thresholdFor(input.tariffMultiplier)
 
   let zone: SolidaritySurchargeZone = 'zero'
-  let annualSurcharge = 0n
+  let annualCandidateNumerator = 0n
   if (assessmentBase > threshold) {
-    const fullAmount = (assessmentBase * FULL_RATE_NUMERATOR) / RATE_DENOMINATOR
-    const taperAmount =
-      ((assessmentBase - threshold) * TAPER_RATE_NUMERATOR) / RATE_DENOMINATOR
-    if (fullAmount <= taperAmount) {
+    const fullCandidateNumerator = assessmentBase * FULL_RATE_NUMERATOR
+    const taperCandidateNumerator =
+      (assessmentBase - threshold) * TAPER_RATE_NUMERATOR
+    if (fullCandidateNumerator <= taperCandidateNumerator) {
       zone = 'full_rate'
-      annualSurcharge = fullAmount
+      annualCandidateNumerator = fullCandidateNumerator
     } else {
       zone = 'taper'
-      annualSurcharge = taperAmount
+      annualCandidateNumerator = taperCandidateNumerator
     }
   }
 
@@ -147,9 +147,11 @@ export const calculateSolidaritySurcharge2026 = (
     fullRatePercent: '5.5',
     taperRatePercent: '11.9',
     paymentPeriod: input.paymentPeriod,
-    annualSurchargeCents: toSafeNumber(annualSurcharge),
+    annualSurchargeCents: toSafeNumber(
+      annualCandidateNumerator / RATE_DENOMINATOR,
+    ),
     surchargeCents: toSafeNumber(
-      allocateToPeriod(annualSurcharge, input.paymentPeriod),
+      allocateToPeriod(annualCandidateNumerator, input.paymentPeriod),
     ),
   }
 }

@@ -146,3 +146,23 @@ export type {
   HealthUnavailableReason,
   HealthUnavailableResult,
 } from './health'
+
+export {
+  calculateAnnualCareContribution2026,
+  calculateCareContribution2026,
+  calculateCareFromNormalizedCompensation2026,
+} from './care'
+export type {
+  AnnualCareContributionInput,
+  AnnualCareContributionResult,
+  CareContributionAmount,
+  CareContributionInput,
+  CareContributionResult,
+  CareEmploymentState,
+  CareEvidenceStatus,
+  CareInsurancePath,
+  CareParentStatus,
+  CareResult,
+  CareUnavailableReason,
+  CareUnavailableResult,
+} from './care'

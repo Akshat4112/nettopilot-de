@@ -69,7 +69,7 @@ describe('taxable-pay preparation (NP-CALC-005)', () => {
     expect(input.STKL).toBe(1)
     expect(input.RE4).toBeGreaterThan(0)
     expect(input.SONSTB).toBe(200000)
-    expect(input.KVZ).toBe(290)
+    expect(input.KVZ).toBe(2.9)
     expect(input.PKV).toBe(0)
     expect(input.PKPV).toBe(0)
     expect(input.PKPVAGZ).toBe(0)
@@ -93,12 +93,12 @@ describe('taxable-pay preparation (NP-CALC-005)', () => {
     expect(prepared.finalSonstb).toBe(input.SONSTB)
   })
 
-  it('computes RE4 from recurring gross minus allowances', () => {
+  it('passes gross RE4 and lets the PAP apply allowances exactly once', () => {
     const scenario = validScenario()
     const { input } = prepare(scenario)
 
-    // 90,000 recurring annual − (1,230 + 102 + 36) allowances = 88,632; /12 → 7,386
-    expect(input.RE4).toBe(738600)
+    expect(input.RE4).toBe(750000)
+    expect(input.JRE4).toBe(9000000)
   })
 
   it('gives tax class II the single-parent relief', () => {
@@ -108,8 +108,7 @@ describe('taxable-pay preparation (NP-CALC-005)', () => {
 
     expect(input.STKL).toBe(2)
     expect(prepared.singleParentRelief).toBe(426000)
-    // (90,000 − 1,368 − 4,260) / 12 = 7,031
-    expect(input.RE4).toBe(703100)
+    expect(input.RE4).toBe(750000)
   })
 
   it('omits employee and pension expense lump sums for classes V and VI', () => {
@@ -160,11 +159,11 @@ describe('taxable-pay preparation (NP-CALC-005)', () => {
 
     expect(input.SONSTB).toBe(500000)
     expect(prepared.annualOneOffGross).toBe(500000)
-    // RE4 from 60,000 recurring only: (6,000,000 − 136,800) / 12 = 488,600 cents
-    expect(input.RE4).toBe(488600)
+    expect(input.RE4).toBe(500000)
+    expect(input.JRE4).toBe(6000000)
   })
 
-  it('maps the insurer-specific additional rate to KVZ basis points', () => {
+  it('maps the insurer-specific additional rate to the PAP percentage input', () => {
     const scenario = validScenario()
     ;(scenario.social as Record<string, unknown>).health = {
       healthInsuranceType: 'statutory',
@@ -173,7 +172,7 @@ describe('taxable-pay preparation (NP-CALC-005)', () => {
     }
     const { input } = prepare(scenario)
 
-    expect(input.KVZ).toBe(160)
+    expect(input.KVZ).toBe(1.6)
   })
 
   it('sets the private-insurance path fields', () => {

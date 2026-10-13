@@ -97,3 +97,5 @@ export type {
   SalaryValidationRules,
   ValidationIssueCode,
 } from './validation'
+export { calculatePayrollTax2026 } from './payroll-tax'
+export type { PayrollTaxResult, PayrollTaxTrace } from './payroll-tax'

@@ -8,9 +8,9 @@
  *
  * Key responsibilities:
  * - Annualise recurring pay using the statutory LZZ fractions.
- * - Compute the Vorsorgepauschale deduction (pension, health, care, unemployment).
- * - Apply fixed payroll allowances (employee expense, pension expense, special expense).
- * - Apply child allowances, single-parent relief, pension/age allowances.
+ * - Map the facts used by the PAP's Vorsorgepauschale branch.
+ * - Report fixed allowance expectations without pre-deducting them from RE4.
+ * - Map child, pension and age inputs only where the admitted scope supports them.
  * - Prepare RE4, RE4ENT, JRE4, SONSTB, LZZFREIB, LZZHINZU, etc.
  * - Return a structured, validated `PapInput` object for the PAP core.
  */
@@ -251,18 +251,11 @@ export function prepareTaxablePay(
       : CHILD_ALLOWANCE_PER_PARENT
   const childAllowanceForSoli = Math.round(zkfValue * childAllowanceUnit)
 
-  // 6. Compute RE4 (taxable recurring wage for the period)
-  //    Start from annual recurring gross, subtract allowances, then annualise to period.
-  const annualRecurringNetOfAllowances =
-    Number(annualRecurringGross) -
-    employeeExpenseLumpSum -
-    pensionExpenseLumpSum -
-    specialExpenseLumpSum -
-    singleParentRelief
-
-  // LZZ = 2 (monthly) is our primary v1 path.
+  // 6. RE4 is the gross wage before the allowances calculated by the PAP.
+  //    Pre-deducting ANP/SAP/EFA here would apply them twice in NP-CALC-006.
+  //    LZZ = 2 (monthly) is our primary v1 path.
   const LZZ = 2
-  const RE4 = Math.round(annualRecurringNetOfAllowances / 12)
+  const RE4 = Math.round(Number(annualRecurringGross) / 12)
 
   // 6b. RE4ENT (taxable section 19a benefits included in RE4) — unsupported in v1
   const RE4ENT = 0
@@ -272,8 +265,9 @@ export function prepareTaxablePay(
   const SONSTENT = 0 // unsupported in v1
   const STERBE = 0 // unsupported in v1
 
-  // 8. JRE4 / JRE4ENT / JVBEZ — unsupported pension path in v1
-  const JRE4 = 0
+  // 8. JRE4 is mandatory for the other-remuneration path and excludes the
+  //    current SONSTB. It is zero only when that path is not used.
+  const JRE4 = Number(SONSTB) > 0 ? Number(annualRecurringGross) : 0
   const JRE4ENT = 0
   const JVBEZ = 0
 
@@ -342,10 +336,9 @@ export function prepareTaxablePay(
     if (healthType === 'statutory') {
       const mode = social.health.additionalRateMode
       if (mode === 'insurer_specific') {
-        return parseFloat(social.health.additionalContributionRate.value) * 100 // stored as basis points in PAP
+        return parseFloat(social.health.additionalContributionRate.value)
       }
-      // published average: 2.9% -> 290 basis points
-      return 290
+      return 2.9
     }
     return 0
   })()

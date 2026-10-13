@@ -120,7 +120,8 @@ const decimalPattern = /^(0|[1-9]\d*)(?:\.(\d+))?$/
 
 const parseNonNegativeDecimal = (value: string, name: string): DecimalParts => {
   const match = decimalPattern.exec(value)
-  if (match === null) throw new TypeError(name + ' must be a non-negative decimal')
+  if (match === null)
+    throw new TypeError(name + ' must be a non-negative decimal')
   const whole = match[1] ?? '0'
   const fraction = match[2] ?? ''
   const raw = whole + fraction
@@ -129,7 +130,8 @@ const parseNonNegativeDecimal = (value: string, name: string): DecimalParts => {
   return {
     coefficient,
     scale: fraction.length,
-    canonical: canonicalFraction.length === 0 ? whole : whole + '.' + canonicalFraction,
+    canonical:
+      canonicalFraction.length === 0 ? whole : whole + '.' + canonicalFraction,
   }
 }
 
@@ -145,7 +147,9 @@ const divideHalfUp = (numerator: bigint, denominator: bigint): bigint => {
 const toSafeNumber = (value: bigint): number => {
   const result = Number(value)
   if (!Number.isSafeInteger(result))
-    throw new RangeError('Health-insurance result exceeds the safe integer range')
+    throw new RangeError(
+      'Health-insurance result exceeds the safe integer range',
+    )
   return result
 }
 
@@ -164,7 +168,9 @@ const formatDecimal = (coefficient: bigint, scale: number): string => {
 
 const resolveRates = (input: HealthAdditionalRateInput) => {
   const additional = parseNonNegativeDecimal(
-    input.mode === 'published_average' ? PUBLISHED_AVERAGE_RATE : input.ratePercent,
+    input.mode === 'published_average'
+      ? PUBLISHED_AVERAGE_RATE
+      : input.ratePercent,
     'additional health-insurance rate',
   )
   const scale = Math.max(1, additional.scale)
@@ -172,10 +178,15 @@ const resolveRates = (input: HealthAdditionalRateInput) => {
   const additionalCoefficient =
     additional.coefficient * powerOfTen(scale - additional.scale)
   const combinedCoefficient = generalCoefficient + additionalCoefficient
+  const halfRateIsExactAtCurrentScale = combinedCoefficient % 2n === 0n
+  const halfRateCoefficient = halfRateIsExactAtCurrentScale
+    ? combinedCoefficient / 2n
+    : combinedCoefficient * 5n
+  const halfRateScale = halfRateIsExactAtCurrentScale ? scale : scale + 1
   return {
     additionalRatePercent: additional.canonical,
     combinedRatePercent: formatDecimal(combinedCoefficient, scale),
-    halfRatePercent: formatDecimal(combinedCoefficient, scale) + ' / 2',
+    halfRatePercent: formatDecimal(halfRateCoefficient, halfRateScale),
     combinedCoefficient,
     percentScale: scale,
   }
@@ -239,7 +250,9 @@ const contributionResult = (
     monthlyCeilingCents: 581_250,
     annualCeilingCents: 6_975_000,
     appliedCeilingCents: toSafeNumber(appliedCeilingCents),
-    contributionBaseCents: toSafeNumber(divideHalfUp(baseNumerator, baseDenominator)),
+    contributionBaseCents: toSafeNumber(
+      divideHalfUp(baseNumerator, baseDenominator),
+    ),
     ceilingReached,
     generalRatePercent: '14.6',
     additionalRateMode: input.additionalRate.mode,
@@ -252,7 +265,7 @@ const contributionResult = (
       employerCents: toSafeNumber(employer),
       totalCents: toSafeNumber(total),
     },
-    memberTotalCents: toSafeNumber(fullContribution),
+    memberTotalCents: toSafeNumber(total),
     employerSubsidyCents: toSafeNumber(employer),
     estimateWarning: input.additionalRate.mode === 'published_average',
   }
@@ -262,15 +275,22 @@ export const calculateStatutoryHealthContribution2026 = (
   input: HealthContributionInput,
 ): HealthResult => {
   if (input.calculationYear !== 2026)
-    throw new RangeError('Only 2026 statutory health assumptions are implemented')
+    throw new RangeError(
+      'Only 2026 statutory health assumptions are implemented',
+    )
 
-  const liablePay = assertSafeNonNegativeInteger(input.liablePayCents, 'liablePayCents')
+  const liablePay = assertSafeNonNegativeInteger(
+    input.liablePayCents,
+    'liablePayCents',
+  )
   if (
     !Number.isSafeInteger(input.contributionDays) ||
     input.contributionDays < 1 ||
     input.contributionDays > 30
   )
-    throw new RangeError('contributionDays must be an integer from 1 through 30')
+    throw new RangeError(
+      'contributionDays must be an integer from 1 through 30',
+    )
 
   resolveRates(input.additionalRate)
 
@@ -283,7 +303,11 @@ export const calculateStatutoryHealthContribution2026 = (
     case 'statutory_reduced_rate':
       return unavailable(input, 'unsupported', 'reduced_rate_unsupported')
     case 'private':
-      return unavailable(input, 'unsupported', 'private_insurance_separate_path')
+      return unavailable(
+        input,
+        'unsupported',
+        'private_insurance_separate_path',
+      )
     case 'family_insured':
       return unavailable(input, 'unsupported', 'family_insurance_unsupported')
     case 'transition_range':
@@ -302,25 +326,32 @@ export const calculateStatutoryHealthContribution2026 = (
           MONTHLY_CEILING_CENTS * BigInt(input.contributionDays) &&
         input.voluntaryOtherIncomeStatus !== 'none'
       )
-        return unavailable(input, 'incomplete', 'voluntary_other_income_unknown')
-    case 'statutory_mandatory_general': {
-      const ceilingNumerator =
-        MONTHLY_CEILING_CENTS * BigInt(input.contributionDays)
-      const liableNumerator = liablePay * CONTRIBUTION_MONTH_DAYS
-      const ceilingReached = liableNumerator > ceilingNumerator
-      const baseNumerator = ceilingReached ? ceilingNumerator : liableNumerator
-      const reportedCeiling = divideHalfUp(
-        ceilingNumerator,
-        CONTRIBUTION_MONTH_DAYS,
-      )
-      return contributionResult(
-        input,
-        baseNumerator,
-        CONTRIBUTION_MONTH_DAYS,
-        reportedCeiling,
-        ceilingReached,
-      )
-    }
+        return unavailable(
+          input,
+          'incomplete',
+          'voluntary_other_income_unknown',
+        )
+      break
+    case 'statutory_mandatory_general':
+      break
+  }
+
+  const ceilingNumerator =
+    MONTHLY_CEILING_CENTS * BigInt(input.contributionDays)
+  const liableNumerator = liablePay * CONTRIBUTION_MONTH_DAYS
+  const ceilingReached = liableNumerator > ceilingNumerator
+  const baseNumerator = ceilingReached ? ceilingNumerator : liableNumerator
+  const reportedCeiling = divideHalfUp(
+    ceilingNumerator,
+    CONTRIBUTION_MONTH_DAYS,
+  )
+  return contributionResult(
+    input,
+    baseNumerator,
+    CONTRIBUTION_MONTH_DAYS,
+    reportedCeiling,
+    ceilingReached,
+  )
   }
 }
 
@@ -370,11 +401,14 @@ export const calculateAnnualStatutoryHealthContribution2026 = (
   voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' = 'none',
 ): AnnualHealthContributionResult => {
   if (monthlyLiablePayCents.length !== 12 || monthlyRateInputs.length !== 12)
-    throw new RangeError('Annual health calculation requires exactly 12 months and rates')
+    throw new RangeError(
+      'Annual health calculation requires exactly 12 months and rates',
+    )
 
   const months = monthlyLiablePayCents.map((liablePayCents, index) => {
     const additionalRate = monthlyRateInputs[index]
-    if (additionalRate === undefined) throw new Error('Missing monthly health rate')
+    if (additionalRate === undefined)
+      throw new Error('Missing monthly health rate')
     const result = calculateStatutoryHealthContribution2026({
       liablePayCents,
       contributionDays: 30,
@@ -384,7 +418,9 @@ export const calculateAnnualStatutoryHealthContribution2026 = (
       voluntaryOtherIncomeStatus,
     })
     if (result.state !== 'calculated')
-      throw new Error('Annual health month is incomplete or unsupported: ' + result.reason)
+      throw new Error(
+        'Annual health month is incomplete or unsupported: ' + result.reason,
+      )
     return result
   })
   return aggregateAnnualResult(months)
@@ -410,7 +446,9 @@ const exactMonthlyContribution = (
     !ceilingReached &&
     voluntaryOtherIncomeStatus !== 'none'
   )
-    throw new RangeError('Voluntary health calculation requires other-income status')
+    throw new RangeError(
+      'Voluntary health calculation requires other-income status',
+    )
 
   return contributionResult(
     {
@@ -437,7 +475,9 @@ export const calculateHealthFromNormalizedCompensation2026 = (
   voluntaryOtherIncomeStatus: 'none' | 'unknown_or_present' = 'none',
 ): AnnualHealthContributionResult | HealthUnavailableResult => {
   if (monthlyRateInputs.length !== 12)
-    throw new RangeError('Normalized health calculation requires exactly 12 monthly rates')
+    throw new RangeError(
+      'Normalized health calculation requires exactly 12 monthly rates',
+    )
 
   if (
     compensation.months.some(
@@ -485,7 +525,8 @@ export const calculateHealthFromNormalizedCompensation2026 = (
 
   const months = compensation.months.map((month, index) => {
     const additionalRate = monthlyRateInputs[index]
-    if (additionalRate === undefined) throw new Error('Missing monthly health rate')
+    if (additionalRate === undefined)
+      throw new Error('Missing monthly health rate')
     return exactMonthlyContribution(
       month.totalRecurringGross,
       coverageStatus,

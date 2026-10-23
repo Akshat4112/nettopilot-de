@@ -318,14 +318,14 @@ export function prepareTaxablePay(
     const selectedHealth = precisionEuroAmountToCents(
       social.health.totalHealthPremiumMonthly,
       'half_up',
-    ) as number
+    )
     const selectedCare = precisionEuroAmountToCents(
       social.health.totalCarePremiumMonthly,
       'half_up',
     ) as number
     if (
-      selectedHealth !== privateInsurance.totalHealthPremiumCents ||
-      selectedCare !== privateInsurance.totalCarePremiumCents
+      selectedHealth !== BigInt(privateInsurance.totalHealthPremiumCents) ||
+      selectedCare !== BigInt(privateInsurance.totalCarePremiumCents)
     )
       throw new RangeError(
         'Private insurance premiums differ from the scenario',

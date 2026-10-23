@@ -202,12 +202,16 @@ export const calculateChurchTaxFromApprovedRule2026 = (
   const registeredRule = CHURCH_TAX_STATE_REGISTRY_2026.find(
     (entry) => entry.state === rule.state,
   )
+  const rateSources = rule.rateSourceIds.join('|')
+  const centSources = rule.finalCentSourceIds.join('|')
+  const approvedRateSources = registeredRule?.rateSourceIds.join('|')
+  const approvedCentSources = registeredRule?.finalCentSourceIds.join('|')
   if (
     registeredRule?.rateEvidence !== 'approved' ||
     registeredRule.finalCentEvidence !== 'approved' ||
     rule.rateBasisPoints !== registeredRule.candidateRateBasisPoints ||
-    rule.rateSourceIds.join('|') !== registeredRule.rateSourceIds.join('|') ||
-    rule.finalCentSourceIds.join('|') !== registeredRule.finalCentSourceIds.join('|')
+    rateSources !== approvedRateSources ||
+    centSources !== approvedCentSources
   )
     throw new RangeError(
       'Church-tax rule is not approved by the production evidence registry',

@@ -178,12 +178,18 @@ describe('approved church-tax rule admission', () => {
   })
 
   it('rejects unsupported payroll scopes even for non-liable employees', () => {
-    for (const scope of ['flat_rate_payroll', 'cross_border', 'final_assessment'] as const) {
-      expect(calculateChurchTax2026({
-        ...liableInput('DE-BY'),
-        status: 'not_liable',
-        scope,
-      })).toMatchObject({
+    for (const scope of [
+      'flat_rate_payroll',
+      'cross_border',
+      'final_assessment',
+    ] as const) {
+      expect(
+        calculateChurchTax2026({
+          ...liableInput('DE-BY'),
+          status: 'not_liable',
+          scope,
+        }),
+      ).toMatchObject({
         state: 'unsupported',
         reason: 'special_case_unsupported',
       })

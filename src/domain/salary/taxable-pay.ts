@@ -322,7 +322,7 @@ export function prepareTaxablePay(
     const selectedCare = precisionEuroAmountToCents(
       social.health.totalCarePremiumMonthly,
       'half_up',
-    ) as number
+    )
     if (
       selectedHealth !== BigInt(privateInsurance.totalHealthPremiumCents) ||
       selectedCare !== BigInt(privateInsurance.totalCarePremiumCents)

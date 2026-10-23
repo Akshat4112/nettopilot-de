@@ -1,4 +1,112 @@
 :root {
+  --np-color-ink: #17221d;
+  --np-color-muted: #46554d;
+  --np-color-canvas: #f4f3ed;
+  --np-color-surface: #faf9f5;
+  --np-color-line: #c8cec9;
+  --np-color-accent: #9c3f28;
+  --np-color-focus: #135e8a;
+  --np-color-error: #a32632;
+  --np-color-success: #176a48;
+  --np-radius-sm: 0.5rem;
+  --np-radius-md: 0.875rem;
+  --np-radius-lg: 1.25rem;
+  --np-space-1: 0.25rem;
+  --np-space-2: 0.5rem;
+  --np-space-3: 0.75rem;
+  --np-space-4: 1rem;
+  --np-space-6: 1.5rem;
+  --np-space-8: 2rem;
+  --np-space-12: 3rem;
+  --np-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+  --np-shadow-raised: 0 12px 35px rgb(23 34 29 / 8%);
+}
+
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--np-color-focus);
+  outline-offset: 3px;
+}
+
+:where(input, select, textarea) {
+  max-width: 100%;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-sm);
+  padding: 0.75rem;
+  background: var(--np-color-surface);
+  color: var(--np-color-ink);
+  font: inherit;
+}
+
+:where(button) {
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: var(--np-radius-sm);
+  padding: 0.65rem 1rem;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+:where(button):disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.np-panel {
+  min-width: 0;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-lg);
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--np-color-surface);
+}
+
+.np-field {
+  display: grid;
+  gap: var(--np-space-2);
+  min-width: 0;
+}
+
+.np-field-error {
+  color: var(--np-color-error);
+  font-size: 0.875rem;
+}
+
+.np-input-error {
+  border-color: var(--np-color-error);
+}
+
+.np-button-primary {
+  background: var(--np-color-ink);
+  color: white;
+}
+
+.np-button-secondary {
+  border-color: var(--np-color-line);
+  background: var(--np-color-surface);
+  color: var(--np-color-ink);
+}
+
+.np-status-error {
+  border-left: 4px solid var(--np-color-error);
+}
+
+.np-status-success {
+  border-left: 4px solid var(--np-color-success);
+}
+
+.np-results-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(16rem, 3fr);
+  gap: var(--np-space-6);
+}
+
+@media (max-width: 760px) {
+  .np-results-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+:root {
   font-family:
     Inter,
     ui-sans-serif,

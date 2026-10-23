@@ -123,6 +123,10 @@ export const calculatePrivateInsurance2026 = (
   const maxHealth = healthEligible === undefined ? healthCap : minimum(halfUp(healthEligible, 2n), healthCap)
   const maxCare = careEligible === undefined ? careCap : minimum(halfUp(careEligible, 2n), careCap)
 
+  if (input.employerSubsidyEligibility === 'not_eligible' &&
+      ((actualHealth ?? 0n) > 0n || (actualCare ?? 0n) > 0n)) {
+    return missing('unsupported', 'ineligible_employee_has_subsidy')
+  }
   const employerHealth = input.employerSubsidyEligibility === 'not_eligible'
     ? 0n
     : actualHealth ?? maxHealth
@@ -134,6 +138,10 @@ export const calculatePrivateInsurance2026 = (
   }
   if (employerHealth > health || employerCare > care) {
     return missing('unsupported', 'employer_subsidy_exceeds_premium')
+  }
+  if ((healthEligible !== undefined && employerHealth * 2n > healthEligible + 1n) ||
+      (careEligible !== undefined && employerCare * 2n > careEligible + 1n)) {
+    return missing('unsupported', 'employer_subsidy_exceeds_eligible_half')
   }
   const subsidy = employerHealth + employerCare
   if (subsidy > basic) {

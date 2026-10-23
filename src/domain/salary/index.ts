@@ -202,3 +202,6 @@ export type {
   PrivateInsuranceResult2026,
   PrivateInsuranceValueSource,
 } from './private-insurance'
+
+export { calculateAnnualPrivateInsurance2026 } from './private-insurance-annual'
+export type { PrivateInsuranceAnnualResult2026 } from './private-insurance-annual'

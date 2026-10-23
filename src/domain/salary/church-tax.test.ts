@@ -167,68 +167,36 @@ describe('2026 church-tax production admission', () => {
   })
 })
 
-describe('approved church-tax rule arithmetic', () => {
-  it.each([
-    [800, 987, 88],
-    [900, 1_111, 99],
-  ] as const)(
-    'truncates the %i-basis-point components separately',
-    (rate, recurring, other) => {
-      const result = calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BY'),
-        approvedRule('DE-BY', rate),
-      )
-
-      expect(result.recurringChurchTaxCents).toBe(recurring)
-      expect(result.otherRemunerationChurchTaxCents).toBe(other)
-      expect(result.totalChurchTaxCents).toBe(recurring + other)
-    },
-  )
-
-  it.each([
-    [0, 0],
-    [100_000, 8_000],
-    [11, 0],
-  ])('handles an 8%% base of %i cents', (base, expected) => {
-    const result = calculateChurchTaxFromApprovedRule2026(
-      liableInput('DE-BW', {
-        recurringAssessmentBaseCents: base,
-        otherRemunerationAssessmentBaseCents: 0,
-        payrollEstablishmentPostcode: '70173',
-      }),
-      approvedRule('DE-BW', 800),
-    )
-    expect(result.recurringChurchTaxCents).toBe(expected)
-  })
-
-  it('rejects a rule for a different establishment state', () => {
+describe('approved church-tax rule admission', () => {
+  it('rejects fabricated source IDs even when a rule claims approved status', () => {
     expect(() =>
       calculateChurchTaxFromApprovedRule2026(
         liableInput('DE-BY'),
-        approvedRule('DE-BE', 900),
+        approvedRule('DE-BY', 900),
       ),
-    ).toThrow('does not match')
+    ).toThrow('not approved by the production evidence registry')
   })
 
-  it('does not let the approved-rule path bypass payroll evidence', () => {
+  it('rejects unsupported payroll scopes even for non-liable employees', () => {
+    for (const scope of ['flat_rate_payroll', 'cross_border', 'final_assessment'] as const) {
+      expect(calculateChurchTax2026({
+        ...liableInput('DE-BY'),
+        status: 'not_liable',
+        scope,
+      })).toMatchObject({
+        state: 'unsupported',
+        reason: 'special_case_unsupported',
+      })
+    }
+  })
+
+  it('continues to reject unconfirmed payroll-marker evidence', () => {
     expect(() =>
       calculateChurchTaxFromApprovedRule2026(
         liableInput('DE-BY', { payrollMarkerEvidence: 'unknown' }),
-        approvedRule('DE-BY', 800),
+        approvedRule('DE-BY', 900),
       ),
     ).toThrow('confirmed payroll-marker evidence')
-  })
-
-  it('enforces the Bad Wimpfen exception rate on an approved rule', () => {
-    expect(() =>
-      calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BW', {
-          payrollEstablishmentPostcode: '74206',
-          bwExceptionStatus: 'applies',
-        }),
-        approvedRule('DE-BW', 800),
-      ),
-    ).toThrow('conflicts with the Bad Wimpfen')
   })
 })
 

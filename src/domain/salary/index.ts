@@ -195,3 +195,6 @@ export type {
   CareUnavailableReason,
   CareUnavailableResult,
 } from './care'
+
+export { calculatePrivateInsurance2026 } from './private-insurance'
+export type { PrivateInsuranceInput2026, PrivateInsuranceResult2026, PrivateInsuranceValueSource } from './private-insurance'

@@ -199,6 +199,15 @@ export const calculateChurchTaxFromApprovedRule2026 = (
     )
   if (input.payrollEstablishmentState !== rule.state)
     throw new RangeError('Approved church-tax rule does not match the state')
+  const registeredRule = CHURCH_TAX_STATE_REGISTRY_2026.find((entry) => entry.state === rule.state)
+  if (
+    registeredRule?.rateEvidence !== 'approved' ||
+    registeredRule.finalCentEvidence !== 'approved' ||
+    rule.rateBasisPoints !== registeredRule.candidateRateBasisPoints ||
+    rule.rateSourceIds.join('|') !== registeredRule.rateSourceIds.join('|') ||
+    rule.finalCentSourceIds.join('|') !== registeredRule.finalCentSourceIds.join('|')
+  )
+    throw new RangeError('Church-tax rule is not approved by the production evidence registry')
   if (rule.rateSourceIds.length === 0 || rule.finalCentSourceIds.length === 0)
     throw new RangeError(
       'Approved church-tax rule has incomplete source metadata',
@@ -273,6 +282,9 @@ export const calculateChurchTax2026 = (
   assert2026(input.calculationYear)
   validateBases(input)
 
+  if (input.scope !== undefined && input.scope !== 'ordinary_payroll')
+    return unavailable('unsupported', 'special_case_unsupported')
+
   if (input.status === 'not_liable')
     return {
       state: 'calculated',
@@ -299,8 +311,6 @@ export const calculateChurchTax2026 = (
 
   if (input.status === 'unknown')
     return unavailable('incomplete', 'unknown_church_tax_status')
-  if (input.scope !== undefined && input.scope !== 'ordinary_payroll')
-    return unavailable('unsupported', 'special_case_unsupported')
   if (input.payrollMarkerEvidence !== 'confirmed')
     return unavailable('incomplete', 'unconfirmed_payroll_marker')
   if (!input.childAllowanceFactorKnown)

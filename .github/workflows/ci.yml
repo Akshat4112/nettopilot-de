@@ -38,6 +38,16 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Print formatter output for payroll adapter repair
+        run: |
+          npx prettier --write src/domain/salary/taxable-pay.ts src/domain/salary/taxable-pay.test.ts
+          echo 'BEGIN_FORMATTED_PAYROLL_TS'
+          cat src/domain/salary/taxable-pay.ts
+          echo 'END_FORMATTED_PAYROLL_TS'
+          echo 'BEGIN_FORMATTED_PAYROLL_TEST'
+          cat src/domain/salary/taxable-pay.test.ts
+          echo 'END_FORMATTED_PAYROLL_TEST'
+
       - name: Check formatting
         run: npm run format:check
 

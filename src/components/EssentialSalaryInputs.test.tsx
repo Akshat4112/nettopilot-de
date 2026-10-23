@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { EssentialSalaryInputs } from './EssentialSalaryInputs'
 import { renderWithUser } from '../test/render'
@@ -28,5 +28,58 @@ describe('EssentialSalaryInputs', () => {
     await user.click(screen.getByRole('button', { name: 'Reset' }))
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
     expect(screen.getByLabelText('Tax class')).toHaveValue('')
+  })
+  it('validates a complete supported essential-input draft', async () => {
+    const { user } = renderWithUser(<EssentialSalaryInputs />)
+    fireEvent.change(screen.getByLabelText('Gross salary (EUR)'), {
+      target: { value: '5000' },
+    })
+    fireEvent.change(screen.getByLabelText('Tax class'), {
+      target: { value: '1' },
+    })
+    fireEvent.change(screen.getByLabelText('Federal state'), {
+      target: { value: 'DE-BW' },
+    })
+    fireEvent.change(screen.getByLabelText('Church-tax liability'), {
+      target: { value: 'not_liable' },
+    })
+    fireEvent.change(screen.getByLabelText('Date of birth'), {
+      target: { value: '1990-05-01' },
+    })
+    fireEvent.change(screen.getByLabelText('Number of children'), {
+      target: { value: '0' },
+    })
+    fireEvent.change(screen.getByLabelText('Health insurance'), {
+      target: { value: 'statutory' },
+    })
+    await user.click(screen.getByRole('button', { name: 'Check inputs' }))
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Essential inputs complete',
+    )
+    fireEvent.change(screen.getByLabelText('Health insurance'), {
+      target: { value: 'unknown' },
+    })
+    await user.click(screen.getByRole('button', { name: 'Check inputs' }))
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Resolve unknown payroll choices',
+    )
+  })
+
+  it('rejects invalid gross, impossible children and future birthdates', async () => {
+    const { user } = renderWithUser(<EssentialSalaryInputs />)
+    fireEvent.change(screen.getByLabelText('Gross salary (EUR)'), {
+      target: { value: '10000000' },
+    })
+    fireEvent.change(screen.getByLabelText('Date of birth'), {
+      target: { value: '2099-01-01' },
+    })
+    fireEvent.change(screen.getByLabelText('Number of children'), {
+      target: { value: '21' },
+    })
+    await user.click(screen.getByRole('button', { name: 'Check inputs' }))
+    const message = screen.getByRole('status')
+    expect(message).toHaveTextContent('supported range')
+    expect(message).toHaveTextContent('valid date of birth')
+    expect(message).toHaveTextContent('valid number of children')
   })
 })

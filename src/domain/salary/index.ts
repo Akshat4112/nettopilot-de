@@ -103,6 +103,23 @@ export {
   calculateOtherRemunerationSolidaritySurcharge2026,
   calculateSolidaritySurcharge2026,
 } from './solidarity-surcharge'
+export {
+  CHURCH_TAX_STATE_REGISTRY_2026,
+  calculateChurchTax2026,
+  calculateChurchTaxFromPayrollTax2026,
+} from './church-tax'
+export type {
+  ApprovedChurchTaxRule2026,
+  ChurchTaxCalculatedResult,
+  ChurchTaxCalculationScope,
+  ChurchTaxEvidenceStatus,
+  ChurchTaxExceptionStatus,
+  ChurchTaxInput2026,
+  ChurchTaxResult,
+  ChurchTaxStateRecord2026,
+  ChurchTaxUnavailableReason,
+  ChurchTaxUnavailableResult,
+} from './church-tax'
 export type {
   OtherRemunerationSolidaritySurchargeInput,
   OtherRemunerationSolidaritySurchargeResult,

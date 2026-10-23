@@ -38,6 +38,15 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Print formatted UI source for one-time repair
+        run: |
+          npx prettier --write src/components/EssentialSalaryInputs.tsx src/components/EssentialSalaryInputs.test.tsx src/App.tsx src/styles.css
+          for path in src/components/EssentialSalaryInputs.tsx src/components/EssentialSalaryInputs.test.tsx src/App.tsx src/styles.css; do
+            echo "BEGIN_FORMATTED_FILE:$path"
+            cat "$path"
+            echo "END_FORMATTED_FILE:$path"
+          done
+
       - name: Check formatting
         run: npm run format:check
 

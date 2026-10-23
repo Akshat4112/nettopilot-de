@@ -1,3 +1,4 @@
+import { EssentialSalaryInputs } from './components/EssentialSalaryInputs'
 import { APP_BASE_PATH } from './config/app'
 
 const principles = [
@@ -43,6 +44,7 @@ export function App() {
             </span>
           </aside>
         </section>
+        <EssentialSalaryInputs />
       </main>
 
       <footer>

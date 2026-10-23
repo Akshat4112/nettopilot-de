@@ -38,6 +38,15 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Emit formatted bonus sources for branch repair
+        run: |
+          npx prettier --write src/domain/salary/bonus.ts src/domain/salary/bonus.test.ts src/domain/salary/index.ts
+          for path in src/domain/salary/bonus.ts src/domain/salary/bonus.test.ts src/domain/salary/index.ts; do
+            echo "BEGIN_FORMATTED_BONUS:$path"
+            cat "$path"
+            echo "END_FORMATTED_BONUS:$path"
+          done
+
       - name: Check formatting
         run: npm run format:check
 

@@ -54,6 +54,9 @@ export function EssentialSalaryInputs() {
   if (draft.children && (!/^\d{1,2}$/.test(draft.children) || Number(draft.children) > 20)) {
     errors.push('Enter a valid number of children.')
   }
+  if (draft.churchTax === 'unknown' || draft.insurance === 'unknown') {
+    errors.push('Resolve unknown payroll choices before calculating.')
+  }
   const ready = errors.length === 0
 
   return (

@@ -106,7 +106,6 @@ export {
 export {
   CHURCH_TAX_STATE_REGISTRY_2026,
   calculateChurchTax2026,
-  calculateChurchTaxFromApprovedRule2026,
   calculateChurchTaxFromPayrollTax2026,
 } from './church-tax'
 export type {

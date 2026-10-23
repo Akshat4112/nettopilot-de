@@ -199,7 +199,9 @@ export const calculateChurchTaxFromApprovedRule2026 = (
     )
   if (input.payrollEstablishmentState !== rule.state)
     throw new RangeError('Approved church-tax rule does not match the state')
-  const registeredRule = CHURCH_TAX_STATE_REGISTRY_2026.find((entry) => entry.state === rule.state)
+  const registeredRule = CHURCH_TAX_STATE_REGISTRY_2026.find(
+    (entry) => entry.state === rule.state,
+  )
   if (
     registeredRule?.rateEvidence !== 'approved' ||
     registeredRule.finalCentEvidence !== 'approved' ||
@@ -207,7 +209,9 @@ export const calculateChurchTaxFromApprovedRule2026 = (
     rule.rateSourceIds.join('|') !== registeredRule.rateSourceIds.join('|') ||
     rule.finalCentSourceIds.join('|') !== registeredRule.finalCentSourceIds.join('|')
   )
-    throw new RangeError('Church-tax rule is not approved by the production evidence registry')
+    throw new RangeError(
+      'Church-tax rule is not approved by the production evidence registry',
+    )
   if (rule.rateSourceIds.length === 0 || rule.finalCentSourceIds.length === 0)
     throw new RangeError(
       'Approved church-tax rule has incomplete source metadata',

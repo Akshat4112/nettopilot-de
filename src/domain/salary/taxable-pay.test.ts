@@ -212,7 +212,6 @@ describe('taxable-pay preparation (NP-CALC-005)', () => {
     expect(input.PKV).toBe(1)
     expect(input.PKPV).toBe(30000)
     expect(input.PKPVAGZ).toBe(24000)
-
   })
 
   it('sets PVZ from child status and PVA from qualifying children', () => {

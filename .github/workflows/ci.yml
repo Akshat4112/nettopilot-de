@@ -38,6 +38,16 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Produce formatter output for branch repair
+        run: |
+          npx prettier --write src/domain/salary/private-insurance.ts src/domain/salary/private-insurance.test.ts
+          echo 'BEGIN_FORMATTED_PRIVATE_TS'
+          cat src/domain/salary/private-insurance.ts
+          echo 'END_FORMATTED_PRIVATE_TS'
+          echo 'BEGIN_FORMATTED_PRIVATE_TEST'
+          cat src/domain/salary/private-insurance.test.ts
+          echo 'END_FORMATTED_PRIVATE_TEST'
+
       - name: Check formatting
         run: npm run format:check
 

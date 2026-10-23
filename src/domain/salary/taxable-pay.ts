@@ -318,11 +318,11 @@ export function prepareTaxablePay(
     const selectedHealth = precisionEuroAmountToCents(
       social.health.totalHealthPremiumMonthly,
       'half_up',
-    )
+    ) as number
     const selectedCare = precisionEuroAmountToCents(
       social.health.totalCarePremiumMonthly,
       'half_up',
-    )
+    ) as number
     if (
       selectedHealth !== privateInsurance.totalHealthPremiumCents ||
       selectedCare !== privateInsurance.totalCarePremiumCents

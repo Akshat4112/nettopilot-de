@@ -49,11 +49,13 @@ describe('2026 private health and care insurance', () => {
   })
 
   it('preserves actual payroll contributions when valid', () => {
-    expect(calculatePrivateInsurance2026({
+    expect(
+      calculatePrivateInsurance2026({
       ...base,
       actualEmployerHealthSubsidyCents: 40000,
       actualEmployerCareSubsidyCents: 8000,
-    })).toMatchObject({
+      }),
+    ).toMatchObject({
       state: 'calculated',
       resultQuality: 'payroll_aligned',
       pap: { PKV: 1, PKPV: 90000, PKPVAGZ: 48000 },
@@ -61,10 +63,12 @@ describe('2026 private health and care insurance', () => {
   })
 
   it('returns zero subsidy for confirmed ineligible employees', () => {
-    expect(calculatePrivateInsurance2026({
+    expect(
+      calculatePrivateInsurance2026({
       ...base,
       employerSubsidyEligibility: 'not_eligible',
-    })).toMatchObject({
+      }),
+    ).toMatchObject({
       state: 'calculated',
       employerSubsidyTotalCents: 0,
       employeeAfterInsuranceCostCents: 103000,
@@ -75,7 +79,10 @@ describe('2026 private health and care insurance', () => {
     [{ employerSubsidyEligibility: 'unknown' }, 'subsidy_eligibility_unknown'],
     [{ employmentState: 'unknown' }, 'employment_state_unknown'],
     [{ payrollBasicCoverageCents: undefined }, 'tax_eligible_amount_missing'],
-    [{ subsidyEligibleHealthPremiumCents: undefined }, 'subsidy_eligible_contribution_missing'],
+    [
+      { subsidyEligibleHealthPremiumCents: undefined },
+      'subsidy_eligible_contribution_missing',
+    ],
     [{ disputedElstam: true }, 'elstam_disputed'],
     [{ coverageConfirmed: false }, 'private_coverage_not_confirmed'],
   ] as const)('fails closed for %o', (change, reason) => {
@@ -86,45 +93,55 @@ describe('2026 private health and care insurance', () => {
   })
 
   it('rejects subsidy amounts exceeding the calculated cap', () => {
-    expect(calculatePrivateInsurance2026({
+    expect(
+      calculatePrivateInsurance2026({
       ...base,
       actualEmployerHealthSubsidyCents: 60000,
-    })).toMatchObject({
+      }),
+    ).toMatchObject({
       state: 'unsupported',
       reason: 'employer_subsidy_exceeds_statutory_cap',
     })
   })
 
   it('rejects a subsidy for an ineligible employee', () => {
-    expect(calculatePrivateInsurance2026({
+    expect(
+      calculatePrivateInsurance2026({
       ...base,
       employerSubsidyEligibility: 'not_eligible',
       actualEmployerHealthSubsidyCents: 100,
-    })).toMatchObject({
+      }),
+    ).toMatchObject({
       state: 'unsupported',
       reason: 'ineligible_employee_has_subsidy',
     })
   })
 
   it('requires care evidence when only health subsidy is documented', () => {
-    expect(calculatePrivateInsurance2026({
+    expect(
+      calculatePrivateInsurance2026({
       ...base,
       subsidyEligibleCarePremiumCents: undefined,
       actualEmployerHealthSubsidyCents: 40000,
-    })).toMatchObject({
+      }),
+    ).toMatchObject({
       state: 'incomplete',
       reason: 'subsidy_eligible_contribution_missing',
     })
   })
 
   it('rejects negative inputs and incorrect year', () => {
-    expect(() => calculatePrivateInsurance2026({
+    expect(() =>
+      calculatePrivateInsurance2026({
       ...base,
       totalHealthPremiumCents: -1,
-    })).toThrow(RangeError)
-    expect(() => calculatePrivateInsurance2026({
+      }),
+    ).toThrow(RangeError)
+    expect(() =>
+      calculatePrivateInsurance2026({
       ...base,
       calculationYear: 2025,
-    })).toThrow(RangeError)
+      }),
+    ).toThrow(RangeError)
   })
 })

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import { normalizeCompensation } from './frequency'
+import { calculatePrivateInsurance2026 } from './private-insurance'
+import type { PrivateInsuranceResult2026 } from './private-insurance'
 import { buildPapInput, prepareTaxablePay } from './taxable-pay'
 
 const validScenario = () => ({
@@ -50,13 +52,17 @@ const validScenario = () => ({
 type MutableScenario = ReturnType<typeof validScenario> &
   Record<string, unknown>
 
-const prepare = (scenario: MutableScenario) => {
+const prepare = (
+  scenario: MutableScenario,
+  privateInsurance?: PrivateInsuranceResult2026,
+) => {
   const normalized = normalizeCompensation(scenario.compensation as never)
   return prepareTaxablePay(
     normalized,
     scenario.tax as never,
     scenario.social as never,
     scenario.calculationYear,
+    privateInsurance,
   )
 }
 
@@ -184,11 +190,28 @@ describe('taxable-pay preparation (NP-CALC-005)', () => {
       payrollBasicCoverageAmountMonthly: { amount: '200.00', currency: 'EUR' },
       employerContributionKnown: false,
     }
-    const { input } = prepare(scenario)
-
+    expect(() => prepare(scenario)).toThrow(
+      'Private insurance requires a completed 2026 subsidy calculation',
+    )
+    const insurance = calculatePrivateInsurance2026({
+      calculationYear: 2026,
+      coverageConfirmed: true,
+      employerSubsidyEligibility: 'eligible',
+      employmentState: 'DE-BW',
+      valueSource: 'payslip',
+      totalHealthPremiumCents: 40000,
+      totalCarePremiumCents: 8000,
+      subsidyEligibleHealthPremiumCents: 40000,
+      subsidyEligibleCarePremiumCents: 8000,
+      payrollBasicCoverageCents: 30000,
+      assessableEmploymentIncomeCents: 600000,
+      actualEmployerHealthSubsidyCents: 20000,
+      actualEmployerCareSubsidyCents: 4000,
+    })
+    const { input } = prepare(scenario, insurance)
     expect(input.PKV).toBe(1)
-    expect(input.PKPV).toBe(48000)
-    expect(input.PKPVAGZ).toBe(0)
+    expect(input.PKPV).toBe(30000)
+    expect(input.PKPVAGZ).toBe(24000)
   })
 
   it('sets PVZ from child status and PVA from qualifying children', () => {

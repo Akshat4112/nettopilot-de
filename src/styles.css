@@ -271,10 +271,33 @@ footer a {
   }
 }
 
-.salary-inputs { width: min(100%, 800px); margin-bottom: 4rem; }
-.salary-inputs form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
-.salary-inputs h2 { margin-top: 0; }
-.salary-inputs :is(input, select) { width: 100%; }
-.salary-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; grid-column: 1 / -1; }
-.salary-inputs [role='status'] { grid-column: 1 / -1; }
-@media (max-width: 620px) { .salary-inputs form { grid-template-columns: minmax(0, 1fr); } }
+.salary-inputs {
+  width: min(100%, 800px);
+  margin-bottom: 4rem;
+}
+.salary-inputs form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+.salary-inputs h2 {
+  margin-top: 0;
+}
+.salary-inputs :is(input, select) {
+  width: 100%;
+}
+.salary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+}
+.salary-inputs [role='status'] {
+  grid-column: 1 / -1;
+}
+@media (max-width: 620px) {
+  .salary-inputs form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -54,13 +54,19 @@ export type PrivateInsuranceResult2026 =
       }
     }
 
-const missing = (state: 'incomplete' | 'unsupported', reason: string): PrivateInsuranceResult2026 => ({
+const missing = (
+  state: 'incomplete' | 'unsupported',
+  reason: string,
+): PrivateInsuranceResult2026 => ({
   state,
   reason,
   assumptionSetId: 'de-private-health-insurance-2026-v1',
 })
 
-const checked = (amount: number | undefined, name: string): bigint | undefined => {
+const checked = (
+  amount: number | undefined,
+  name: string,
+): bigint | undefined => {
   if (amount === undefined) return undefined
   if (!Number.isSafeInteger(amount) || amount < 0) {
     throw new RangeError(name + ' must be a non-negative safe integer in cents')
@@ -70,7 +76,8 @@ const checked = (amount: number | undefined, name: string): bigint | undefined =
 
 const cents = (value: bigint): number => {
   const result = Number(value)
-  if (!Number.isSafeInteger(result)) throw new RangeError('Result exceeds safe integer range')
+  if (!Number.isSafeInteger(result))
+    throw new RangeError('Result exceeds safe integer range')
   return result
 }
 
@@ -86,24 +93,57 @@ export const calculatePrivateInsurance2026 = (
   if (input.calculationYear !== 2026) {
     throw new RangeError('Only 2026 private-insurance rules are implemented')
   }
-  const health = checked(input.totalHealthPremiumCents, 'totalHealthPremiumCents')
-  const care = checked(input.totalCarePremiumCents, 'totalCarePremiumCents')
-  const healthEligible = checked(input.subsidyEligibleHealthPremiumCents, 'subsidyEligibleHealthPremiumCents')
-  const careEligible = checked(input.subsidyEligibleCarePremiumCents, 'subsidyEligibleCarePremiumCents')
-  const basic = checked(input.payrollBasicCoverageCents, 'payrollBasicCoverageCents')
-  const income = checked(input.assessableEmploymentIncomeCents, 'assessableEmploymentIncomeCents')
-  const actualHealth = checked(input.actualEmployerHealthSubsidyCents, 'actualEmployerHealthSubsidyCents')
-  const actualCare = checked(input.actualEmployerCareSubsidyCents, 'actualEmployerCareSubsidyCents')
+  const health = checked(
+    input.totalHealthPremiumCents,
+    'totalHealthPremiumCents',
+  )
+  const care = checked(
+    input.totalCarePremiumCents,
+    'totalCarePremiumCents',
+  )
+  const healthEligible = checked(
+    input.subsidyEligibleHealthPremiumCents,
+    'subsidyEligibleHealthPremiumCents',
+  )
+  const careEligible = checked(
+    input.subsidyEligibleCarePremiumCents,
+    'subsidyEligibleCarePremiumCents',
+  )
+  const basic = checked(
+    input.payrollBasicCoverageCents,
+    'payrollBasicCoverageCents',
+  )
+  const income = checked(
+    input.assessableEmploymentIncomeCents,
+    'assessableEmploymentIncomeCents',
+  )
+  const actualHealth = checked(
+    input.actualEmployerHealthSubsidyCents,
+    'actualEmployerHealthSubsidyCents',
+  )
+  const actualCare = checked(
+    input.actualEmployerCareSubsidyCents,
+    'actualEmployerCareSubsidyCents',
+  )
 
-  if (input.unsupportedSpecialCase) return missing('unsupported', 'special_employment_case')
-  if (!input.coverageConfirmed) return missing('incomplete', 'private_coverage_not_confirmed')
-  if (input.disputedElstam) return missing('incomplete', 'elstam_disputed')
-  if (input.employerSubsidyEligibility === 'unknown') return missing('incomplete', 'subsidy_eligibility_unknown')
-  if (input.employmentState === 'unknown') return missing('incomplete', 'employment_state_unknown')
-  if (basic === undefined) return missing('incomplete', 'tax_eligible_amount_missing')
-  if (income === undefined) return missing('incomplete', 'assessable_income_missing')
-  if (health === undefined || care === undefined) return missing('incomplete', 'total_premium_missing')
-  if (basic > health + care) return missing('unsupported', 'basic_contribution_exceeds_total')
+  if (input.unsupportedSpecialCase)
+    return missing('unsupported', 'special_employment_case')
+  if (!input.coverageConfirmed)
+    return missing('incomplete', 'private_coverage_not_confirmed')
+  if (input.disputedElstam)
+    return missing('incomplete', 'elstam_disputed')
+  if (input.employerSubsidyEligibility === 'unknown')
+    return missing('incomplete', 'subsidy_eligibility_unknown')
+  if (input.employmentState === 'unknown')
+    return missing('incomplete', 'employment_state_unknown')
+  if (basic === undefined)
+    return missing('incomplete', 'tax_eligible_amount_missing')
+  if (income === undefined)
+    return missing('incomplete', 'assessable_income_missing')
+  if (health === undefined || care === undefined)
+    return missing('incomplete', 'total_premium_missing')
+  if (basic > health + care)
+    return missing('unsupported', 'basic_contribution_exceeds_total')
   if (healthEligible !== undefined && healthEligible > health) {
     return missing('unsupported', 'eligible_health_exceeds_total')
   }
@@ -115,47 +155,72 @@ export const calculatePrivateInsurance2026 = (
   const healthCap = halfUp(cappedIncome * 875n, 10000n)
   const careRate = input.employmentState === 'DE-SN' ? 130n : 180n
   const careCap = halfUp(cappedIncome * careRate, 10000n)
-  if (input.employerSubsidyEligibility === 'eligible' &&
-      ((healthEligible === undefined && actualHealth === undefined) ||
-        (careEligible === undefined && actualCare === undefined))) {
+  if (
+    input.employerSubsidyEligibility === 'eligible' &&
+    ((healthEligible === undefined && actualHealth === undefined) ||
+      (careEligible === undefined && actualCare === undefined))
+  ) {
     return missing('incomplete', 'subsidy_eligible_contribution_missing')
   }
-  const maxHealth = healthEligible === undefined ? healthCap : minimum(halfUp(healthEligible, 2n), healthCap)
-  const maxCare = careEligible === undefined ? careCap : minimum(halfUp(careEligible, 2n), careCap)
+  const maxHealth =
+    healthEligible === undefined
+      ? healthCap
+      : minimum(halfUp(healthEligible, 2n), healthCap)
+  const maxCare =
+    careEligible === undefined
+      ? careCap
+      : minimum(halfUp(careEligible, 2n), careCap)
 
-  if (input.employerSubsidyEligibility === 'not_eligible' &&
-      ((actualHealth ?? 0n) > 0n || (actualCare ?? 0n) > 0n)) {
+  if (
+    input.employerSubsidyEligibility === 'not_eligible' &&
+    ((actualHealth ?? 0n) > 0n || (actualCare ?? 0n) > 0n)
+  ) {
     return missing('unsupported', 'ineligible_employee_has_subsidy')
   }
-  const employerHealth = input.employerSubsidyEligibility === 'not_eligible'
-    ? 0n
-    : actualHealth ?? maxHealth
-  const employerCare = input.employerSubsidyEligibility === 'not_eligible'
-    ? 0n
-    : actualCare ?? maxCare
+  const employerHealth =
+    input.employerSubsidyEligibility === 'not_eligible'
+      ? 0n
+      : (actualHealth ?? maxHealth)
+  const employerCare =
+    input.employerSubsidyEligibility === 'not_eligible'
+      ? 0n
+      : (actualCare ?? maxCare)
   if (employerHealth > maxHealth || employerCare > maxCare) {
     return missing('unsupported', 'employer_subsidy_exceeds_statutory_cap')
   }
   if (employerHealth > health || employerCare > care) {
     return missing('unsupported', 'employer_subsidy_exceeds_premium')
   }
-  if ((healthEligible !== undefined && employerHealth * 2n > healthEligible + 1n) ||
-      (careEligible !== undefined && employerCare * 2n > careEligible + 1n)) {
+  if (
+    (healthEligible !== undefined &&
+      employerHealth * 2n > healthEligible + 1n) ||
+    (careEligible !== undefined && employerCare * 2n > careEligible + 1n)
+  ) {
     return missing('unsupported', 'employer_subsidy_exceeds_eligible_half')
   }
   const subsidy = employerHealth + employerCare
   if (subsidy > basic) {
-    return missing('unsupported', 'subsidy_exceeds_tax_eligible_basic_contribution')
+    return missing(
+      'unsupported',
+      'subsidy_exceeds_tax_eligible_basic_contribution',
+    )
   }
   return {
     state: 'calculated',
     calculationYear: 2026,
     assumptionSetId: 'de-private-health-insurance-2026-v1',
-    resultQuality: actualHealth !== undefined && actualCare !== undefined &&
+    resultQuality:
+      actualHealth !== undefined &&
+      actualCare !== undefined &&
       (input.valueSource === 'elstam' || input.valueSource === 'payslip')
-      ? 'payroll_aligned'
-      : 'guided_estimate',
-    sourceIds: ['DE-SGB5-257', 'DE-SGB11-61', 'DE-SGB11-58', 'DE-BMF-PAP-2026-A1'],
+        ? 'payroll_aligned'
+        : 'guided_estimate',
+    sourceIds: [
+      'DE-SGB5-257',
+      'DE-SGB11-61',
+      'DE-SGB11-58',
+      'DE-BMF-PAP-2026-A1',
+    ],
     totalHealthPremiumCents: cents(health),
     totalCarePremiumCents: cents(care),
     healthEmployerCapCents: cents(healthCap),

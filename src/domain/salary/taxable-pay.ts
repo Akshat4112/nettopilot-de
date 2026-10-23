@@ -311,7 +311,7 @@ export function prepareTaxablePay(
   let PKPV = 0
   let PKPVAGZ = 0
   if (healthType === 'private') {
-    if (!privateInsurance || privateInsurance.state !== 'calculated')
+    if (privateInsurance?.state !== 'calculated')
       throw new RangeError(
         'Private insurance requires a completed 2026 subsidy calculation',
       )
@@ -327,7 +327,9 @@ export function prepareTaxablePay(
       selectedHealth !== privateInsurance.totalHealthPremiumCents ||
       selectedCare !== privateInsurance.totalCarePremiumCents
     )
-      throw new RangeError('Private insurance premiums differ from the scenario')
+      throw new RangeError(
+        'Private insurance premiums differ from the scenario',
+      )
     PKPV = privateInsurance.pap.PKPV
     PKPVAGZ = privateInsurance.pap.PKPVAGZ
   }
@@ -377,7 +379,7 @@ export function prepareTaxablePay(
     LZZFREIB,
     LZZHINZU,
     MBV: 0,
-    PKPV: Number(PKPV),
+    PKPV,
     PKPVAGZ,
     PKV,
     PVA,

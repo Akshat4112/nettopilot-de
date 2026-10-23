@@ -59,7 +59,10 @@ export type BonusPreparationResult2026 =
     }
   | {
       readonly state: 'prepared'
-      readonly classification: Exclude<BonusClass2026, 'monthly_recurring_bonus'>
+      readonly classification: Exclude<
+        BonusClass2026,
+        'monthly_recurring_bonus'
+      >
       readonly paymentMonth: number
       readonly grossPaymentCents: number
       readonly expectedAnnualTaxBaseCents: number
@@ -98,7 +101,7 @@ const liableAmount = (
 export const prepareBonus2026 = (
   input: BonusPreparationInput2026,
 ): BonusPreparationResult2026 => {
-  if (input.calculationYear !== 2026 || input.pap.calculationYear !== 2026)
+  if (input.pap.calculationYear !== 2026)
     throw new RangeError('Only 2026 bonus rules are supported')
   const gross = checked(input.grossPaymentCents, 'grossPaymentCents')
   const running = checked(
@@ -109,8 +112,11 @@ export const prepareBonus2026 = (
     input.priorOtherRemunerationCents,
     'priorOtherRemunerationCents',
   )
-  if (!Number.isInteger(input.paymentMonth) ||
-      input.paymentMonth < 1 || input.paymentMonth > 12)
+  if (
+    !Number.isInteger(input.paymentMonth) ||
+    input.paymentMonth < 1 ||
+    input.paymentMonth > 12
+  )
     throw new RangeError('paymentMonth must be 1 through 12')
   if (gross === 0n)
     return { state: 'incomplete', reason: 'payment_amount_required' }
@@ -122,12 +128,17 @@ export const prepareBonus2026 = (
     return { state: 'incomplete', reason: 'running_pay_period_required' }
   if (input.insurancePath === 'unknown')
     return { state: 'incomplete', reason: 'insurance_path_unknown' }
-  if (input.contributionDays === 'unknown' ||
-      input.priorKvPvContributoryPayCents === 'unknown' ||
-      input.priorRvAvContributoryPayCents === 'unknown')
+  if (
+    input.contributionDays === 'unknown' ||
+    input.priorKvPvContributoryPayCents === 'unknown' ||
+    input.priorRvAvContributoryPayCents === 'unknown'
+  )
     return { state: 'incomplete', reason: 'contribution_history_required' }
-  if (!Number.isInteger(input.contributionDays) ||
-      input.contributionDays < 0 || input.contributionDays > 360)
+  if (
+    !Number.isInteger(input.contributionDays) ||
+    input.contributionDays < 0 ||
+    input.contributionDays > 360
+  )
     throw new RangeError('contributionDays must be 0 through 360')
   const days = BigInt(input.contributionDays)
   const priorKv = checked(
@@ -138,15 +149,18 @@ export const prepareBonus2026 = (
     input.priorRvAvContributoryPayCents,
     'priorRvAvContributoryPayCents',
   )
-  const kv = input.insurancePath === 'private'
-    ? 0n
-    : liableAmount(gross, 6_975_000n, days, priorKv)
+  const kv =
+    input.insurancePath === 'private'
+      ? 0n
+      : liableAmount(gross, 6_975_000n, days, priorKv)
   const rv = liableAmount(gross, 10_140_000n, days, priorRv)
   if (input.paymentMonth <= 3) {
     if (input.sameEmployerPreviousYear === 'unknown')
       return { state: 'incomplete', reason: 'march_clause_history_unknown' }
-    if (input.sameEmployerPreviousYear &&
-        (input.insurancePath === 'statutory' ? kv < gross : rv < gross))
+    if (
+      input.sameEmployerPreviousYear &&
+      (input.insurancePath === 'statutory' ? kv < gross : rv < gross)
+    )
       return { state: 'unsupported', reason: 'march_clause_prior_year' }
   }
   const annualBase = running + earlier
@@ -167,10 +181,6 @@ export const prepareBonus2026 = (
     otherRemunerationSoliCents: tax.otherRemunerationSolidaritySurchargeCents,
     otherRemunerationChurchBaseCents:
       tax.otherRemunerationChurchTaxAssessmentBaseCents,
-    sourceIds: [
-      'DE-BMF-PAP-2026-A1',
-      'DE-SGB4-23A',
-      'DE-BMF-LSTH-2026-R39B6',
-    ],
+    sourceIds: ['DE-BMF-PAP-2026-A1', 'DE-SGB4-23A', 'DE-BMF-LSTH-2026-R39B6'],
   }
 }

@@ -116,8 +116,8 @@ export const calculatePrivateInsurance2026 = (
   const careRate = input.employmentState === 'DE-SN' ? 130n : 180n
   const careCap = halfUp(cappedIncome * careRate, 10000n)
   if (input.employerSubsidyEligibility === 'eligible' &&
-      (healthEligible === undefined || careEligible === undefined) &&
-      (actualHealth === undefined || actualCare === undefined)) {
+      ((healthEligible === undefined && actualHealth === undefined) ||
+        (careEligible === undefined && actualCare === undefined))) {
     return missing('incomplete', 'subsidy_eligible_contribution_missing')
   }
   const maxHealth = healthEligible === undefined ? healthCap : minimum(halfUp(healthEligible, 2n), healthCap)

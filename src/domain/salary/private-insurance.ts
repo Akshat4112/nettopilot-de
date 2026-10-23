@@ -2,10 +2,7 @@
 import type { FederalStateCode } from './types'
 
 export type PrivateInsuranceValueSource =
-  | 'elstam'
-  | 'payslip'
-  | 'insurer_notice'
-  | 'user_estimate'
+  'elstam' | 'payslip' | 'insurer_notice' | 'user_estimate'
 
 export interface PrivateInsuranceInput2026 {
   readonly calculationYear: number
@@ -15,12 +12,12 @@ export interface PrivateInsuranceInput2026 {
   readonly valueSource: PrivateInsuranceValueSource
   readonly totalHealthPremiumCents: number
   readonly totalCarePremiumCents: number
-  readonly subsidyEligibleHealthPremiumCents?: number
-  readonly subsidyEligibleCarePremiumCents?: number
-  readonly payrollBasicCoverageCents?: number
-  readonly assessableEmploymentIncomeCents?: number
-  readonly actualEmployerHealthSubsidyCents?: number
-  readonly actualEmployerCareSubsidyCents?: number
+  readonly subsidyEligibleHealthPremiumCents?: number | undefined
+  readonly subsidyEligibleCarePremiumCents?: number | undefined
+  readonly payrollBasicCoverageCents?: number | undefined
+  readonly assessableEmploymentIncomeCents?: number | undefined
+  readonly actualEmployerHealthSubsidyCents?: number | undefined
+  readonly actualEmployerCareSubsidyCents?: number | undefined
   readonly disputedElstam?: boolean
   readonly unsupportedSpecialCase?: boolean
 }
@@ -97,10 +94,7 @@ export const calculatePrivateInsurance2026 = (
     input.totalHealthPremiumCents,
     'totalHealthPremiumCents',
   )
-  const care = checked(
-    input.totalCarePremiumCents,
-    'totalCarePremiumCents',
-  )
+  const care = checked(input.totalCarePremiumCents, 'totalCarePremiumCents')
   const healthEligible = checked(
     input.subsidyEligibleHealthPremiumCents,
     'subsidyEligibleHealthPremiumCents',
@@ -130,8 +124,7 @@ export const calculatePrivateInsurance2026 = (
     return missing('unsupported', 'special_employment_case')
   if (!input.coverageConfirmed)
     return missing('incomplete', 'private_coverage_not_confirmed')
-  if (input.disputedElstam)
-    return missing('incomplete', 'elstam_disputed')
+  if (input.disputedElstam) return missing('incomplete', 'elstam_disputed')
   if (input.employerSubsidyEligibility === 'unknown')
     return missing('incomplete', 'subsidy_eligibility_unknown')
   if (input.employmentState === 'unknown')

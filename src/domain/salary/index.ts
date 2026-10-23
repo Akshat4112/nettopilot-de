@@ -212,3 +212,6 @@ export type {
   BonusPreparationInput2026,
   BonusPreparationResult2026,
 } from './bonus'
+
+export { prepareBonusSequence2026 } from './bonus-sequence'
+export type { BonusSequence2026 } from './bonus-sequence'

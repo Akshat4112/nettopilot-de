@@ -207,9 +207,12 @@ describe('approved church-tax rule admission', () => {
 })
 
 describe('approved registry fixtures', () => {
-  const withFixture = (run: () => void): void => {
+  const withFixture = (
+    run: () => void,
+    state: FederalStateCode = 'DE-BY',
+  ): void => {
     const record = CHURCH_TAX_STATE_REGISTRY_2026.find(
-      (entry) => entry.state === 'DE-BY',
+      (entry) => entry.state === state,
     )
     if (!record) throw new Error('Missing fixture')
     const previous = { ...record }
@@ -262,6 +265,46 @@ describe('approved registry fixtures', () => {
       const compute = () => calculateChurchTaxFromApprovedRule2026(input, rule)
       expect(compute).toThrow('child-allowance factor')
     })
+  })
+
+  it('rejects untrusted rate and cent sources', () => {
+    withFixture(() => {
+      const input = liableInput('DE-BY')
+      const wrongRate = approvedRule('DE-BY', 900)
+      const rateAttempt = () =>
+        calculateChurchTaxFromApprovedRule2026(input, wrongRate)
+      expect(rateAttempt).toThrow('not approved')
+      const wrongSource = {
+        ...approvedRule('DE-BY', 800),
+        finalCentSourceIds: ['UNVERIFIED'] as [string],
+      }
+      const sourceAttempt = () =>
+        calculateChurchTaxFromApprovedRule2026(input, wrongSource)
+      expect(sourceAttempt).toThrow('not approved')
+    })
+  })
+
+  it('validates Baden-Württemberg postcode and exception evidence', () => {
+    withFixture(() => {
+      const rule = approvedRule('DE-BW', 800)
+      const missing = liableInput('DE-BW')
+      const invalid = liableInput('DE-BW', {
+        payrollEstablishmentPostcode: 'bad',
+      })
+      const exception = liableInput('DE-BW', {
+        payrollEstablishmentPostcode: '74206',
+      })
+      const mismatch = liableInput('DE-BW', {
+        payrollEstablishmentPostcode: '74206',
+        bwExceptionStatus: 'applies',
+      })
+      const compute = (input: ChurchTaxInput2026) =>
+        calculateChurchTaxFromApprovedRule2026(input, rule)
+      expect(() => compute(missing)).toThrow('postcode')
+      expect(() => compute(invalid)).toThrow('five-digit')
+      expect(() => compute(exception)).toThrow('exception status')
+      expect(() => compute(mismatch)).toThrow('conflicts')
+    }, 'DE-BW')
   })
 
   it('rejects non-liable status for an approved rule', () => {

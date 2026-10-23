@@ -66,50 +66,60 @@ describe('2026 bonus preparation', () => {
   })
 
   it('prevents a bonus from creating statutory KV/PV on the PKV path', () => {
-    expect(prepareBonus2026({
-      ...base,
-      insurancePath: 'private',
-    })).toMatchObject({
+    expect(
+      prepareBonus2026({
+        ...base,
+        insurancePath: 'private',
+      }),
+    ).toMatchObject({
       state: 'prepared',
       kvPvLiableCents: 0,
     })
   })
 
   it('requires January-March history for a one-time payment', () => {
-    expect(prepareBonus2026({
-      ...base,
-      paymentMonth: 2,
-      sameEmployerPreviousYear: 'unknown',
-    })).toMatchObject({
+    expect(
+      prepareBonus2026({
+        ...base,
+        paymentMonth: 2,
+        sameEmployerPreviousYear: 'unknown',
+      }),
+    ).toMatchObject({
       state: 'incomplete',
       reason: 'march_clause_history_unknown',
     })
   })
 
   it('blocks previous-year allocation when the March clause may apply', () => {
-    expect(prepareBonus2026({
-      ...base,
-      paymentMonth: 2,
-      sameEmployerPreviousYear: true,
-      priorKvPvContributoryPayCents: 6_900_000,
-    })).toMatchObject({
+    expect(
+      prepareBonus2026({
+        ...base,
+        paymentMonth: 2,
+        sameEmployerPreviousYear: true,
+        priorKvPvContributoryPayCents: 6_900_000,
+      }),
+    ).toMatchObject({
       state: 'unsupported',
       reason: 'march_clause_prior_year',
     })
   })
 
   it('rejects unknown legal classification and missing contribution history', () => {
-    expect(prepareBonus2026({
-      ...base,
-      classification: 'unknown',
-    })).toMatchObject({
+    expect(
+      prepareBonus2026({
+        ...base,
+        classification: 'unknown',
+      }),
+    ).toMatchObject({
       state: 'incomplete',
       reason: 'classification_unknown',
     })
-    expect(prepareBonus2026({
-      ...base,
-      contributionDays: 'unknown',
-    })).toMatchObject({
+    expect(
+      prepareBonus2026({
+        ...base,
+        contributionDays: 'unknown',
+      }),
+    ).toMatchObject({
       state: 'incomplete',
       reason: 'contribution_history_required',
     })

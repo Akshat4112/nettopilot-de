@@ -61,8 +61,7 @@ export const calculateAnnualPrivateInsurance2026 = (
     ),
     annualPremiumsCents: safeSum(
       months.map(
-        (month) =>
-          month.totalHealthPremiumCents + month.totalCarePremiumCents,
+        (month) => month.totalHealthPremiumCents + month.totalCarePremiumCents,
       ),
     ),
     annualAfterInsuranceCostCents: safeSum(

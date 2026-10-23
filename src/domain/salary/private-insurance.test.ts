@@ -95,6 +95,28 @@ describe('2026 private health and care insurance', () => {
     })
   })
 
+  it('rejects a subsidy for an ineligible employee', () => {
+    expect(calculatePrivateInsurance2026({
+      ...base,
+      employerSubsidyEligibility: 'not_eligible',
+      actualEmployerHealthSubsidyCents: 100,
+    })).toMatchObject({
+      state: 'unsupported',
+      reason: 'ineligible_employee_has_subsidy',
+    })
+  })
+
+  it('requires care evidence when only health subsidy is documented', () => {
+    expect(calculatePrivateInsurance2026({
+      ...base,
+      subsidyEligibleCarePremiumCents: undefined,
+      actualEmployerHealthSubsidyCents: 40000,
+    })).toMatchObject({
+      state: 'incomplete',
+      reason: 'subsidy_eligible_contribution_missing',
+    })
+  })
+
   it('rejects negative inputs and incorrect year', () => {
     expect(() => calculatePrivateInsurance2026({
       ...base,

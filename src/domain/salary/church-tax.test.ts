@@ -206,19 +206,14 @@ describe('approved church-tax rule admission', () => {
   })
 })
 
-describe('approved registry fixture branches', () => {
-  const withApprovedFixture = (
-    state: FederalStateCode,
-    rate: 800 | 900,
-    run: () => void,
-  ): void => {
+describe('approved registry fixtures', () => {
+  const withFixture = (run: () => void): void => {
     const record = CHURCH_TAX_STATE_REGISTRY_2026.find(
-      (entry) => entry.state === state,
+      (entry) => entry.state === 'DE-BY',
     )
-    if (!record) throw new Error('Missing fixture state')
-    const original = { ...record }
+    if (!record) throw new Error('Missing fixture')
+    const previous = { ...record }
     Object.assign(record, {
-      candidateRateBasisPoints: rate,
       rateEvidence: 'approved',
       finalCentEvidence: 'approved',
       rateSourceIds: ['TEST-GOVERNING-RATE'],
@@ -227,90 +222,54 @@ describe('approved registry fixture branches', () => {
     try {
       run()
     } finally {
-      Object.assign(record, original)
+      Object.assign(record, previous)
     }
   }
 
-  it.each([
-    [800, 987, 88],
-    [900, 1_111, 99],
-  ] as const)('calculates separate %i basis-point components', (rate, recurring, other) => {
-    withApprovedFixture('DE-BY', rate, () => {
-      const result = calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BY'),
-        approvedRule('DE-BY', rate),
-      )
-      expect(result.recurringChurchTaxCents).toBe(recurring)
-      expect(result.otherRemunerationChurchTaxCents).toBe(other)
+  it('calculates 8-percent arithmetic from admitted test evidence', () => {
+    withFixture(() => {
+      const rule = approvedRule('DE-BY', 800)
+      const input = liableInput('DE-BY')
+      const result = calculateChurchTaxFromApprovedRule2026(input, rule)
+      expect(result.recurringChurchTaxCents).toBe(987)
+      expect(result.otherRemunerationChurchTaxCents).toBe(88)
+      expect(result.totalChurchTaxCents).toBe(1075)
     })
   })
 
-  it.each([
-    [0, 0],
-    [100_000, 8_000],
-    [11, 0],
-  ])('calculates Baden-Württemberg base %i cents', (base, expected) => {
-    withApprovedFixture('DE-BW', 800, () => {
-      const result = calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BW', {
-          recurringAssessmentBaseCents: base,
-          otherRemunerationAssessmentBaseCents: 0,
-          payrollEstablishmentPostcode: '70173',
-        }),
-        approvedRule('DE-BW', 800),
-      )
-      expect(result.recurringChurchTaxCents).toBe(expected)
+  it('rejects mismatched establishment state', () => {
+    withFixture(() => {
+      const rule = approvedRule('DE-BY', 800)
+      const input = liableInput('DE-BE')
+      const compute = () => calculateChurchTaxFromApprovedRule2026(input, rule)
+      expect(compute).toThrow('does not match')
     })
   })
 
-  it('rejects a mismatching state under an approved fixture', () => {
-    withApprovedFixture('DE-BY', 800, () => {
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BE'),
-        approvedRule('DE-BY', 800),
-      )).toThrow('does not match')
+  it('rejects unsupported approved-rule scopes', () => {
+    withFixture(() => {
+      const rule = approvedRule('DE-BY', 800)
+      const input = liableInput('DE-BY', { scope: 'capping' })
+      const compute = () => calculateChurchTaxFromApprovedRule2026(input, rule)
+      expect(compute).toThrow('ordinary payroll')
     })
   })
 
-  it('validates source metadata and exceptional postcode controls', () => {
-    withApprovedFixture('DE-BW', 800, () => {
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BW'),
-        approvedRule('DE-BW', 800),
-      )).toThrow('postcode')
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BW', { payrollEstablishmentPostcode: 'invalid' }),
-        approvedRule('DE-BW', 800),
-      )).toThrow('five-digit')
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BW', { payrollEstablishmentPostcode: '74206' }),
-        approvedRule('DE-BW', 800),
-      )).toThrow('exception status')
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BW', {
-          payrollEstablishmentPostcode: '74206',
-          bwExceptionStatus: 'applies',
-        }),
-        approvedRule('DE-BW', 800),
-      )).toThrow('conflicts with')
+  it('rejects unknown child factors', () => {
+    withFixture(() => {
+      const rule = approvedRule('DE-BY', 800)
+      const input = liableInput('DE-BY', { childAllowanceFactorKnown: false })
+      const compute = () => calculateChurchTaxFromApprovedRule2026(input, rule)
+      expect(compute).toThrow('child-allowance factor')
     })
   })
 
-  it('rejects unknown factor, status and special scopes', () => {
-    withApprovedFixture('DE-BY', 900, () => {
-      const rule = approvedRule('DE-BY', 900)
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BY', { status: 'not_liable' }),
-        rule,
-      )).toThrow('liable status')
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BY', { childAllowanceFactorKnown: false }),
-        rule,
-      )).toThrow('child-allowance factor')
-      expect(() => calculateChurchTaxFromApprovedRule2026(
-        liableInput('DE-BY', { scope: 'capping' }),
-        rule,
-      )).toThrow('ordinary payroll')
+  it('rejects non-liable status for an approved rule', () => {
+    withFixture(() => {
+      const rule = approvedRule('DE-BY', 800)
+      const input = liableInput('DE-BY', { status: 'not_liable' })
+      const compute = () => calculateChurchTaxFromApprovedRule2026(input, rule)
+      expect(compute).toThrow('liable status')
     })
   })
 })

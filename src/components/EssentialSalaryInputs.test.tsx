@@ -15,7 +15,9 @@ describe('EssentialSalaryInputs', () => {
   it('shows missing-input guidance instead of fabricated net pay', async () => {
     const { user } = renderWithUser(<EssentialSalaryInputs />)
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
-    expect(screen.getByRole('status')).toHaveTextContent('Complete all required')
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Complete all required',
+    )
     expect(screen.queryByText(/estimated net/i)).not.toBeInTheDocument()
   })
 

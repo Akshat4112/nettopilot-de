@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { prepareBonus2026, type BonusPreparationInput2026 } from './bonus'
+import { prepareBonusSequence2026 } from './bonus-sequence'
 import type { PapInput } from './taxable-pay'
 
 const pap: PapInput = {
@@ -122,6 +123,31 @@ describe('2026 bonus preparation', () => {
     ).toMatchObject({
       state: 'incomplete',
       reason: 'contribution_history_required',
+    })
+  })
+  it('applies bonuses in chronological order without counting future bonuses in JRE4', () => {
+    const result = prepareBonusSequence2026([
+      { ...base, paymentMonth: 11, grossPaymentCents: 100000 },
+      { ...base, paymentMonth: 12, grossPaymentCents: 200000 },
+    ])
+    expect(result).toMatchObject({
+      state: 'prepared',
+      totalGrossCents: 300000,
+      payments: [
+        { expectedAnnualTaxBaseCents: 6000000, grossPaymentCents: 100000 },
+        { expectedAnnualTaxBaseCents: 6100000, grossPaymentCents: 200000 },
+      ],
+    })
+  })
+
+  it('rejects reverse chronological payments', () => {
+    expect(prepareBonusSequence2026([
+      { ...base, paymentMonth: 12 },
+      { ...base, paymentMonth: 11 },
+    ])).toMatchObject({
+      state: 'unsupported',
+      reason: 'payments_not_chronological',
+      paymentIndex: 1,
     })
   })
 })

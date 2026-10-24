@@ -80,5 +80,9 @@ export const prepareBonusSequence2026 = (
     earlierRv += BigInt(result.rvAvLiableCents)
     totalGross += BigInt(result.grossPaymentCents)
   }
-  return { state: 'prepared', payments: prepared, totalGrossCents: safe(totalGross) }
+  return {
+    state: 'prepared',
+    payments: prepared,
+    totalGrossCents: safe(totalGross),
+  }
 }

@@ -205,3 +205,13 @@ export type {
 
 export { calculateAnnualPrivateInsurance2026 } from './private-insurance-annual'
 export type { PrivateInsuranceAnnualResult2026 } from './private-insurance-annual'
+
+export { prepareBonus2026, BONUS_CLASS_REGISTRY_2026 } from './bonus'
+export type {
+  BonusClass2026,
+  BonusPreparationInput2026,
+  BonusPreparationResult2026,
+} from './bonus'
+
+export { prepareBonusSequence2026 } from './bonus-sequence'
+export type { BonusSequence2026 } from './bonus-sequence'

@@ -177,6 +177,15 @@ const calculateComponent = (
 ): number =>
   toSafeNumber((BigInt(baseCents) * BigInt(rateBasisPoints)) / 10_000n)
 
+/** Exact arithmetic only; not evidence that a state rate is legally approved. */
+export const calculateChurchTaxComponent2026 = (
+  assessmentBaseCents: number,
+  rateBasisPoints: 800 | 900,
+): number => {
+  toBigInt(assessmentBaseCents, 'assessmentBaseCents')
+  return calculateComponent(assessmentBaseCents, rateBasisPoints)
+}
+
 export const calculateChurchTaxFromApprovedRule2026 = (
   input: ChurchTaxInput2026,
   rule: ApprovedChurchTaxRule2026,

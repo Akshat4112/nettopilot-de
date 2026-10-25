@@ -38,13 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Canonical reference insurance test formatting
-        run: |
-          npx prettier --write src/domain/salary/reference-insurance-validation.test.ts
-          echo BEGIN_INSURANCE_FORMAT
-          cat src/domain/salary/reference-insurance-validation.test.ts
-          echo END_INSURANCE_FORMAT
-
       - name: Check formatting
         run: npm run format:check
 

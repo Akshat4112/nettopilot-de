@@ -1,5 +1,6 @@
 import type { SalaryAggregationResult2026 } from '../domain/salary/salary-aggregation'
 import { SalaryDeductionBreakdown } from './SalaryDeductionBreakdown'
+import { SalaryGrossToNetChart } from './SalaryGrossToNetChart'
 
 type Calculated = Extract<SalaryAggregationResult2026, { state: 'calculated' }>
 
@@ -113,6 +114,7 @@ export function SalarySummary({
             {displayPeriod === 'annual' ? 'annual' : 'monthly'} display.
           </p>
           <SummaryFigures result={result} period={displayPeriod} />
+          <SalaryGrossToNetChart totals={result.annual} />
           <SalaryDeductionBreakdown totals={result.annual} />
         </>
       ) : (

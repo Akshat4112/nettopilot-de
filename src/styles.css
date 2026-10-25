@@ -387,3 +387,70 @@ footer a {
   color: var(--np-color-muted);
   text-align: left;
 }
+
+.np-gross-net-figure {
+  min-width: 0;
+  margin: var(--np-space-6) 0;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.np-gross-net-figure figcaption {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.np-gross-net-figure p {
+  color: var(--np-color-muted);
+  line-height: 1.5;
+}
+
+.np-gross-net-bar {
+  display: flex;
+  height: 2rem;
+  overflow: hidden;
+  border-radius: var(--np-radius-sm);
+  background: var(--np-color-canvas);
+}
+
+.np-gross-net-available {
+  background: var(--np-color-success);
+}
+
+.np-gross-net-deductions {
+  background: var(--np-color-accent);
+}
+
+.np-gross-net-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: var(--np-space-4);
+}
+
+.np-gross-net-legend dt {
+  color: var(--np-color-muted);
+}
+
+.np-gross-net-legend dd {
+  margin: var(--np-space-2) 0 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.np-gross-net-swatch {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: var(--np-space-2);
+  border-radius: 2px;
+}
+
+.np-gross-net-swatch-available {
+  background: var(--np-color-success);
+}
+
+.np-gross-net-swatch-deductions {
+  background: var(--np-color-accent);
+}

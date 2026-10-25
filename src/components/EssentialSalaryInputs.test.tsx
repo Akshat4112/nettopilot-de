@@ -136,7 +136,9 @@ describe('EssentialSalaryInputs', () => {
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
     expect(screen.getByLabelText('Tax class')).toHaveValue('')
     expect(screen.getByRole('checkbox')).not.toBeChecked()
-    expect(screen.getByRole('status')).toHaveTextContent('Safe URL settings restored')
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Safe URL settings restored',
+    )
   })
 
   it('rejects manipulated share URLs rather than importing private values', () => {
@@ -153,19 +155,29 @@ describe('EssentialSalaryInputs', () => {
 
   it('creates a non-sensitive share link and removes it on reset', async () => {
     const { user } = renderWithUser(<EssentialSalaryInputs />)
-    await user.click(screen.getByRole('button', { name: /Load example: €3,500 monthly/ }))
-    await user.click(screen.getByRole('button', { name: 'Create privacy-safe link' }))
-    const link = screen.getByLabelText('Private-settings link (select and copy)')
-    const url = String((link as HTMLInputElement).value)
+    await user.click(
+      screen.getByRole('button', { name: /Load example: €3,500 monthly/ }),
+    )
+    await user.click(
+      screen.getByRole('button', { name: 'Create privacy-safe link' }),
+    )
+    const link = screen.getByLabelText(
+      'Private-settings link (select and copy)',
+    )
+    const url = (link as HTMLInputElement).value
     expect(new URL(url).search).toBe(
       '?np=1&year=2026&period=monthly&state=DE-BW',
     )
-    expect(url).not.toMatch(/3500|gross|taxClass|birth|church|children|insurance|bonus/i)
-    await user.click(screen.getByRole('button', { name: 'Clear shared settings and reset' }))
+    expect(url).not.toMatch(
+      /3500|gross|taxClass|birth|church|children|insurance|bonus/i,
+    )
+    await user.click(
+      screen.getByRole('button', { name: 'Clear shared settings and reset' }),
+    )
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
-    expect(screen.queryByLabelText('Private-settings link (select and copy)')).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Private-settings link (select and copy)'),
+    ).not.toBeInTheDocument()
     expect(window.location.search).toBe('')
   })
-
-
 })

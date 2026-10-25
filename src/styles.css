@@ -454,3 +454,25 @@ footer a {
 .np-gross-net-swatch-deductions {
   background: var(--np-color-accent);
 }
+
+.np-period-toggle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--np-space-1);
+  margin-bottom: var(--np-space-3);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-sm);
+  padding: var(--np-space-1);
+  background: var(--np-color-canvas);
+}
+
+.np-period-toggle button {
+  min-width: 7rem;
+  background: transparent;
+  color: var(--np-color-ink);
+}
+
+.np-period-toggle button[aria-pressed='true'] {
+  background: var(--np-color-ink);
+  color: #fff;
+}

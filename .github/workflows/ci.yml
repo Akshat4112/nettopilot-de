@@ -38,15 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Print canonical salary explanation formatting
-        run: |
-          npx prettier --write src/domain/salary/index.ts src/domain/salary/salary-explanations.test.ts src/domain/salary/salary-explanations.ts
-          for path in src/domain/salary/index.ts src/domain/salary/salary-explanations.test.ts src/domain/salary/salary-explanations.ts; do
-            echo "BEGIN_FORMATTED_EXPLAIN:$path"
-            cat "$path"
-            echo "END_FORMATTED_EXPLAIN:$path"
-          done
-
       - name: Check formatting
         run: npm run format:check
 

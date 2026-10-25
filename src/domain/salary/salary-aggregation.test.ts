@@ -182,4 +182,80 @@ describe('2026 salary result aggregation', () => {
       reason: 'bonus_cash_reconciliation_failed',
     })
   })
+  it('admits zero-gross periods without claiming an effective rate', () => {
+    const months = year()
+    months[0] = {
+      state: 'calculated',
+      value: {
+        ...baseline(1),
+        recurringGrossCents: 0,
+        guaranteedRecurringGrossCents: 0,
+        recurringWageTaxCents: 0,
+        employeePensionCents: 0,
+        employeeUnemploymentCents: 0,
+        employeeHealthCents: 0,
+        employeeCareCents: 0,
+        employerPensionCents: 0,
+        employerUnemploymentCents: 0,
+        employerHealthCents: 0,
+        employerCareCents: 0,
+      },
+    }
+    const result = aggregateSalaryResults2026(months)
+    expect(result.state).toBe('calculated')
+    if (result.state === 'calculated') {
+      expect(result.months[0]?.effectiveDeductionRatePartsPerMillion).toBeNull()
+      expect(result.recurringMonthlyNetIsStable).toBe(false)
+    }
+  })
+
+  it('preserves incomplete bonus admission instead of inventing a zero deduction', () => {
+    const months = year()
+    months[3] = {
+      state: 'calculated',
+      value: {
+        ...baseline(4),
+        oneOffPayments: [{
+          guarantee: 'variable',
+          settlement: { state: 'incomplete', reason: 'payroll_evidence_missing' },
+        }],
+      },
+    }
+    expect(aggregateSalaryResults2026(months)).toMatchObject({
+      state: 'incomplete',
+      month: 4,
+      reason: 'payroll_evidence_missing',
+    })
+  })
+
+  it('rejects a bonus when employer cost does not reconcile', () => {
+    const months = year()
+    months[1] = {
+      state: 'calculated',
+      value: {
+        ...baseline(2),
+        oneOffPayments: [{
+          guarantee: 'guaranteed',
+          settlement: {
+            state: 'calculated',
+            grossCents: 10000,
+            wageTaxCents: 1000,
+            solidarityCents: 0,
+            churchTaxCents: 0,
+            employeeInsuranceCents: 1000,
+            employerInsuranceCents: 1000,
+            netBonusCents: 8000,
+            incrementalEmployerCostCents: 10000,
+          },
+        }],
+      },
+    }
+    expect(aggregateSalaryResults2026(months)).toMatchObject({
+      state: 'unsupported',
+      month: 2,
+      reason: 'bonus_employer_reconciliation_failed',
+    })
+  })
+
+
 })

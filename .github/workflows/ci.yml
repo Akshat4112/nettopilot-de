@@ -45,6 +45,16 @@ jobs:
           cat src/domain/salary/reference-admission-validation.test.ts
           echo END_ADMISSION_FORMAT
 
+      - name: Show canonical reference formatting
+        run: |
+          npx prettier --write src/domain/salary/reference-bonus-validation.test.ts src/domain/salary/reference-admission-validation.test.ts
+          echo BEGIN_BONUS_REFERENCE
+          cat src/domain/salary/reference-bonus-validation.test.ts
+          echo END_BONUS_REFERENCE
+          echo BEGIN_ADMISSION_REFERENCE
+          cat src/domain/salary/reference-admission-validation.test.ts
+          echo END_ADMISSION_REFERENCE
+
       - name: Check formatting
         run: npm run format:check
 

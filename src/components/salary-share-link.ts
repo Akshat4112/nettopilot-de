@@ -38,7 +38,9 @@ const federalStates = new Set([
 
 const permittedKeys = new Set(['np', 'year', 'period', 'state'])
 
-export const readShareableSalarySettings = (search: string): ShareReadResult => {
+export const readShareableSalarySettings = (
+  search: string,
+): ShareReadResult => {
   const params = new URLSearchParams(search)
   if (!params.has('np')) return { status: 'none' }
   if ([...params.keys()].some((key) => !permittedKeys.has(key)))
@@ -48,11 +50,9 @@ export const readShareableSalarySettings = (search: string): ShareReadResult => 
   if (params.get('np') !== '1' || params.get('year') !== '2026')
     return { status: 'invalid' }
   const period = params.get('period')
-  if (period !== 'monthly' && period !== 'annual')
-    return { status: 'invalid' }
+  if (period !== 'monthly' && period !== 'annual') return { status: 'invalid' }
   const state = params.get('state')
-  if (state !== null && !federalStates.has(state))
-    return { status: 'invalid' }
+  if (state !== null && !federalStates.has(state)) return { status: 'invalid' }
   return {
     status: 'valid',
     settings: {
@@ -67,10 +67,6 @@ export const createShareableSalaryUrl = (
   currentUrl: string,
   settings: ShareableSalarySettings,
 ): string => {
-  if (settings.year !== '2026')
-    throw new RangeError('Unsupported share year')
-  if (settings.period !== 'monthly' && settings.period !== 'annual')
-    throw new RangeError('Unsupported share frequency')
   if (
     settings.federalState !== undefined &&
     settings.federalState !== '' &&

@@ -25,8 +25,8 @@ export interface BonusSettlementInput2026 {
     CareContributionInput,
     'liablePayCents' | 'contributionDays' | 'includesOneOffPay' | 'payrollMonth'
   >
-  /** Verified 2026 state-specific church tax on the PAP other-remuneration base. */
-  readonly churchTaxCents: number | 'unknown'
+  /** Only confirmed non-liability is admitted until the state-rate registry is approved. */
+  readonly churchTaxStatus: 'not_liable' | 'liable' | 'unknown'
 }
 
 export type BonusSettlement2026 =
@@ -57,17 +57,17 @@ export const calculateBonusSettlement2026 = (
   const bonus = prepareBonus2026(input.bonus)
   if (bonus.state !== 'prepared')
     return { state: bonus.state, reason: bonus.reason }
-  if (input.churchTaxCents === 'unknown')
-    return { state: 'incomplete', reason: 'church_tax_calculation_required' }
-  if (!Number.isSafeInteger(input.churchTaxCents) || input.churchTaxCents < 0)
-    throw new RangeError('churchTaxCents must be non-negative integer cents')
-  const pension = calculatePensionContribution2026({
+  if (input.churchTaxStatus === 'unknown')
+    return { state: 'incomplete', reason: 'church_tax_status_unknown' }
+  if (input.churchTaxStatus === 'liable')
+    return { state: 'unsupported', reason: 'church_tax_rate_evidence_not_approved' }
+  const pension = calculateAllocatedOneOffPensionContribution2026({
     calculationYear: 2026,
     contributionDays: 30,
     liablePayCents: bonus.rvAvLiableCents,
     coverageStatus: input.pensionCoverage,
   })
-  const unemployment = calculateUnemploymentContribution2026({
+  const unemployment = calculateAllocatedOneOffUnemploymentContribution2026({
     calculationYear: 2026,
     contributionDays: 30,
     liablePayCents: bonus.rvAvLiableCents,
@@ -83,14 +83,14 @@ export const calculateBonusSettlement2026 = (
   let employeeCare = 0
   let employerCare = 0
   if (input.bonus.insurancePath === 'statutory') {
-    const health = calculateStatutoryHealthContribution2026({
+    const health = calculateAllocatedOneOffHealthContribution2026({
       calculationYear: 2026,
       contributionDays: 30,
       liablePayCents: bonus.kvPvLiableCents,
       coverageStatus: 'statutory_mandatory_general',
       additionalRate: input.healthRate,
     })
-    const care = calculateCareContribution2026({
+    const care = calculateAllocatedOneOffCareContribution2026({
       ...input.care,
       calculationYear: 2026,
       payrollMonth: input.bonus.paymentMonth,
@@ -124,14 +124,14 @@ export const calculateBonusSettlement2026 = (
     grossCents: bonus.grossPaymentCents,
     wageTaxCents: bonus.otherRemunerationWageTaxCents,
     solidarityCents: bonus.otherRemunerationSoliCents,
-    churchTaxCents: input.churchTaxCents,
+    churchTaxCents: 0,
     employeeInsuranceCents,
     employerInsuranceCents,
     netBonusCents: sum(
       bonus.grossPaymentCents,
       -bonus.otherRemunerationWageTaxCents,
       -bonus.otherRemunerationSoliCents,
-      -input.churchTaxCents,
+      0,
       -employeeInsuranceCents,
     ),
     incrementalEmployerCostCents: sum(

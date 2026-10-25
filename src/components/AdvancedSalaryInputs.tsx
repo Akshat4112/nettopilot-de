@@ -1,6 +1,9 @@
 import { useState } from 'react'
 
-import { validateAdvancedSalaryDraft, type AdvancedSalaryDraft } from './advanced-salary-validation'
+import {
+  validateAdvancedSalaryDraft,
+  type AdvancedSalaryDraft,
+} from './advanced-salary-validation'
 
 const empty: AdvancedSalaryDraft = {
   annualTaxAllowanceEur: '',
@@ -38,7 +41,9 @@ export function AdvancedSalaryInputs({
           id="np-allowance"
           inputMode="decimal"
           value={draft.annualTaxAllowanceEur}
-          onChange={(event) => { change('annualTaxAllowanceEur', event.target.value) }}
+          onChange={(event) => {
+            change('annualTaxAllowanceEur', event.target.value)
+          }}
         />
         <small>
           Use an officially confirmed annual allowance, not a guess.
@@ -50,7 +55,9 @@ export function AdvancedSalaryInputs({
           id="np-addition"
           inputMode="decimal"
           value={draft.annualTaxAdditionEur}
-          onChange={(event) => { change('annualTaxAdditionEur', event.target.value) }}
+          onChange={(event) => {
+            change('annualTaxAdditionEur', event.target.value)
+          }}
         />
       </div>
       {insurance === 'statutory' && (
@@ -62,7 +69,9 @@ export function AdvancedSalaryInputs({
             id="np-health-rate"
             inputMode="decimal"
             value={draft.additionalHealthRatePercent}
-            onChange={(event) => { change('additionalHealthRatePercent', event.target.value) }}
+            onChange={(event) => {
+              change('additionalHealthRatePercent', event.target.value)
+            }}
           />
           <small>
             Leave blank to use the published average rate assumption.
@@ -79,7 +88,9 @@ export function AdvancedSalaryInputs({
               id="np-private-health"
               inputMode="decimal"
               value={draft.privateHealthPremiumEur}
-              onChange={(event) => { change('privateHealthPremiumEur', event.target.value) }}
+              onChange={(event) => {
+                change('privateHealthPremiumEur', event.target.value)
+              }}
             />
           </div>
           <div className="np-field">
@@ -90,7 +101,9 @@ export function AdvancedSalaryInputs({
               id="np-private-care"
               inputMode="decimal"
               value={draft.privateCarePremiumEur}
-              onChange={(event) => { change('privateCarePremiumEur', event.target.value) }}
+              onChange={(event) => {
+                change('privateCarePremiumEur', event.target.value)
+              }}
             />
           </div>
         </>
@@ -101,7 +114,9 @@ export function AdvancedSalaryInputs({
           id="np-bonus"
           inputMode="decimal"
           value={draft.oneOffBonusEur}
-          onChange={(event) => { change('oneOffBonusEur', event.target.value) }}
+          onChange={(event) => {
+            change('oneOffBonusEur', event.target.value)
+          }}
         />
       </div>
       <div className="np-field">
@@ -109,7 +124,9 @@ export function AdvancedSalaryInputs({
         <select
           id="np-bonus-month"
           value={draft.oneOffBonusMonth}
-          onChange={(event) => { change('oneOffBonusMonth', event.target.value) }}
+          onChange={(event) => {
+            change('oneOffBonusMonth', event.target.value)
+          }}
         >
           <option value="">Select month (if applicable)</option>
           {Array.from({ length: 12 }, (_, index) => (

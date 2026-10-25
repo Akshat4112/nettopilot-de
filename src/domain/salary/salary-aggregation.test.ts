@@ -47,8 +47,9 @@ describe('2026 salary result aggregation', () => {
       },
     })
     if (result.state === 'calculated')
-      expect(result.annual.grossCents - result.annual.allDeductionsCents)
-        .toBe(result.annual.disposableAfterPrivateInsuranceCents)
+      expect(result.annual.grossCents - result.annual.allDeductionsCents).toBe(
+        result.annual.disposableAfterPrivateInsuranceCents,
+      )
   })
 
   it('treats one-off bonuses separately and does not average them into recurring net', () => {
@@ -57,20 +58,22 @@ describe('2026 salary result aggregation', () => {
       state: 'calculated',
       value: {
         ...baseline(12),
-        oneOffPayments: [{
-          guarantee: 'variable',
-          settlement: {
-            state: 'calculated',
-            grossCents: 100000,
-            wageTaxCents: 30000,
-            solidarityCents: 0,
-            churchTaxCents: 0,
-            employeeInsuranceCents: 10000,
-            employerInsuranceCents: 10000,
-            netBonusCents: 60000,
-            incrementalEmployerCostCents: 110000,
+        oneOffPayments: [
+          {
+            guarantee: 'variable',
+            settlement: {
+              state: 'calculated',
+              grossCents: 100000,
+              wageTaxCents: 30000,
+              solidarityCents: 0,
+              churchTaxCents: 0,
+              employeeInsuranceCents: 10000,
+              employerInsuranceCents: 10000,
+              netBonusCents: 60000,
+              incrementalEmployerCostCents: 110000,
+            },
           },
-        }],
+        ],
       },
     }
     const result = aggregateSalaryResults2026(months)
@@ -102,7 +105,9 @@ describe('2026 salary result aggregation', () => {
     expect(result.state).toBe('calculated')
     if (result.state === 'calculated') {
       expect(result.months[0]?.netPayrollCents).toBe(372000)
-      expect(result.months[0]?.disposableAfterPrivateInsuranceCents).toBe(347000)
+      expect(result.months[0]?.disposableAfterPrivateInsuranceCents).toBe(
+        347000,
+      )
       expect(result.recurringMonthlyNetIsStable).toBe(false)
       expect(result.recurringMonthlyNetCents).toBeNull()
     }
@@ -110,17 +115,22 @@ describe('2026 salary result aggregation', () => {
 
   it('fails closed for missing months, reversed months and uncalculated components', () => {
     expect(aggregateSalaryResults2026(year().slice(0, 11))).toMatchObject({
-      state: 'incomplete', reason: 'twelve_payroll_months_required',
+      state: 'incomplete',
+      reason: 'twelve_payroll_months_required',
     })
     const missing = year()
     missing[4] = { state: 'incomplete', reason: 'unverified_payroll_evidence' }
     expect(aggregateSalaryResults2026(missing)).toMatchObject({
-      state: 'incomplete', month: 5, reason: 'unverified_payroll_evidence',
+      state: 'incomplete',
+      month: 5,
+      reason: 'unverified_payroll_evidence',
     })
     const reversed = year()
     reversed[1] = { state: 'calculated', value: baseline(3) }
     expect(aggregateSalaryResults2026(reversed)).toMatchObject({
-      state: 'unsupported', month: 2, reason: 'payroll_month_order_mismatch',
+      state: 'unsupported',
+      month: 2,
+      reason: 'payroll_month_order_mismatch',
     })
   })
 
@@ -131,7 +141,9 @@ describe('2026 salary result aggregation', () => {
       value: { ...baseline(1), guaranteedRecurringGrossCents: 600000 },
     }
     expect(aggregateSalaryResults2026(guaranteed)).toMatchObject({
-      state: 'unsupported', month: 1, reason: 'guaranteed_recurring_exceeds_total',
+      state: 'unsupported',
+      month: 1,
+      reason: 'guaranteed_recurring_exceeds_total',
     })
     const invalid = year()
     invalid[0] = {
@@ -144,19 +156,28 @@ describe('2026 salary result aggregation', () => {
       state: 'calculated',
       value: {
         ...baseline(1),
-        oneOffPayments: [{
-          guarantee: 'guaranteed',
-          settlement: {
-            state: 'calculated', grossCents: 10000, wageTaxCents: 2000,
-            solidarityCents: 0, churchTaxCents: 0, employeeInsuranceCents: 1000,
-            employerInsuranceCents: 1000, netBonusCents: 9999,
-            incrementalEmployerCostCents: 11000,
+        oneOffPayments: [
+          {
+            guarantee: 'guaranteed',
+            settlement: {
+              state: 'calculated',
+              grossCents: 10000,
+              wageTaxCents: 2000,
+              solidarityCents: 0,
+              churchTaxCents: 0,
+              employeeInsuranceCents: 1000,
+              employerInsuranceCents: 1000,
+              netBonusCents: 9999,
+              incrementalEmployerCostCents: 11000,
+            },
           },
-        }],
+        ],
       },
     }
     expect(aggregateSalaryResults2026(bonus)).toMatchObject({
-      state: 'unsupported', month: 1, reason: 'bonus_cash_reconciliation_failed',
+      state: 'unsupported',
+      month: 1,
+      reason: 'bonus_cash_reconciliation_failed',
     })
   })
 })

@@ -38,15 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Print canonical bonus sequence formatting
-        run: |
-          npx prettier --write src/domain/salary/bonus-settlement-sequence.ts src/domain/salary/bonus.test.ts src/domain/salary/index.ts
-          for path in src/domain/salary/bonus-settlement-sequence.ts src/domain/salary/bonus.test.ts src/domain/salary/index.ts; do
-            echo "START_FORMATTED_SEQUENCE:$path"
-            cat "$path"
-            echo "END_FORMATTED_SEQUENCE:$path"
-          done
-
       - name: Check formatting
         run: npm run format:check
 

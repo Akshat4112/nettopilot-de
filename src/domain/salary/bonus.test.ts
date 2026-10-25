@@ -199,7 +199,10 @@ describe('2026 bonus preparation', () => {
         },
         churchTaxStatus: 'liable',
       }),
-    ).toThrow('churchTaxCents')
+    ).toMatchObject({
+      state: 'unsupported',
+      reason: 'church_tax_rate_evidence_not_approved',
+    })
   })
 
   it('rejects unsupported pension coverage without inventing net pay', () => {

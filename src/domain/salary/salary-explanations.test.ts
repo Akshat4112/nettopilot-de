@@ -8,7 +8,10 @@ import {
 import type { SalaryPeriodTotals2026 } from './salary-aggregation'
 
 const totals = Object.fromEntries(
-  SALARY_EXPLANATION_FIELDS_2026.map((key) => [key, key === 'grossCents' ? 500000 : 0]),
+  SALARY_EXPLANATION_FIELDS_2026.map((key) => [
+    key,
+    key === 'grossCents' ? 500000 : 0,
+  ]),
 ) as unknown as SalaryPeriodTotals2026
 
 const record: SalaryLineItemProvenance2026 = {
@@ -22,7 +25,10 @@ const record: SalaryLineItemProvenance2026 = {
   },
 }
 
-const provenance = (): Record<SalaryExplanationField2026, SalaryLineItemProvenance2026> =>
+const provenance = (): Record<
+  SalaryExplanationField2026,
+  SalaryLineItemProvenance2026
+> =>
   Object.fromEntries(
     SALARY_EXPLANATION_FIELDS_2026.map((key) => [key, record]),
   ) as Record<SalaryExplanationField2026, SalaryLineItemProvenance2026>
@@ -44,16 +50,22 @@ describe('2026 salary explainability', () => {
         assumptionVersion: '1.0.0',
         unit: 'EUR_CENTS',
       })
-      expect(result.lines.every((line) => Boolean(line.label.de && line.label.en))).toBe(true)
+      expect(
+        result.lines.every((line) => Boolean(line.label.de && line.label.en)),
+      ).toBe(true)
     }
   })
 
   it('refuses missing source evidence rather than inserting a made-up label', () => {
     const sources = provenance()
     delete (sources as Partial<typeof sources>).wageTaxCents
-    expect(explainSalaryResults2026({
-      period: 'monthly', totals, provenance: sources,
-    })).toMatchObject({
+    expect(
+      explainSalaryResults2026({
+        period: 'monthly',
+        totals,
+        provenance: sources,
+      }),
+    ).toMatchObject({
       state: 'incomplete',
       reason: 'provenance_missing',
       field: 'wageTaxCents',
@@ -66,9 +78,13 @@ describe('2026 salary explainability', () => {
       ...record,
       sourceIds: [''],
     }
-    expect(explainSalaryResults2026({
-      period: 'monthly', totals, provenance: sources,
-    })).toMatchObject({
+    expect(
+      explainSalaryResults2026({
+        period: 'monthly',
+        totals,
+        provenance: sources,
+      }),
+    ).toMatchObject({
       state: 'incomplete',
       field: 'employerCostCents',
     })
@@ -76,8 +92,12 @@ describe('2026 salary explainability', () => {
 
   it('rejects non-integer results even if source metadata exists', () => {
     const broken = { ...totals, grossCents: Number.NaN }
-    expect(() => explainSalaryResults2026({
-      period: 'monthly', totals: broken, provenance: provenance(),
-    })).toThrow(RangeError)
+    expect(() =>
+      explainSalaryResults2026({
+        period: 'monthly',
+        totals: broken,
+        provenance: provenance(),
+      }),
+    ).toThrow(RangeError)
   })
 })

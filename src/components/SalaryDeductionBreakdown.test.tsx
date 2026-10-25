@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { SalaryDeductionBreakdown, percentageOfGross } from './SalaryDeductionBreakdown'
+import { SalaryDeductionBreakdown } from './SalaryDeductionBreakdown'
+import { percentageOfGross } from './salary-deductions'
 import { aggregateSalaryResults2026 } from '../domain/salary/salary-aggregation'
 import type { SalaryMonthAdmission2026 } from '../domain/salary/salary-aggregation'
 
@@ -38,11 +39,15 @@ describe('NP-UI-007 deduction breakdown', () => {
     expect(result.state).toBe('calculated')
     if (result.state !== 'calculated') return
     render(<SalaryDeductionBreakdown totals={result.annual} />)
-    expect(screen.getByRole('table', { name: /Annual employee deductions/ })).toBeInTheDocument()
+    expect(
+      screen.getByRole('table', { name: /Annual employee deductions/ }),
+    ).toBeInTheDocument()
     expect(screen.getByText('Wage tax')).toBeInTheDocument()
     expect(screen.getByText('Employee pension insurance')).toBeInTheDocument()
     expect(screen.getByText(/How wage tax is calculated/)).toBeInTheDocument()
-    expect(screen.getByText(/Total deductions \(including outside-payroll costs\)/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Total deductions \(including outside-payroll costs\)/),
+    ).toBeInTheDocument()
   })
 
   it('distinguishes share of gross from the statutory rate', () => {

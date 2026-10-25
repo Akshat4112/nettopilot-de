@@ -92,8 +92,8 @@ export function SalaryGrossToNetChart({
         </div>
       </dl>
       <p>
-        Detailed tax and insurance amounts are listed in the deduction
-        breakdown below.
+        Detailed tax and insurance amounts are listed in the deduction breakdown
+        below.
       </p>
     </figure>
   )

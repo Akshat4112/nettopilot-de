@@ -130,7 +130,9 @@ const aggregate = (
     employeeUnemploymentCents: item('employeeUnemploymentCents'),
     employeeHealthCents: item('employeeHealthCents'),
     employeeCareCents: item('employeeCareCents'),
-    oneOffEmployeeSocialInsuranceCents: item('oneOffEmployeeSocialInsuranceCents'),
+    oneOffEmployeeSocialInsuranceCents: item(
+      'oneOffEmployeeSocialInsuranceCents',
+    ),
     employeeSocialInsuranceCents: item('employeeSocialInsuranceCents'),
     privateInsuranceOutflowCents: item('privateInsuranceOutflowCents'),
     allDeductionsCents,
@@ -142,7 +144,9 @@ const aggregate = (
     employerUnemploymentCents: item('employerUnemploymentCents'),
     employerHealthCents: item('employerHealthCents'),
     employerCareCents: item('employerCareCents'),
-    oneOffEmployerSocialInsuranceCents: item('oneOffEmployerSocialInsuranceCents'),
+    oneOffEmployerSocialInsuranceCents: item(
+      'oneOffEmployerSocialInsuranceCents',
+    ),
     employerSocialInsuranceCents: item('employerSocialInsuranceCents'),
     employerCostCents: item('employerCostCents'),
     effectiveDeductionRatePartsPerMillion: ratio(
@@ -306,7 +310,9 @@ const calculateMonth = (
     employerUnemploymentCents: month.employerUnemploymentCents,
     employerHealthCents: month.employerHealthCents,
     employerCareCents: month.employerCareCents,
-    oneOffEmployerSocialInsuranceCents: sum(extras.map((bonus) => bonus.employerInsuranceCents)),
+    oneOffEmployerSocialInsuranceCents: sum(
+      extras.map((bonus) => bonus.employerInsuranceCents),
+    ),
     employerSocialInsuranceCents,
     employerCostCents: sum([grossCents, employerSocialInsuranceCents]),
     effectiveDeductionRatePartsPerMillion: ratio(

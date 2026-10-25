@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import references from '../../../fixtures/reference/2026/nettopilot-reference-scenarios.json'
-import { prepareBonus2026 } from './bonus'
+import { prepareBonus2026, type BonusPreparationInput2026 } from './bonus'
 import type { PapInput } from './taxable-pay'
 
 const pap: PapInput = {

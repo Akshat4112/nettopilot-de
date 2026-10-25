@@ -13,6 +13,27 @@ const euro = (cents: number): string =>
     currency: 'EUR',
   }).format(cents / 100)
 
+const reasonText: Record<string, string> = {
+  standard_employment_confirmation_required:
+    'Confirm the standard full-year payroll assumptions.',
+  private_insurance_payslip_details_required:
+    'Private insurance needs additional confirmed premium and subsidy data.',
+  church_tax_evidence_not_in_scope:
+    'Church-tax withholding requires additional approved evidence.',
+  child_allowance_and_care_status_required:
+    'Child allowances and age-dependent care reductions need more details.',
+  age_specific_pension_or_care_rules_required:
+    'Age-specific insurance and payroll assumptions need more details.',
+  advanced_payroll_settlement_not_connected:
+    'Bonuses and adjusted payroll allowances are not enabled in this view.',
+  annual_salary_requires_monthly_cent_allocation:
+    'This annual amount cannot be split into twelve equal cent-precise months.',
+  special_or_voluntary_insurance_check_required:
+    'This salary range needs additional insurance-coverage confirmation.',
+  payroll_calculation_could_not_be_validated:
+    'The selected values could not be verified against the supported payroll rules.',
+}
+
 function SummaryFigures({
   result,
   period,
@@ -97,7 +118,7 @@ export function SalarySummary({
           {result.state === 'incomplete'
             ? 'Salary result unavailable: more validated payroll inputs are required.'
             : 'Salary result unavailable: this payroll scenario is not supported.'}{' '}
-          Reason: {result.reason}.{' '}
+          Reason: {reasonText[result.reason] ?? result.reason}.{' '}
           {result.month > 0 ? `Affected month: ${String(result.month)}.` : ''}
         </p>
       )}

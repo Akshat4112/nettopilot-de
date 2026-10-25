@@ -53,7 +53,6 @@ const base: BonusPreparationInput2026 = {
   pap,
 }
 
-
 const find = (id: string) => {
   const fixture = references.scenarios.find((scenario) => scenario.id === id)
   if (!fixture) throw new Error('Reference scenario missing: ' + id)

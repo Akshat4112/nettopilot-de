@@ -1,4 +1,5 @@
 import { EssentialSalaryInputs } from './components/EssentialSalaryInputs'
+import { OfferComparisonInputs } from './components/OfferComparisonInputs'
 import { APP_BASE_PATH } from './config/app'
 
 const principles = [
@@ -47,6 +48,7 @@ export function App() {
           </aside>
         </section>
         <EssentialSalaryInputs />
+        <OfferComparisonInputs />
       </main>
 
       <footer>

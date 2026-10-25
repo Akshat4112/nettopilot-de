@@ -1,0 +1,30 @@
+name: Temporary NP-UI-005 formatter
+on:
+  push:
+    branches:
+      - np-ui-005-validation-errors
+permissions:
+  contents: write
+jobs:
+  format:
+    if: "!contains(github.event.head_commit.message, '[formatted]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx prettier --write src/components/EssentialSalaryInputs.tsx src/components/essential-salary-validation.ts src/components/essential-salary-validation.test.ts
+      - name: Commit formatting
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/EssentialSalaryInputs.tsx src/components/essential-salary-validation.ts src/components/essential-salary-validation.test.ts
+          if ! git diff --cached --quiet; then
+            git commit -m "NP-UI-005: apply Prettier [formatted]"
+            git push
+          fi

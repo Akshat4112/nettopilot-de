@@ -90,17 +90,6 @@ const sum = (values: readonly number[]): number =>
 const ratio = (deductions: number, gross: number): number | null =>
   gross === 0 ? null : safe((BigInt(deductions) * 1_000_000n + BigInt(gross) / 2n) / BigInt(gross))
 
-const deductionKeys = [
-  'wageTaxCents', 'solidarityCents', 'churchTaxCents',
-  'employeePensionCents', 'employeeUnemploymentCents',
-  'employeeHealthCents', 'employeeCareCents',
-  'privateInsuranceOutflowCents',
-] as const
-const employerKeys = [
-  'employerPensionCents', 'employerUnemploymentCents',
-  'employerHealthCents', 'employerCareCents',
-] as const
-
 const aggregate = (values: readonly SalaryPeriodTotals2026[]): SalaryPeriodTotals2026 => {
   const item = (key: keyof SalaryPeriodTotals2026): number =>
     sum(values.map((value) => {

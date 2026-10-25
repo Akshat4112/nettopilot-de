@@ -1,7 +1,14 @@
 import { prepareBonus2026 } from './bonus'
-import { calculateBonusSettlement2026, type BonusSettlementInput2026, type BonusSettlement2026 } from './bonus-settlement'
+import {
+  calculateBonusSettlement2026,
+  type BonusSettlementInput2026,
+  type BonusSettlement2026,
+} from './bonus-settlement'
 
-type CalculatedBonus = Extract<BonusSettlement2026, { readonly state: 'calculated' }>
+type CalculatedBonus = Extract<
+  BonusSettlement2026,
+  { readonly state: 'calculated' }
+>
 
 export type BonusSettlementSequence2026 =
   | {
@@ -19,7 +26,8 @@ export type BonusSettlementSequence2026 =
 
 const safe = (value: bigint): number => {
   const result = Number(value)
-  if (!Number.isSafeInteger(result)) throw new RangeError('Bonus sequence cents exceed safe integer range')
+  if (!Number.isSafeInteger(result))
+    throw new RangeError('Bonus sequence cents exceed safe integer range')
   return result
 }
 
@@ -38,23 +46,47 @@ export const calculateBonusSettlementSequence2026 = (
   for (const [index, input] of inputs.entries()) {
     const b = input.bonus
     if (b.paymentMonth < previousMonth)
-      return { state: 'unsupported', paymentIndex: index, reason: 'payments_not_chronological' }
+      return {
+        state: 'unsupported',
+        paymentIndex: index,
+        reason: 'payments_not_chronological',
+      }
     previousMonth = b.paymentMonth
-    if (b.priorKvPvContributoryPayCents === 'unknown' ||
-        b.priorRvAvContributoryPayCents === 'unknown')
-      return { state: 'incomplete', paymentIndex: index, reason: 'contribution_history_required' }
+    if (
+      b.priorKvPvContributoryPayCents === 'unknown' ||
+      b.priorRvAvContributoryPayCents === 'unknown'
+    )
+      return {
+        state: 'incomplete',
+        paymentIndex: index,
+        reason: 'contribution_history_required',
+      }
     const current = {
       ...b,
-      priorOtherRemunerationCents: safe(BigInt(b.priorOtherRemunerationCents) + earlierOther),
-      priorKvPvContributoryPayCents: safe(BigInt(b.priorKvPvContributoryPayCents) + earlierKv),
-      priorRvAvContributoryPayCents: safe(BigInt(b.priorRvAvContributoryPayCents) + earlierRv),
+      priorOtherRemunerationCents: safe(
+        BigInt(b.priorOtherRemunerationCents) + earlierOther,
+      ),
+      priorKvPvContributoryPayCents: safe(
+        BigInt(b.priorKvPvContributoryPayCents) + earlierKv,
+      ),
+      priorRvAvContributoryPayCents: safe(
+        BigInt(b.priorRvAvContributoryPayCents) + earlierRv,
+      ),
     }
     const prepared = prepareBonus2026(current)
     if (prepared.state !== 'prepared')
-      return { state: prepared.state, paymentIndex: index, reason: prepared.reason }
+      return {
+        state: prepared.state,
+        paymentIndex: index,
+        reason: prepared.reason,
+      }
     const settled = calculateBonusSettlement2026({ ...input, bonus: current })
     if (settled.state !== 'calculated')
-      return { state: settled.state, paymentIndex: index, reason: settled.reason }
+      return {
+        state: settled.state,
+        paymentIndex: index,
+        reason: settled.reason,
+      }
     payments.push(settled)
     earlierOther += BigInt(prepared.grossPaymentCents)
     earlierKv += BigInt(prepared.kvPvLiableCents)

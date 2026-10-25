@@ -38,11 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Diagnose PR formatting
-        run: |
-          npx --no-install prettier --write src/App.tsx src/components/EssentialSalaryInputs.tsx src/components/calculate-simple-salary.ts src/components/calculate-simple-salary.test.ts
-          git diff -- src/App.tsx src/components/EssentialSalaryInputs.tsx src/components/calculate-simple-salary.ts src/components/calculate-simple-salary.test.ts
-
       - name: Check formatting
         run: npm run format:check
 

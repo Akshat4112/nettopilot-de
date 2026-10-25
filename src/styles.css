@@ -572,3 +572,77 @@ footer a {
     font-weight: 650;
   }
 }
+
+/* NP-UI-013: Prevent intrinsic grid and form content from widening the page. */
+.app-shell,
+main,
+.hero,
+.salary-inputs,
+.salary-inputs form,
+.salary-actions,
+.np-field,
+.np-panel,
+.np-gross-net-figure,
+.np-gross-net-legend,
+.salary-summary-figures {
+  min-width: 0;
+}
+
+main {
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.salary-inputs form > *,
+.salary-actions > *,
+.salary-inputs .np-panel {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.salary-actions p,
+.salary-actions button,
+.salary-inputs small,
+.salary-inputs label,
+.np-gross-net-legend dd,
+.salary-summary-figures dd {
+  overflow-wrap: anywhere;
+}
+
+.salary-deduction-table {
+  min-width: 33rem;
+}
+
+@media screen and (max-width: 620px) {
+  .app-shell {
+    padding-inline: clamp(0.75rem, 4vw, 1.25rem);
+  }
+
+  .hero {
+    padding-block: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .salary-inputs {
+    padding: 1rem;
+  }
+
+  .salary-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .salary-actions button,
+  .salary-actions .np-field {
+    width: 100%;
+  }
+
+  .np-period-toggle {
+    display: flex;
+    width: 100%;
+  }
+
+  .np-period-toggle button {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}

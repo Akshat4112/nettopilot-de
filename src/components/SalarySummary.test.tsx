@@ -73,11 +73,7 @@ describe('SalarySummary', () => {
         }}
       />,
     )
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Affected month: 3',
-    )
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'missing_tax_evidence',
-    )
+    expect(screen.getByRole('status')).toHaveTextContent('Affected month: 3')
+    expect(screen.getByRole('status')).toHaveTextContent('missing_tax_evidence')
   })
 })

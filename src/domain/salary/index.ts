@@ -226,4 +226,10 @@ export { calculateBonusSettlementSequence2026 } from './bonus-settlement-sequenc
 export type { BonusSettlementSequence2026 } from './bonus-settlement-sequence'
 
 export { aggregateSalaryResults2026 } from './salary-aggregation'
-export type { SalaryMonthAdmission2026, SalaryMonthComponents2026, SalaryPeriodTotals2026, SalaryAggregationResult2026, AggregatedBonus2026 } from './salary-aggregation'
+export type {
+  SalaryMonthAdmission2026,
+  SalaryMonthComponents2026,
+  SalaryPeriodTotals2026,
+  SalaryAggregationResult2026,
+  AggregatedBonus2026,
+} from './salary-aggregation'

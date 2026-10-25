@@ -93,14 +93,15 @@ export interface OfferComparisonDraft {
   readonly calculationYear: 2026
   readonly currency: 'EUR'
   readonly selectedView:
-    | 'recurring'
-    | 'guaranteed_annual'
-    | 'total_compensation'
+    'recurring' | 'guaranteed_annual' | 'total_compensation'
   /** Populated only after both payroll scenarios are independently validated. */
   readonly payrollMetadata: OfferInput<ResolvedScenarioMetadata>
-  readonly offers: readonly [OfferSide & { readonly id: 'offer_a' }, OfferSide & {
-    readonly id: 'offer_b'
-  }]
+  readonly offers: readonly [
+    OfferSide & { readonly id: 'offer_a' },
+    OfferSide & {
+      readonly id: 'offer_b'
+    },
+  ]
 }
 
 const unknown = <T>(): OfferInput<T> => ({ state: 'unknown' })

@@ -33,7 +33,7 @@ describe('NP-CALC-017 verified withholding and admission fixtures', () => {
       payrollMarkerEvidence: 'confirmed',
       childAllowanceFactorKnown: true,
     })
-    expect(result.state).toBe('incomplete')
+    expect(result.state).toBe(fixture.expected.churchTaxResultState)
     expect(fixture.expected).toHaveProperty('normalChurchTaxAmount', false)
   })
 })

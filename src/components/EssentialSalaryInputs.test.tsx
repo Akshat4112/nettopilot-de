@@ -94,7 +94,9 @@ describe('EssentialSalaryInputs', () => {
     expect(screen.getByLabelText('Federal state')).toHaveValue('DE-BW')
     expect(screen.getByLabelText('Health insurance')).toHaveValue('statutory')
     expect(screen.getByRole('checkbox')).not.toBeChecked()
-    expect(screen.queryByRole('heading', { name: 'Salary summary' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: 'Salary summary' }),
+    ).not.toBeInTheDocument()
   })
 
   it('switches between examples and resets previously entered advanced values', async () => {
@@ -118,5 +120,4 @@ describe('EssentialSalaryInputs', () => {
     expect(screen.getByRole('checkbox')).not.toBeChecked()
     expect(screen.getByText(/not personalized advice/i)).toBeInTheDocument()
   })
-
 })

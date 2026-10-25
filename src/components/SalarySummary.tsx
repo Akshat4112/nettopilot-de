@@ -6,8 +6,6 @@ import type {
 import { SalaryDeductionBreakdown } from './SalaryDeductionBreakdown'
 import { SalaryGrossToNetChart } from './SalaryGrossToNetChart'
 
-type Calculated = Extract<SalaryAggregationResult2026, { state: 'calculated' }>
-
 export interface SalarySummaryProps {
   readonly result: SalaryAggregationResult2026
   readonly displayPeriod?: 'monthly' | 'annual'
@@ -98,7 +96,7 @@ export function SalarySummary({
     result.state === 'calculated'
       ? period === 'annual'
         ? result.annual
-        : monthlyStable && first !== undefined
+        : monthlyStable
           ? first
           : null
       : null
@@ -116,14 +114,18 @@ export function SalarySummary({
             <button
               type="button"
               aria-pressed={period === 'monthly'}
-              onClick={() => setPeriod('monthly')}
+              onClick={() => {
+                setPeriod('monthly')
+              }}
             >
               Monthly
             </button>
             <button
               type="button"
               aria-pressed={period === 'annual'}
-              onClick={() => setPeriod('annual')}
+              onClick={() => {
+                setPeriod('annual')
+              }}
             >
               Annual
             </button>

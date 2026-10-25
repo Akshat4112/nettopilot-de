@@ -38,6 +38,11 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Diagnose print report formatting
+        run: |
+          npx --no-install prettier --write src/components/EssentialSalaryInputs.tsx src/components/SalaryPrintReport.tsx src/components/SalarySummary.test.tsx src/components/SalarySummary.tsx
+          git diff -- src/components/EssentialSalaryInputs.tsx src/components/SalaryPrintReport.tsx src/components/SalarySummary.test.tsx src/components/SalarySummary.tsx
+
       - name: Check formatting
         run: npm run format:check
 

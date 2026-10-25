@@ -38,13 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Print formatted boundary assertions
-        run: |
-          npx prettier --write src/domain/salary/salary-boundary.test.ts
-          echo START_BOUNDARY_ASSERTIONS
-          cat src/domain/salary/salary-boundary.test.ts
-          echo END_BOUNDARY_ASSERTIONS
-
       - name: Check formatting
         run: npm run format:check
 

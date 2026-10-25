@@ -231,7 +231,7 @@ export const aggregateSalaryResults2026 = (
     results.push({ ...result, month: index + 1 })
   }
   const annual = aggregate(results)
-  const recurringNets = results.map((month, index) => {
+  const recurringNets = results.map((_, index) => {
     const details = months[index]
     if (details?.state !== 'calculated') throw new Error('Missing validated month')
     const value = details.value

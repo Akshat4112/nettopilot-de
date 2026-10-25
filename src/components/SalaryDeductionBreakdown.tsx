@@ -28,13 +28,13 @@ export function SalaryDeductionBreakdown({
     <section aria-labelledby="deduction-heading">
       <h3 id="deduction-heading">Deduction breakdown</h3>
       <p>
-        {period === 'annual' ? 'Annual' : 'Monthly'} 2026 amounts. Percentages show each deduction as a share of gross
-        salary, not the statutory tax or insurance rate.
+        Amounts for {period} 2026. Percentages show a share of gross salary, not
+        a statutory tax or insurance rate.
       </p>
       <div className="salary-deduction-scroll">
         <table className="salary-deduction-table">
           <caption>
-            {period === 'annual' ? 'Annual' : 'Monthly'} employee deductions and external insurance costs
+            {period === 'annual' ? 'Annual' : 'Monthly'} employee deductions
           </caption>
           <thead>
             <tr>

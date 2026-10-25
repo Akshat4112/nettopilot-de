@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AdvancedSalaryInputs } from './AdvancedSalaryInputs'
+import { validateEssentialSalaryDraft } from './essential-salary-validation'
 
 const stateOptions = [
   ['DE-BB', 'Brandenburg'],
@@ -59,43 +60,19 @@ export function EssentialSalaryInputs() {
       setAdvancedErrors([])
     }
   }
-  const errors: string[] = []
-  const gross = Number(draft.gross)
-  if (
-    !draft.gross ||
-    !/^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/.test(draft.gross) ||
-    gross <= 0 ||
-    gross * (draft.period === 'monthly' ? 12 : 1) > 10000000
-  ) {
-    errors.push('Enter a positive gross salary within the supported range.')
-  }
-  if (
-    !draft.taxClass ||
-    !draft.federalState ||
-    !draft.churchTax ||
-    !draft.dateOfBirth ||
-    !draft.children ||
-    !draft.insurance
-  ) {
-    errors.push('Complete all required personal and insurance details.')
-  }
-  if (
-    draft.dateOfBirth &&
-    (draft.dateOfBirth > '2026-12-31' || draft.dateOfBirth < '1900-01-01')
-  ) {
-    errors.push('Enter a valid date of birth.')
-  }
-  if (
-    draft.children &&
-    (!/^\d{1,2}$/.test(draft.children) || Number(draft.children) > 20)
-  ) {
-    errors.push('Enter a valid number of children.')
-  }
-  if (draft.churchTax === 'unknown' || draft.insurance === 'unknown') {
-    errors.push('Resolve unknown payroll choices before calculating.')
-  }
-  errors.push(...advancedErrors)
+  const fieldErrors = validateEssentialSalaryDraft(draft)
+  const errors = [...Object.values(fieldErrors), ...advancedErrors]
   const ready = errors.length === 0
+
+  const fieldError = (field: keyof EssentialSalaryDraft) =>
+    submitted && fieldErrors[field] ? (
+      <small id={`np-error-${field}`} role="alert">
+        {fieldErrors[field]}
+      </small>
+    ) : null
+
+  const errorId = (field: keyof EssentialSalaryDraft) =>
+    submitted && fieldErrors[field] ? `np-error-${field}` : undefined
 
   return (
     <section
@@ -118,6 +95,9 @@ export function EssentialSalaryInputs() {
           <label htmlFor="np-gross">Gross salary (EUR)</label>
           <input
             id="np-gross"
+            aria-invalid={submitted && Boolean(fieldErrors.gross)}
+            aria-describedby={errorId('gross')}
+
             type="text"
             inputMode="decimal"
             value={draft.gross}
@@ -126,11 +106,15 @@ export function EssentialSalaryInputs() {
             }}
             required
           />
+          {fieldError('gross')}
         </div>
         <div className="np-field">
           <label htmlFor="np-period">Salary frequency</label>
           <select
             id="np-period"
+            aria-invalid={submitted && Boolean(fieldErrors.period)}
+            aria-describedby={errorId('period')}
+
             value={draft.period}
             onChange={(event) => {
               change('period', event.target.value)
@@ -139,11 +123,15 @@ export function EssentialSalaryInputs() {
             <option value="monthly">Monthly</option>
             <option value="annual">Annual</option>
           </select>
+          {fieldError('period')}
         </div>
         <div className="np-field">
           <label htmlFor="np-year">Tax year</label>
           <select
             id="np-year"
+            aria-invalid={submitted && Boolean(fieldErrors.year)}
+            aria-describedby={errorId('year')}
+
             value={draft.year}
             onChange={(event) => {
               change('year', event.target.value)
@@ -151,11 +139,14 @@ export function EssentialSalaryInputs() {
           >
             <option value="2026">2026</option>
           </select>
+          {fieldError('year')}
         </div>
         <div className="np-field">
           <label htmlFor="np-class">Tax class</label>
           <select
             id="np-class"
+            aria-invalid={submitted && Boolean(fieldErrors.taxClass)}
+            aria-describedby={errorId('taxClass')}
             value={draft.taxClass}
             required
             onChange={(event) => {
@@ -169,11 +160,14 @@ export function EssentialSalaryInputs() {
               </option>
             ))}
           </select>
+          {fieldError('taxClass')}
         </div>
         <div className="np-field">
           <label htmlFor="np-state">Federal state</label>
           <select
             id="np-state"
+            aria-invalid={submitted && Boolean(fieldErrors.federalState)}
+            aria-describedby={errorId('federalState')}
             required
             value={draft.federalState}
             onChange={(event) => {
@@ -187,11 +181,14 @@ export function EssentialSalaryInputs() {
               </option>
             ))}
           </select>
+          {fieldError('federalState')}
         </div>
         <div className="np-field">
           <label htmlFor="np-church">Church-tax liability</label>
           <select
             id="np-church"
+            aria-invalid={submitted && Boolean(fieldErrors.churchTax)}
+            aria-describedby={errorId('churchTax')}
             required
             value={draft.churchTax}
             onChange={(event) => {
@@ -203,11 +200,14 @@ export function EssentialSalaryInputs() {
             <option value="not_liable">Not liable</option>
             <option value="unknown">I don't know</option>
           </select>
+          {fieldError('churchTax')}
         </div>
         <div className="np-field">
           <label htmlFor="np-birth">Date of birth</label>
           <input
             id="np-birth"
+            aria-invalid={submitted && Boolean(fieldErrors.dateOfBirth)}
+            aria-describedby={errorId('dateOfBirth')}
             type="date"
             value={draft.dateOfBirth}
             required
@@ -215,11 +215,14 @@ export function EssentialSalaryInputs() {
               change('dateOfBirth', event.target.value)
             }}
           />
+          {fieldError('dateOfBirth')}
         </div>
         <div className="np-field">
           <label htmlFor="np-children">Number of children</label>
           <input
             id="np-children"
+            aria-invalid={submitted && Boolean(fieldErrors.children)}
+            aria-describedby={errorId('children')}
             type="number"
             min="0"
             max="20"
@@ -230,11 +233,14 @@ export function EssentialSalaryInputs() {
               change('children', event.target.value)
             }}
           />
+          {fieldError('children')}
         </div>
         <div className="np-field">
           <label htmlFor="np-insurance">Health insurance</label>
           <select
             id="np-insurance"
+            aria-invalid={submitted && Boolean(fieldErrors.insurance)}
+            aria-describedby={errorId('insurance')}
             required
             value={draft.insurance}
             onChange={(event) => {
@@ -246,6 +252,7 @@ export function EssentialSalaryInputs() {
             <option value="private">Private (PKV)</option>
             <option value="unknown">I don't know</option>
           </select>
+          {fieldError('insurance')}
         </div>
         <AdvancedSalaryInputs
           key={`${String(resetToken)}-${draft.insurance}`}

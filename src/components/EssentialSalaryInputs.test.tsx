@@ -16,7 +16,7 @@ describe('EssentialSalaryInputs', () => {
     const { user } = renderWithUser(<EssentialSalaryInputs />)
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Complete all required',
+      'Choose a valid tax class.',
     )
     expect(screen.queryByText(/estimated net/i)).not.toBeInTheDocument()
   })
@@ -61,7 +61,7 @@ describe('EssentialSalaryInputs', () => {
     })
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Resolve unknown payroll choices',
+      'Confirm your health-insurance type',
     )
   })
 
@@ -80,6 +80,6 @@ describe('EssentialSalaryInputs', () => {
     const message = screen.getByRole('status')
     expect(message).toHaveTextContent('supported range')
     expect(message).toHaveTextContent('valid date of birth')
-    expect(message).toHaveTextContent('valid number of children')
+    expect(message).toHaveTextContent('number of children from 0 to 20')
   })
 })

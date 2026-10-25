@@ -8,16 +8,6 @@ export interface AdvancedSalaryDraft {
   readonly oneOffBonusMonth: string
 }
 
-const empty: AdvancedSalaryDraft = {
-  annualTaxAllowanceEur: '',
-  annualTaxAdditionEur: '',
-  additionalHealthRatePercent: '',
-  privateHealthPremiumEur: '',
-  privateCarePremiumEur: '',
-  oneOffBonusEur: '',
-  oneOffBonusMonth: '',
-}
-
 const euro = (value: string): boolean =>
   value === '' || /^(?:0|[1-9]\d{0,7})(?:\.\d{1,2})?$/.test(value)
 
@@ -35,7 +25,7 @@ export function validateAdvancedSalaryDraft(
   ]) {
     if (!euro(value))
       errors.push(
-        field + ' must be a non-negative EUR amount with up to two decimals.',
+        String(field) + ' must be a non-negative EUR amount with up to two decimals.',
       )
   }
   if (

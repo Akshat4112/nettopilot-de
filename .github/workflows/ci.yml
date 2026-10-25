@@ -38,13 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Print formatted reference tests
-        run: |
-          npx prettier --write src/domain/salary/reference-validation.test.ts
-          echo START_REF_TEST
-          cat src/domain/salary/reference-validation.test.ts
-          echo END_REF_TEST
-
       - name: Check formatting
         run: npm run format:check
 

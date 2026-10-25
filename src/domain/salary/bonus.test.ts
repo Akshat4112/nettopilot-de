@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { prepareBonus2026, type BonusPreparationInput2026 } from './bonus'
 import { prepareBonusSequence2026 } from './bonus-sequence'
+import { calculateBonusSettlement2026 } from './bonus-settlement'
 import type { PapInput } from './taxable-pay'
 
 const pap: PapInput = {
@@ -192,4 +193,55 @@ describe('2026 bonus preparation', () => {
       paymentIndex: 1,
     })
   })
+  it('reconciles a supported private bonus without statutory health deductions', () => {
+    const result = calculateBonusSettlement2026({
+      bonus: {
+        ...base,
+        insurancePath: 'private',
+        grossPaymentCents: 100000,
+        priorOtherRemunerationCents: 0,
+      },
+      pensionCoverage: 'general_statutory_mandatory',
+      unemploymentCoverage: 'mandatory_standard',
+      healthRate: { mode: 'published_average' },
+      care: {
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'private',
+        employmentState: 'other',
+        parentStatus: 'childless',
+      },
+      churchTaxCents: 0,
+    })
+    expect(result.state).toBe('calculated')
+    if (result.state === 'calculated') {
+      expect(result.grossCents).toBe(100000)
+      expect(result.netBonusCents + result.wageTaxCents +
+        result.solidarityCents + result.churchTaxCents +
+        result.employeeInsuranceCents).toBe(result.grossCents)
+      expect(result.incrementalEmployerCostCents).toBe(
+        result.grossCents + result.employerInsuranceCents,
+      )
+    }
+  })
+
+  it('rejects one-time bases that cannot fit the monthly insurance engine', () => {
+    const result = calculateBonusSettlement2026({
+      bonus: { ...base, grossPaymentCents: 2000000 },
+      pensionCoverage: 'general_statutory_mandatory',
+      unemploymentCoverage: 'mandatory_standard',
+      healthRate: { mode: 'published_average' },
+      care: {
+        calculationYear: 2026, payrollYear: 2026,
+        insurancePath: 'statutory', employmentState: 'other',
+        parentStatus: 'childless',
+      },
+      churchTaxCents: 0,
+    })
+    expect(result).toMatchObject({
+      state: 'unsupported',
+      reason: 'one_time_above_monthly_module_limit',
+    })
+  })
+
 })

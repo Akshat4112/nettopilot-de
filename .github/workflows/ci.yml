@@ -38,6 +38,11 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Diagnose deduction formatting
+        run: |
+          npx --no-install prettier --write src/components/SalaryDeductionBreakdown.tsx src/components/SalaryDeductionBreakdown.test.tsx
+          git diff -- src/components/SalaryDeductionBreakdown.tsx src/components/SalaryDeductionBreakdown.test.tsx
+
       - name: Check formatting
         run: npm run format:check
 

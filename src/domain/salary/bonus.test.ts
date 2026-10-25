@@ -408,4 +408,61 @@ describe('2026 bonus preparation', () => {
     })
   })
 
+  it('keeps empty and incomplete bonus settlement sequences distinct', () => {
+    expect(calculateBonusSettlementSequence2026([])).toMatchObject({
+      state: 'calculated',
+      payments: [],
+      totalGrossCents: 0,
+      totalNetCents: 0,
+      totalIncrementalEmployerCostCents: 0,
+    })
+    const context = {
+      pensionCoverage: 'general_statutory_mandatory' as const,
+      unemploymentCoverage: 'mandatory_standard' as const,
+      healthRate: { mode: 'published_average' as const },
+      care: {
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'private' as const,
+        employmentState: 'other' as const,
+        parentStatus: 'childless' as const,
+      },
+      churchTaxStatus: 'not_liable' as const,
+    }
+    expect(
+      calculateBonusSettlementSequence2026([
+        {
+          ...context,
+          bonus: {
+            ...base,
+            insurancePath: 'private',
+            grossPaymentCents: 100000,
+            priorKvPvContributoryPayCents: 'unknown',
+          },
+        },
+      ]),
+    ).toMatchObject({
+      state: 'incomplete',
+      paymentIndex: 0,
+      reason: 'contribution_history_required',
+    })
+    expect(
+      calculateBonusSettlementSequence2026([
+        {
+          ...context,
+          bonus: {
+            ...base,
+            insurancePath: 'private',
+            grossPaymentCents: 100000,
+            classification: 'unknown',
+          },
+        },
+      ]),
+    ).toMatchObject({
+      state: 'incomplete',
+      paymentIndex: 0,
+      reason: 'classification_unknown',
+    })
+  })
+
 })

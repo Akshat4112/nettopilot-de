@@ -49,6 +49,7 @@ export interface SalaryPeriodTotals2026 {
   readonly employeeUnemploymentCents: number
   readonly employeeHealthCents: number
   readonly employeeCareCents: number
+  readonly oneOffEmployeeSocialInsuranceCents: number
   readonly employeeSocialInsuranceCents: number
   readonly privateInsuranceOutflowCents: number
   readonly allDeductionsCents: number
@@ -58,6 +59,7 @@ export interface SalaryPeriodTotals2026 {
   readonly employerUnemploymentCents: number
   readonly employerHealthCents: number
   readonly employerCareCents: number
+  readonly oneOffEmployerSocialInsuranceCents: number
   readonly employerSocialInsuranceCents: number
   readonly employerCostCents: number
   /** Effective deduction ratio to 6 decimal places, not a tax rate. */
@@ -128,6 +130,7 @@ const aggregate = (
     employeeUnemploymentCents: item('employeeUnemploymentCents'),
     employeeHealthCents: item('employeeHealthCents'),
     employeeCareCents: item('employeeCareCents'),
+    oneOffEmployeeSocialInsuranceCents: item('oneOffEmployeeSocialInsuranceCents'),
     employeeSocialInsuranceCents: item('employeeSocialInsuranceCents'),
     privateInsuranceOutflowCents: item('privateInsuranceOutflowCents'),
     allDeductionsCents,
@@ -139,6 +142,7 @@ const aggregate = (
     employerUnemploymentCents: item('employerUnemploymentCents'),
     employerHealthCents: item('employerHealthCents'),
     employerCareCents: item('employerCareCents'),
+    oneOffEmployerSocialInsuranceCents: item('oneOffEmployerSocialInsuranceCents'),
     employerSocialInsuranceCents: item('employerSocialInsuranceCents'),
     employerCostCents: item('employerCostCents'),
     effectiveDeductionRatePartsPerMillion: ratio(
@@ -262,6 +266,7 @@ const calculateMonth = (
     wageTaxCents,
     solidarityCents,
     churchTaxCents,
+    oneOffEmployeeSocialInsuranceCents: bonusEmployeeInsurance,
     employeeSocialInsuranceCents,
   ])
   const allDeductionsCents = sum([
@@ -301,6 +306,7 @@ const calculateMonth = (
     employerUnemploymentCents: month.employerUnemploymentCents,
     employerHealthCents: month.employerHealthCents,
     employerCareCents: month.employerCareCents,
+    oneOffEmployerSocialInsuranceCents: sum(extras.map((bonus) => bonus.employerInsuranceCents)),
     employerSocialInsuranceCents,
     employerCostCents: sum([grossCents, employerSocialInsuranceCents]),
     effectiveDeductionRatePartsPerMillion: ratio(

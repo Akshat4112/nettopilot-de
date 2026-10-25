@@ -60,7 +60,10 @@ export const calculateBonusSettlement2026 = (
   if (input.churchTaxStatus === 'unknown')
     return { state: 'incomplete', reason: 'church_tax_status_unknown' }
   if (input.churchTaxStatus === 'liable')
-    return { state: 'unsupported', reason: 'church_tax_rate_evidence_not_approved' }
+    return {
+      state: 'unsupported',
+      reason: 'church_tax_rate_evidence_not_approved',
+    }
   const pension = calculateAllocatedOneOffPensionContribution2026({
     calculationYear: 2026,
     contributionDays: 30,

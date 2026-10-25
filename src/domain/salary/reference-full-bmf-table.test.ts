@@ -72,7 +72,7 @@ describe('NP-CALC-017 complete official Annex 2 matrix', () => {
   it('transcribes the complete 43×12 check table without missing cells', () => {
     expect(data).toHaveLength(43)
     for (const row of data) {
-      expect(row).toHaveLength(14)
+      expect(row).toHaveLength(15)
       expect(row.every((value) => Number.isSafeInteger(value))).toBe(true)
       expect(row[1]).toBeLessThanOrEqual(row[2] ?? -1)
     }

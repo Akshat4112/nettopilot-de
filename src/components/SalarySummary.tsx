@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import type { EssentialSalaryDraft } from './EssentialSalaryInputs'
+import type { AdvancedSalaryDraft } from './advanced-salary-validation'
+import { SalaryPrintReport } from './SalaryPrintReport'
 import type {
   SalaryAggregationResult2026,
   SalaryPeriodTotals2026,
@@ -9,6 +12,8 @@ import { SalaryGrossToNetChart } from './SalaryGrossToNetChart'
 export interface SalarySummaryProps {
   readonly result: SalaryAggregationResult2026
   readonly displayPeriod?: 'monthly' | 'annual'
+  readonly inputs?: EssentialSalaryDraft
+  readonly advancedInputs?: AdvancedSalaryDraft
 }
 
 const euro = (cents: number): string =>
@@ -78,6 +83,8 @@ function SummaryFigures({
 export function SalarySummary({
   result,
   displayPeriod = 'annual',
+  inputs,
+  advancedInputs,
 }: SalarySummaryProps) {
   const [period, setPeriod] = useState<'monthly' | 'annual'>(displayPeriod)
   const first = result.state === 'calculated' ? result.months[0] : undefined
@@ -106,6 +113,23 @@ export function SalarySummary({
       <h2 id="salary-summary-heading">Salary summary</h2>
       {result.state === 'calculated' ? (
         <>
+          {inputs !== undefined && advancedInputs !== undefined && (
+            <div className="np-print-action">
+              <p>
+                Printing includes your personal salary and payroll inputs.
+                Review the contents before sharing or saving.
+              </p>
+              <button
+                type="button"
+                className="np-button-secondary"
+                onClick={() => {
+                  window.print()
+                }}
+              >
+                Print or save as PDF
+              </button>
+            </div>
+          )}
           <div
             className="np-period-toggle"
             role="group"
@@ -145,6 +169,15 @@ export function SalarySummary({
               <SalaryGrossToNetChart totals={values} period={period} />
               <SalaryDeductionBreakdown totals={values} period={period} />
             </>
+          )}
+          {inputs !== undefined && advancedInputs !== undefined && (
+            <SalaryPrintReport
+              inputs={inputs}
+              advanced={advancedInputs}
+              totals={result.annual}
+              calculationYear={result.calculationYear}
+              generatedOn={new Date().toISOString().slice(0, 10)}
+            />
           )}
         </>
       ) : (

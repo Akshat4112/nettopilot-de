@@ -87,7 +87,7 @@ export function SalarySummary({
       {result.state === 'calculated' ? (
         <>
           <p>
-            Verified payroll result for {result.calculationYear} —{' '}
+            Estimated payroll result for {result.calculationYear} —{' '}
             {displayPeriod === 'annual' ? 'annual' : 'monthly'} display.
           </p>
           <SummaryFigures result={result} period={displayPeriod} />

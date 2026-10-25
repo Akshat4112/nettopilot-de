@@ -43,7 +43,9 @@ export function SalaryGrossToNetChart({
       aria-labelledby="np-gross-net-title"
       aria-describedby="np-gross-net-description"
     >
-      <figcaption id="np-gross-net-title">From annual gross to available pay</figcaption>
+      <figcaption id="np-gross-net-title">
+        From annual gross to available pay
+      </figcaption>
       <p id="np-gross-net-description">
         The bar separates available annual pay from tax, social insurance and
         any external private-insurance costs. Percentages show a share of gross,
@@ -70,14 +72,20 @@ export function SalaryGrossToNetChart({
         </div>
         <div>
           <dt>
-            <span aria-hidden="true" className="np-gross-net-swatch np-gross-net-swatch-available" />
+            <span
+              aria-hidden="true"
+              className="np-gross-net-swatch np-gross-net-swatch-available"
+            />
             Available pay ({availablePct})
           </dt>
           <dd>{money(available)}</dd>
         </div>
         <div>
           <dt>
-            <span aria-hidden="true" className="np-gross-net-swatch np-gross-net-swatch-deductions" />
+            <span
+              aria-hidden="true"
+              className="np-gross-net-swatch np-gross-net-swatch-deductions"
+            />
             Total deductions ({deductionPct})
           </dt>
           <dd>{money(deductions)}</dd>

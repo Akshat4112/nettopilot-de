@@ -205,3 +205,22 @@ export type {
 
 export { calculateAnnualPrivateInsurance2026 } from './private-insurance-annual'
 export type { PrivateInsuranceAnnualResult2026 } from './private-insurance-annual'
+
+export { prepareBonus2026, BONUS_CLASS_REGISTRY_2026 } from './bonus'
+export type {
+  BonusClass2026,
+  BonusPreparationInput2026,
+  BonusPreparationResult2026,
+} from './bonus'
+
+export { prepareBonusSequence2026 } from './bonus-sequence'
+export type { BonusSequence2026 } from './bonus-sequence'
+
+export { calculateBonusSettlement2026 } from './bonus-settlement'
+export type {
+  BonusSettlementInput2026,
+  BonusSettlement2026,
+} from './bonus-settlement'
+
+export { calculateBonusSettlementSequence2026 } from './bonus-settlement-sequence'
+export type { BonusSettlementSequence2026 } from './bonus-settlement-sequence'

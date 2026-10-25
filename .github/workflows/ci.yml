@@ -38,11 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Inspect offer formatting
-        run: |
-          npx --no-install prettier --write src/domain/comparison/offer-model.ts
-          git diff -- src/domain/comparison/offer-model.ts
-
       - name: Check formatting
         run: npm run format:check
 

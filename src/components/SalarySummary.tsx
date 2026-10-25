@@ -32,8 +32,7 @@ function SummaryFigures({
         month.netPayrollCents === first.netPayrollCents &&
         month.allDeductionsCents === first.allDeductionsCents &&
         month.employerCostCents === first.employerCostCents &&
-        month.privateInsuranceOutflowCents ===
-          first.privateInsuranceOutflowCents,
+        month.privateInsuranceOutflowCents === first.privateInsuranceOutflowCents,
     )
   const values = period === 'annual' ? annual : stable ? first : null
 

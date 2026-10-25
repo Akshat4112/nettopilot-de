@@ -82,4 +82,41 @@ describe('EssentialSalaryInputs', () => {
     expect(message).toHaveTextContent('valid date of birth')
     expect(message).toHaveTextContent('number of children from 0 to 20')
   })
+  it('loads fictional example values without submitting or confirming payroll', async () => {
+    const { user } = renderWithUser(<EssentialSalaryInputs />)
+    await user.click(
+      screen.getByRole('button', {
+        name: /Load example: €3,500 monthly/,
+      }),
+    )
+    expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('3500')
+    expect(screen.getByLabelText('Tax class')).toHaveValue('1')
+    expect(screen.getByLabelText('Federal state')).toHaveValue('DE-BW')
+    expect(screen.getByLabelText('Health insurance')).toHaveValue('statutory')
+    expect(screen.getByRole('checkbox')).not.toBeChecked()
+    expect(screen.queryByRole('heading', { name: 'Salary summary' })).not.toBeInTheDocument()
+  })
+
+  it('switches between examples and resets previously entered advanced values', async () => {
+    const { user } = renderWithUser(<EssentialSalaryInputs />)
+    fireEvent.change(screen.getByLabelText('One-off bonus (EUR)'), {
+      target: { value: '500' },
+    })
+    fireEvent.change(screen.getByLabelText('Bonus payment month'), {
+      target: { value: '10' },
+    })
+    await user.click(
+      screen.getByRole('button', {
+        name: /Load example: €48,000 annually/,
+      }),
+    )
+    expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('48000')
+    expect(screen.getByLabelText('Salary frequency')).toHaveValue('annual')
+    expect(screen.getByLabelText('Tax class')).toHaveValue('4')
+    expect(screen.getByLabelText('Federal state')).toHaveValue('DE-BE')
+    expect(screen.getByLabelText('One-off bonus (EUR)')).toHaveValue('')
+    expect(screen.getByRole('checkbox')).not.toBeChecked()
+    expect(screen.getByText(/not personalized advice/i)).toBeInTheDocument()
+  })
+
 })

@@ -13,9 +13,7 @@ test('compare-offer inputs copy, clear and validate without storing salary', asy
   await a.fill('85000.00')
   await b.fill('92000.25')
   await page.getByRole('button', { name: 'Check both offers' }).click()
-  await expect(
-    page.getByText(/Both base salaries are valid/),
-  ).toBeVisible()
+  await expect(page.getByText(/Both base salaries are valid/)).toBeVisible()
 
   await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
   await expect(b).toHaveValue('85000.00')

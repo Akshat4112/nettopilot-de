@@ -84,6 +84,8 @@ describe('2026 salary result aggregation', () => {
         grossCents: 6100000,
         variableGrossCents: 100000,
         oneOffGrossCents: 100000,
+        oneOffEmployeeSocialInsuranceCents: 10000,
+        oneOffEmployerSocialInsuranceCents: 10000,
         netPayrollCents: 3924000,
         employerCostCents: 7334000,
       },

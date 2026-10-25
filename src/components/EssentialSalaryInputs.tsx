@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AdvancedSalaryInputs } from './AdvancedSalaryInputs'
 
 const stateOptions = [
   ['DE-BB', 'Brandenburg'],
@@ -48,9 +49,15 @@ type Field = keyof EssentialSalaryDraft
 export function EssentialSalaryInputs() {
   const [draft, setDraft] = useState<EssentialSalaryDraft>(empty)
   const [submitted, setSubmitted] = useState(false)
+  const [resetToken, setResetToken] = useState(0)
+  const [advancedErrors, setAdvancedErrors] = useState<readonly string[]>([])
   const change = (field: Field, value: string) => {
     setDraft((previous) => ({ ...previous, [field]: value }))
     setSubmitted(false)
+    if (field === 'insurance') {
+      setResetToken((previous) => previous + 1)
+      setAdvancedErrors([])
+    }
   }
   const errors: string[] = []
   const gross = Number(draft.gross)
@@ -87,6 +94,7 @@ export function EssentialSalaryInputs() {
   if (draft.churchTax === 'unknown' || draft.insurance === 'unknown') {
     errors.push('Resolve unknown payroll choices before calculating.')
   }
+  errors.push(...advancedErrors)
   const ready = errors.length === 0
 
   return (
@@ -239,6 +247,11 @@ export function EssentialSalaryInputs() {
             <option value="unknown">I don't know</option>
           </select>
         </div>
+        <AdvancedSalaryInputs
+          key={`${String(resetToken)}-${draft.insurance}`}
+          insurance={draft.insurance}
+          onErrorsChange={setAdvancedErrors}
+        />
         <div className="salary-actions">
           <button type="submit" className="np-button-primary">
             Check inputs
@@ -249,6 +262,8 @@ export function EssentialSalaryInputs() {
             onClick={() => {
               setDraft(empty)
               setSubmitted(false)
+              setResetToken((previous) => previous + 1)
+              setAdvancedErrors([])
             }}
           >
             Reset

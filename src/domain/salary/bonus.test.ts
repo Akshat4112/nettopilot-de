@@ -398,10 +398,12 @@ describe('2026 bonus preparation', () => {
       },
       churchTaxStatus: 'not_liable' as const,
     }
-    expect(calculateBonusSettlementSequence2026([
-      { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
-      { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
-    ])).toMatchObject({
+    expect(
+      calculateBonusSettlementSequence2026([
+        { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
+        { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
+      ]),
+    ).toMatchObject({
       state: 'unsupported',
       paymentIndex: 1,
       reason: 'payments_not_chronological',
@@ -464,5 +466,4 @@ describe('2026 bonus preparation', () => {
       reason: 'classification_unknown',
     })
   })
-
 })

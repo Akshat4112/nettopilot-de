@@ -38,6 +38,13 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Print formatted admission tests
+        run: |
+          npx prettier --write src/domain/salary/reference-admission-validation.test.ts
+          echo BEGIN_ADMISSION_FORMAT
+          cat src/domain/salary/reference-admission-validation.test.ts
+          echo END_ADMISSION_FORMAT
+
       - name: Check formatting
         run: npm run format:check
 

@@ -67,7 +67,11 @@ describe('2026 admitted salary calculation', () => {
     expect(
       calculateSimpleSalary2026({
         ...valid,
-        advanced: { ...valid.advanced, oneOffBonusEur: '1000', oneOffBonusMonth: '10' },
+        advanced: {
+          ...valid.advanced,
+          oneOffBonusEur: '1000',
+          oneOffBonusMonth: '10',
+        },
       }).state,
     ).toBe('unsupported')
     expect(
@@ -103,6 +107,8 @@ describe('2026 admitted salary calculation', () => {
     expect(average.annual.employeeHealthCents).toBeLessThan(
       insurer.annual.employeeHealthCents,
     )
-    expect(average.annual.employeeCareCents).not.toBe(insurer.annual.employeeCareCents)
+    expect(average.annual.employeeCareCents).not.toBe(
+      insurer.annual.employeeCareCents,
+    )
   })
 })

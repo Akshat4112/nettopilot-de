@@ -38,15 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Print advanced form Prettier output
-        run: |
-          npx prettier --write src/components/AdvancedSalaryInputs.tsx src/components/AdvancedSalaryInputs.test.ts src/components/EssentialSalaryInputs.tsx src/components/advanced-salary-validation.ts
-          for path in src/components/AdvancedSalaryInputs.tsx src/components/AdvancedSalaryInputs.test.ts src/components/EssentialSalaryInputs.tsx src/components/advanced-salary-validation.ts; do
-            echo "START_FORMATTED_UI:$path"
-            cat "$path"
-            echo "END_FORMATTED_UI:$path"
-          done
-
       - name: Check formatting
         run: npm run format:check
 

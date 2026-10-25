@@ -4,13 +4,21 @@ import { calculatePayrollTax2026 } from './payroll-tax'
 import type { PapInput, StklValue } from './taxable-pay'
 
 const headers = [
-  'gross_reference_eur', 'table_step_from_eur', 'table_step_to_eur',
-  'general_class_I_eur', 'general_class_II_eur',
-  'general_class_III_eur', 'general_class_IV_eur',
-  'general_class_V_eur', 'general_class_VI_eur',
-  'special_class_I_eur', 'special_class_II_eur',
-  'special_class_III_eur', 'special_class_IV_eur',
-  'special_class_V_eur', 'special_class_VI_eur',
+  'gross_reference_eur',
+  'table_step_from_eur',
+  'table_step_to_eur',
+  'general_class_I_eur',
+  'general_class_II_eur',
+  'general_class_III_eur',
+  'general_class_IV_eur',
+  'general_class_V_eur',
+  'general_class_VI_eur',
+  'special_class_I_eur',
+  'special_class_II_eur',
+  'special_class_III_eur',
+  'special_class_IV_eur',
+  'special_class_V_eur',
+  'special_class_VI_eur',
 ] as const
 
 const exactCents = (decimal: string): number => {
@@ -79,14 +87,16 @@ describe('NP-CALC-017 complete official Annex 2 matrix', () => {
     expect(data.length * 12).toBe(516)
   })
 
-  it.each(data.flatMap((row, index) =>
-    [1, 2, 3, 4, 5, 6].map((taxClass) => ({
-      referenceIndex: index + 1,
-      classIndex: taxClass,
-      grossCents: row[2] ?? 0,
-      expectedCents: row[2 + taxClass] ?? -1,
-    })),
-  ))(
+  it.each(
+    data.flatMap((row, index) =>
+      [1, 2, 3, 4, 5, 6].map((taxClass) => ({
+        referenceIndex: index + 1,
+        classIndex: taxClass,
+        grossCents: row[2] ?? 0,
+        expectedCents: row[2 + taxClass] ?? -1,
+      })),
+    ),
+  )(
     'matches general Annex 2 row $referenceIndex tax class $classIndex exactly',
     ({ grossCents, classIndex, expectedCents }) => {
       const result = calculatePayrollTax2026(

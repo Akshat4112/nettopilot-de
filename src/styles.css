@@ -646,3 +646,69 @@ main {
     min-width: 0;
   }
 }
+
+.offer-comparison {
+  width: min(100%, 980px);
+  margin-bottom: var(--np-space-12);
+}
+
+.offer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--np-space-6);
+}
+
+.offer-card {
+  display: grid;
+  gap: var(--np-space-4);
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.offer-card legend {
+  padding: 0 var(--np-space-2);
+  font-weight: 700;
+}
+
+.offer-card :is(input, select) {
+  width: 100%;
+}
+
+.offer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--np-space-2);
+}
+
+.offer-review {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--np-space-3);
+  margin-top: var(--np-space-4);
+}
+
+.offer-review p {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
+@media screen and (max-width: 760px) {
+  .offer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .offer-actions button {
+    flex: 1 1 11rem;
+  }
+}
+
+@media print {
+  /* Offer drafts must never leak into a separate salary calculation printout. */
+  .offer-comparison {
+    display: none !important;
+  }
+}

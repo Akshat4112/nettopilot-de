@@ -67,7 +67,7 @@ export function EssentialSalaryInputs() {
   const fieldError = (field: keyof EssentialSalaryDraft) =>
     submitted && fieldErrors[field] ? (
       <small id={`np-error-${field}`} role="alert">
-        {fieldErrors[field]}
+          {fieldErrors[field]}
       </small>
     ) : null
 
@@ -104,7 +104,7 @@ export function EssentialSalaryInputs() {
             }}
             required
           />
-        {fieldError('gross')}
+          {fieldError('gross')}
         </div>
         <div className="np-field">
           <label htmlFor="np-period">Salary frequency</label>
@@ -122,7 +122,7 @@ export function EssentialSalaryInputs() {
             <option value="monthly">Monthly</option>
             <option value="annual">Annual</option>
           </select>
-        {fieldError('period')}
+          {fieldError('period')}
         </div>
         <div className="np-field">
           <label htmlFor="np-year">Tax year</label>
@@ -139,7 +139,7 @@ export function EssentialSalaryInputs() {
           >
             <option value="2026">2026</option>
           </select>
-        {fieldError('year')}
+          {fieldError('year')}
         </div>
         <div className="np-field">
           <label htmlFor="np-class">Tax class</label>
@@ -162,7 +162,7 @@ export function EssentialSalaryInputs() {
               </option>
             ))}
           </select>
-        {fieldError('taxClass')}
+          {fieldError('taxClass')}
         </div>
         <div className="np-field">
           <label htmlFor="np-state">Federal state</label>
@@ -185,7 +185,7 @@ export function EssentialSalaryInputs() {
               </option>
             ))}
           </select>
-        {fieldError('federalState')}
+          {fieldError('federalState')}
         </div>
         <div className="np-field">
           <label htmlFor="np-church">Church-tax liability</label>
@@ -206,7 +206,7 @@ export function EssentialSalaryInputs() {
             <option value="not_liable">Not liable</option>
             <option value="unknown">I don't know</option>
           </select>
-        {fieldError('churchTax')}
+          {fieldError('churchTax')}
         </div>
         <div className="np-field">
           <label htmlFor="np-birth">Date of birth</label>
@@ -223,7 +223,7 @@ export function EssentialSalaryInputs() {
               change('dateOfBirth', event.target.value)
             }}
           />
-        {fieldError('dateOfBirth')}
+          {fieldError('dateOfBirth')}
         </div>
         <div className="np-field">
           <label htmlFor="np-children">Number of children</label>
@@ -243,7 +243,7 @@ export function EssentialSalaryInputs() {
               change('children', event.target.value)
             }}
           />
-        {fieldError('children')}
+          {fieldError('children')}
         </div>
         <div className="np-field">
           <label htmlFor="np-insurance">Health insurance</label>
@@ -264,7 +264,7 @@ export function EssentialSalaryInputs() {
             <option value="private">Private (PKV)</option>
             <option value="unknown">I don't know</option>
           </select>
-        {fieldError('insurance')}
+          {fieldError('insurance')}
         </div>
         <AdvancedSalaryInputs
           key={`${String(resetToken)}-${draft.insurance}`}

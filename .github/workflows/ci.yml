@@ -38,11 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Show exact visualization formatting
-        run: |
-          npx --no-install prettier --write src/components/SalaryGrossToNetChart.tsx src/components/SalaryGrossToNetChart.test.tsx
-          git diff -- src/components/SalaryGrossToNetChart.tsx src/components/SalaryGrossToNetChart.test.tsx
-
       - name: Check formatting
         run: npm run format:check
 

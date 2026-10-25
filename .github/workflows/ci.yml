@@ -38,12 +38,14 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Print formatted bonus test for repair
+      - name: Emit formatter output for allocated contribution and bonus modules
         run: |
-          npx prettier --write src/domain/salary/bonus.test.ts
-          echo START_BONUS_TEST
-          cat src/domain/salary/bonus.test.ts
-          echo END_BONUS_TEST
+          npx prettier --write src/domain/salary/pension.ts src/domain/salary/unemployment.ts src/domain/salary/health.ts src/domain/salary/care.ts src/domain/salary/bonus-settlement.ts src/domain/salary/bonus.test.ts
+          for path in src/domain/salary/pension.ts src/domain/salary/unemployment.ts src/domain/salary/health.ts src/domain/salary/care.ts src/domain/salary/bonus-settlement.ts src/domain/salary/bonus.test.ts; do
+            echo "BEGIN_FORMATTED_WORK:$path"
+            cat "$path"
+            echo "END_FORMATTED_WORK:$path"
+          done
 
       - name: Check formatting
         run: npm run format:check

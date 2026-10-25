@@ -21,13 +21,21 @@ function SummaryFigures({
   readonly period: 'monthly' | 'annual'
 }) {
   const annual = result.annual
-  const values =
-    period === 'annual'
-      ? annual
-      : result.recurringMonthlyNetIsStable &&
-          result.recurringMonthlyNetCents !== null
-        ? (result.months[0] ?? null)
-        : null
+  const first = result.months[0]
+  const stable =
+    first !== undefined &&
+    result.months.length === 12 &&
+    result.months.every(
+      (month) =>
+        month.oneOffGrossCents === 0 &&
+        month.grossCents === first.grossCents &&
+        month.netPayrollCents === first.netPayrollCents &&
+        month.allDeductionsCents === first.allDeductionsCents &&
+        month.employerCostCents === first.employerCostCents &&
+        month.privateInsuranceOutflowCents ===
+          first.privateInsuranceOutflowCents,
+    )
+  const values = period === 'annual' ? annual : stable ? first : null
 
   if (values === null)
     return (

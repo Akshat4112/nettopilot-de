@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { AdvancedSalaryInputs } from './AdvancedSalaryInputs'
 import { validateEssentialSalaryDraft } from './essential-salary-validation'
+import { SalarySummary } from './SalarySummary'
+import { calculateSimpleSalary2026 } from './calculate-simple-salary'
+import type { AdvancedSalaryDraft } from './advanced-salary-validation'
 
 const stateOptions = [
   ['DE-BB', 'Brandenburg'],
@@ -45,6 +48,16 @@ const empty: EssentialSalaryDraft = {
   insurance: '',
 }
 
+const emptyAdvanced: AdvancedSalaryDraft = {
+  annualTaxAllowanceEur: '',
+  annualTaxAdditionEur: '',
+  additionalHealthRatePercent: '',
+  privateHealthPremiumEur: '',
+  privateCarePremiumEur: '',
+  oneOffBonusEur: '',
+  oneOffBonusMonth: '',
+}
+
 type Field = keyof EssentialSalaryDraft
 
 export function EssentialSalaryInputs() {
@@ -52,17 +65,28 @@ export function EssentialSalaryInputs() {
   const [submitted, setSubmitted] = useState(false)
   const [resetToken, setResetToken] = useState(0)
   const [advancedErrors, setAdvancedErrors] = useState<readonly string[]>([])
+  const [advancedDraft, setAdvancedDraft] = useState<AdvancedSalaryDraft>(emptyAdvanced)
+  const [standardEmploymentConfirmed, setStandardEmploymentConfirmed] = useState(false)
   const change = (field: Field, value: string) => {
     setDraft((previous) => ({ ...previous, [field]: value }))
     setSubmitted(false)
     if (field === 'insurance') {
       setResetToken((previous) => previous + 1)
       setAdvancedErrors([])
+      setAdvancedDraft(emptyAdvanced)
     }
   }
   const fieldErrors = validateEssentialSalaryDraft(draft)
   const errors = [...Object.values(fieldErrors), ...advancedErrors]
   const ready = errors.length === 0
+  const calculation =
+    submitted && ready && standardEmploymentConfirmed
+      ? calculateSimpleSalary2026({
+          essential: draft,
+          advanced: advancedDraft,
+          standardEmploymentConfirmed,
+        })
+      : null
 
   const fieldError = (field: keyof EssentialSalaryDraft) =>
     submitted && fieldErrors[field] ? (
@@ -81,8 +105,8 @@ export function EssentialSalaryInputs() {
     >
       <h2 id="salary-input-heading">Salary calculator inputs</h2>
       <p>
-        Inputs are kept in your browser. This preview does not yet calculate net
-        salary.
+        Inputs stay in your browser. A limited 2026 standard-employee estimate is
+        available after confirming the payroll assumptions.
       </p>
       <form
         onSubmit={(event) => {
@@ -258,7 +282,32 @@ export function EssentialSalaryInputs() {
           key={`${String(resetToken)}-${draft.insurance}`}
           insurance={draft.insurance}
           onErrorsChange={setAdvancedErrors}
+          onDraftChange={(next) => {
+            setAdvancedDraft(next)
+            setSubmitted(false)
+          }}
         />
+        <div className="np-field">
+          <label htmlFor="np-standard-employment">
+            <input
+              id="np-standard-employment"
+              type="checkbox"
+              checked={standardEmploymentConfirmed}
+              onChange={(event) => {
+                setStandardEmploymentConfirmed(event.target.checked)
+                setSubmitted(false)
+              }}
+            />
+            I confirm full-year ordinary employment (12 equal payroll months),
+            compulsory GKV health insurance, standard statutory pension and
+            unemployment insurance, and no special payroll treatment.
+          </label>
+          <small>
+            This confirmation does not cover bonuses, children, private health
+            insurance, church tax, allowance adjustments or special employment.
+            Unsupported cases will not show a fabricated net salary.
+          </small>
+        </div>
         <div className="salary-actions">
           <button type="submit" className="np-button-primary">
             Check inputs
@@ -271,6 +320,8 @@ export function EssentialSalaryInputs() {
               setSubmitted(false)
               setResetToken((previous) => previous + 1)
               setAdvancedErrors([])
+              setAdvancedDraft(emptyAdvanced)
+              setStandardEmploymentConfirmed(false)
             }}
           >
             Reset
@@ -279,11 +330,12 @@ export function EssentialSalaryInputs() {
         {submitted && (
           <div role="status" aria-live="polite">
             {ready
-              ? 'Essential inputs complete. Calculation is not yet available.'
+              ? 'Essential inputs complete. Confirm standard employment details to view the limited calculation.'
               : errors.join(' ')}
           </div>
         )}
       </form>
+      {calculation !== null && <SalarySummary result={calculation} />}
     </section>
   )
 }

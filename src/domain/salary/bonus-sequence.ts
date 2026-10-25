@@ -27,7 +27,8 @@ const safe = (value: bigint): number => {
 }
 
 /** Preserve entered order for same-month payments and reject reversed months. */
-export type BonusSequenceHistoryMode = 'reported_includes_batch' | 'reported_excludes_batch'
+export type BonusSequenceHistoryMode =
+  'reported_includes_batch' | 'reported_excludes_batch'
 
 export const prepareBonusSequence2026 = (
   historyMode: BonusSequenceHistoryMode,
@@ -62,13 +63,16 @@ export const prepareBonusSequence2026 = (
     const result = prepareBonus2026({
       ...payment,
       priorOtherRemunerationCents: safe(
-        BigInt(payment.priorOtherRemunerationCents) + (historyMode === 'reported_excludes_batch' ? earlierOther : 0n),
+        BigInt(payment.priorOtherRemunerationCents) +
+          (historyMode === 'reported_excludes_batch' ? earlierOther : 0n),
       ),
       priorKvPvContributoryPayCents: safe(
-        BigInt(payment.priorKvPvContributoryPayCents) + (historyMode === 'reported_excludes_batch' ? earlierKv : 0n),
+        BigInt(payment.priorKvPvContributoryPayCents) +
+          (historyMode === 'reported_excludes_batch' ? earlierKv : 0n),
       ),
       priorRvAvContributoryPayCents: safe(
-        BigInt(payment.priorRvAvContributoryPayCents) + (historyMode === 'reported_excludes_batch' ? earlierRv : 0n),
+        BigInt(payment.priorRvAvContributoryPayCents) +
+          (historyMode === 'reported_excludes_batch' ? earlierRv : 0n),
       ),
     })
     if (result.state !== 'prepared')

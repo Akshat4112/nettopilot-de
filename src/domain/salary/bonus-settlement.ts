@@ -1,18 +1,18 @@
 import { prepareBonus2026, type BonusPreparationInput2026 } from './bonus'
 import {
-  calculatePensionContribution2026,
+  calculateAllocatedOneOffPensionContribution2026,
   type PensionCoverageStatus,
 } from './pension'
 import {
-  calculateUnemploymentContribution2026,
+  calculateAllocatedOneOffUnemploymentContribution2026,
   type UnemploymentCoverageStatus,
 } from './unemployment'
 import {
-  calculateStatutoryHealthContribution2026,
+  calculateAllocatedOneOffHealthContribution2026,
   type HealthAdditionalRateInput,
 } from './health'
 import {
-  calculateCareContribution2026,
+  calculateAllocatedOneOffCareContribution2026,
   type CareContributionInput,
 } from './care'
 
@@ -61,13 +61,6 @@ export const calculateBonusSettlement2026 = (
     return { state: 'incomplete', reason: 'church_tax_calculation_required' }
   if (!Number.isSafeInteger(input.churchTaxCents) || input.churchTaxCents < 0)
     throw new RangeError('churchTaxCents must be non-negative integer cents')
-  // Existing monthly insurance modules cap the contribution basis at one month.
-  // Do not undercharge a large one-time payment by applying that cap twice.
-  if (bonus.rvAvLiableCents > 845000 || bonus.kvPvLiableCents > 581250)
-    return {
-      state: 'unsupported',
-      reason: 'one_time_above_monthly_module_limit',
-    }
   const pension = calculatePensionContribution2026({
     calculationYear: 2026,
     contributionDays: 30,

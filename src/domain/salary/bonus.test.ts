@@ -223,6 +223,40 @@ describe('2026 bonus preparation', () => {
     })
   })
 
+
+  it('allows a January bonus when previous-year employment is ruled out', () => {
+    const result = prepareBonus2026({
+      ...base,
+      paymentMonth: 1,
+      sameEmployerPreviousYear: false,
+      grossPaymentCents: 100000,
+    })
+    expect(result.state).toBe('prepared')
+  })
+
+  it('uses zero remaining KV headroom when the full annual ceiling was consumed', () => {
+    const result = prepareBonus2026({
+      ...base,
+      grossPaymentCents: 100000,
+      priorKvPvContributoryPayCents: 6975000,
+      priorRvAvContributoryPayCents: 10140000,
+    })
+    expect(result).toMatchObject({
+      state: 'prepared',
+      kvPvLiableCents: 0,
+      rvAvLiableCents: 0,
+    })
+  })
+
+  it('rejects invalid contribution days without inventing insurance amounts', () => {
+    expect(() =>
+      prepareBonus2026({
+        ...base,
+        contributionDays: 361,
+      }),
+    ).toThrow('contributionDays')
+  })
+
   it('applies bonuses in chronological order without counting future bonuses in JRE4', () => {
     const result = prepareBonusSequence2026([
       { ...base, paymentMonth: 11, grossPaymentCents: 100000 },

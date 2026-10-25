@@ -38,6 +38,11 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Inspect comparison UI formatting
+        run: |
+          npx --no-install prettier --write src/components/OfferComparisonInputs.tsx src/components/OfferComparisonInputs.test.tsx src/components/offer-input-validation.test.ts e2e/offer-inputs.spec.ts
+          git diff -- src/components/OfferComparisonInputs.tsx src/components/OfferComparisonInputs.test.tsx src/components/offer-input-validation.test.ts e2e/offer-inputs.spec.ts
+
       - name: Check formatting
         run: npm run format:check
 

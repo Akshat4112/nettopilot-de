@@ -33,3 +33,11 @@ presenting payroll deltas.
 
 Scenario status, estimated tax, payroll results, and user-value calculations
 remain owned by later tasks, not by this schema.
+
+## Privacy and admissibility
+
+Offer entries must remain client-side by default. Share links must not silently
+serialize salary, compensation, commuting, pension or benefit inputs. Values
+marked `provided` retain their declared source for explanation; their source
+is not a substitute for payroll validation. Do not compute or display an
+"offer winner" from this input contract.

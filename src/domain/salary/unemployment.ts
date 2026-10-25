@@ -244,6 +244,21 @@ export const calculateUnemploymentContribution2026 = (
   }
 }
 
+/** Calculate an already-allocated one-time contribution base without applying a second monthly ceiling. */
+export const calculateAllocatedOneOffUnemploymentContribution2026 = (
+  input: UnemploymentContributionInput,
+): UnemploymentResult => {
+  const admission = calculateUnemploymentContribution2026({
+    ...input,
+    liablePayCents: 0,
+    includesOneOffPay: false,
+  })
+  if (admission.state !== 'calculated') return admission
+  if (!Number.isSafeInteger(input.liablePayCents) || input.liablePayCents < 0)
+    throw new RangeError('Allocated bonus base must be safe non-negative cents')
+  return contributionResult(input, BigInt(input.liablePayCents), BigInt(input.liablePayCents), 1n, false)
+}
+
 const aggregateAnnualResult = (
   months: readonly UnemploymentContributionResult[],
 ): AnnualUnemploymentContributionResult => ({

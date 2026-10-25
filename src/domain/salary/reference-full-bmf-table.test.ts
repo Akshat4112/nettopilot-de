@@ -105,4 +105,29 @@ describe('NP-CALC-017 complete official Annex 2 matrix', () => {
       expect(result.wageTaxCents).toBe(expectedCents)
     },
   )
+  it.each(
+    data.flatMap((row, index) =>
+      [1, 2, 3, 4, 5, 6].map((taxClass) => ({
+        referenceIndex: index + 1,
+        classIndex: taxClass,
+        grossCents: row[2] ?? 0,
+        expectedCents: row[8 + taxClass] ?? -1,
+      })),
+    ),
+  )(
+    'matches special Annex 2 row $referenceIndex class $classIndex exactly',
+    ({ grossCents, classIndex, expectedCents }) => {
+      const input = {
+        ...referenceInput(grossCents, classIndex as StklValue),
+        ALV: 1 as const,
+        KRV: 1 as const,
+        PKV: 1 as const,
+        PKPV: 0,
+        PKPVAGZ: 0,
+      }
+      const result = calculatePayrollTax2026(input)
+      expect(result.wageTaxCents).toBe(expectedCents)
+    },
+  )
+
 })

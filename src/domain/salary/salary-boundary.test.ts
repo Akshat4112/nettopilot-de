@@ -62,17 +62,29 @@ describe('2026 salary boundary admission', () => {
     ).toThrow(RangeError)
   })
   it('requests employment, tax class, insurance and contribution history separately', () => {
-    expect(admitSalaryBoundary2026({ ...base, employment: 'unknown' })).toMatchObject({
-      state: 'incomplete', reason: 'employment_type_required',
+    expect(
+      admitSalaryBoundary2026({ ...base, employment: 'unknown' }),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'employment_type_required',
     })
-    expect(admitSalaryBoundary2026({ ...base, taxClass: 'unknown' })).toMatchObject({
-      state: 'incomplete', reason: 'tax_class_required',
+    expect(
+      admitSalaryBoundary2026({ ...base, taxClass: 'unknown' }),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'tax_class_required',
     })
-    expect(admitSalaryBoundary2026({ ...base, healthCoverage: 'unknown' })).toMatchObject({
-      state: 'incomplete', reason: 'health_coverage_required',
+    expect(
+      admitSalaryBoundary2026({ ...base, healthCoverage: 'unknown' }),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'health_coverage_required',
     })
-    expect(admitSalaryBoundary2026({ ...base, contributionDays: null })).toMatchObject({
-      state: 'incomplete', reason: 'contribution_history_required',
+    expect(
+      admitSalaryBoundary2026({ ...base, contributionDays: null }),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'contribution_history_required',
     })
   })
 
@@ -89,8 +101,8 @@ describe('2026 salary boundary admission', () => {
       },
     })
     expect(result).toMatchObject({
-      state: 'unsupported', reason: 'annual_gross_reconciliation_mismatch',
+      state: 'unsupported',
+      reason: 'annual_gross_reconciliation_mismatch',
     })
   })
-
 })

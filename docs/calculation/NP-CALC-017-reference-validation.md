@@ -6,7 +6,7 @@
 
 ## Method
 
-The initial executable suite reads the checked-in fixture JSON, selects the six
+The executable suites currently cover six official BMF general-table rows, four statutory insurance scenarios and two private subsidy scenarios. Additional families below remain unverified. The initial executable suite reads the checked-in fixture JSON, selects the six
 `official_exact` BMF general annual check-table scenarios (classes I–VI),
 and compares the 2026 PAP engine output to every explicitly sourced expected
 value at zero-cent tolerance. It verifies the source IDs and fixture-set
@@ -25,8 +25,8 @@ branch is therefore classified separately and is not silently admitted.
 | General annual BMF wage tax; 6 classes | Official exact | Implemented in `reference-validation.test.ts` |
 | Full 516-cell BMF check table | Official exact | Pending extended reference runner |
 | BMF special annual table | Official exact | Scope/admission classification only; numeric adapter comparison pending |
-| Statutory RV/AV/GKV/PV | Source-derived exact | Pending fixture-driven integration runner |
-| Private subsidy ceilings | Source-derived exact | Pending fixture-driven integration runner |
+| Statutory RV/AV/GKV/PV; 4 fixtures | Source-derived exact | Implemented in `reference-insurance-validation.test.ts`; CI verification pending |
+| Private subsidy ceilings; 2 fixtures | Source-derived exact | Implemented in `reference-insurance-validation.test.ts`; CI verification pending |
 | Soli and church-tax arithmetic | Source-derived exact | Pending fixture-driven integration runner |
 | Bonus social-insurance allocation | Source-derived exact | Pending fixture-driven integration runner |
 | Admission gates, March clause, source-gated church tax | Admission gate | Pending fixture-driven integration runner |

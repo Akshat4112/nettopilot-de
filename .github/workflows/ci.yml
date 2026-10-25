@@ -38,6 +38,11 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Diagnose private-share formatting
+        run: |
+          npx --no-install prettier --write src/components/EssentialSalaryInputs.tsx src/components/EssentialSalaryInputs.test.tsx src/components/salary-share-link.ts src/components/salary-share-link.test.ts
+          git diff -- src/components/EssentialSalaryInputs.tsx src/components/EssentialSalaryInputs.test.tsx src/components/salary-share-link.ts src/components/salary-share-link.test.ts
+
       - name: Check formatting
         run: npm run format:check
 

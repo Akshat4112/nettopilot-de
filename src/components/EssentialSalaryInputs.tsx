@@ -65,8 +65,10 @@ export function EssentialSalaryInputs() {
   const [submitted, setSubmitted] = useState(false)
   const [resetToken, setResetToken] = useState(0)
   const [advancedErrors, setAdvancedErrors] = useState<readonly string[]>([])
-  const [advancedDraft, setAdvancedDraft] = useState<AdvancedSalaryDraft>(emptyAdvanced)
-  const [standardEmploymentConfirmed, setStandardEmploymentConfirmed] = useState(false)
+  const [advancedDraft, setAdvancedDraft] =
+    useState<AdvancedSalaryDraft>(emptyAdvanced)
+  const [standardEmploymentConfirmed, setStandardEmploymentConfirmed] =
+    useState(false)
   const change = (field: Field, value: string) => {
     setDraft((previous) => ({ ...previous, [field]: value }))
     setSubmitted(false)
@@ -105,8 +107,8 @@ export function EssentialSalaryInputs() {
     >
       <h2 id="salary-input-heading">Salary calculator inputs</h2>
       <p>
-        Inputs stay in your browser. A limited 2026 standard-employee estimate is
-        available after confirming the payroll assumptions.
+        Inputs stay in your browser. A limited 2026 standard-employee estimate
+        is available after confirming the payroll assumptions.
       </p>
       <form
         onSubmit={(event) => {

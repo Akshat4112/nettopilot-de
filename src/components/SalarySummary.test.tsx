@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { SalarySummary } from './SalarySummary'
 import {
   aggregateSalaryResults2026,
@@ -104,6 +104,48 @@ describe('SalarySummary', () => {
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Annual' }))
     expect(screen.getByText('Net payroll pay')).toBeInTheDocument()
+  })
+
+  it('prints a local-only report with input assumptions and exact annual totals', () => {
+    const print = vi.spyOn(window, 'print').mockImplementation(() => {})
+    render(
+      <SalarySummary
+        result={complete()}
+        inputs={{
+          gross: '5000',
+          period: 'monthly',
+          year: '2026',
+          taxClass: '4',
+          federalState: 'DE-BW',
+          churchTax: 'not_liable',
+          dateOfBirth: '1990-01-01',
+          children: '0',
+          insurance: 'statutory',
+        }}
+        advancedInputs={{
+          annualTaxAllowanceEur: '',
+          annualTaxAdditionEur: '',
+          additionalHealthRatePercent: '',
+          privateHealthPremiumEur: '',
+          privateCarePremiumEur: '',
+          oneOffBonusEur: '',
+          oneOffBonusMonth: '',
+        }}
+      />,
+    )
+    const report = screen.getByRole('region', {
+      name: 'Printable salary report',
+      hidden: true,
+    })
+    expect(report).toHaveTextContent('BMF 2026 wage-tax algorithm')
+    expect(report).toHaveTextContent('1990-01-01')
+    expect(report).toHaveTextContent('Reconciled calculation summary (annual)')
+    expect(report).toHaveTextContent('Generated (UTC)')
+    expect(report).toHaveTextContent('All values were calculated locally')
+    expect(screen.getByText(/Printing includes your personal salary/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Print or save as PDF' }))
+    expect(print).toHaveBeenCalledTimes(1)
+    print.mockRestore()
   })
 
   it('never presents missing data as a calculated net salary', () => {

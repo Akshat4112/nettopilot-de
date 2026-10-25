@@ -250,7 +250,6 @@ export function EssentialSalaryInputs() {
         <AdvancedSalaryInputs
           key={`${String(resetToken)}-${draft.insurance}`}
           insurance={draft.insurance}
-          resetToken={resetToken}
           onErrorsChange={setAdvancedErrors}
         />
         <div className="salary-actions">

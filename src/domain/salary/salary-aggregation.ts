@@ -266,7 +266,6 @@ const calculateMonth = (
     wageTaxCents,
     solidarityCents,
     churchTaxCents,
-    oneOffEmployeeSocialInsuranceCents: bonusEmployeeInsurance,
     employeeSocialInsuranceCents,
   ])
   const allDeductionsCents = sum([

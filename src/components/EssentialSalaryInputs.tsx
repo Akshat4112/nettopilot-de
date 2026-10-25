@@ -497,7 +497,13 @@ export function EssentialSalaryInputs() {
           </div>
         )}
       </form>
-      {calculation !== null && <SalarySummary result={calculation} />}
+      {calculation !== null && (
+        <SalarySummary
+          result={calculation}
+          inputs={draft}
+          advancedInputs={advancedDraft}
+        />
+      )}
     </section>
   )
 }

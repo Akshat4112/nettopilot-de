@@ -162,7 +162,6 @@ describe('2026 bonus preparation', () => {
     )
   })
 
-
   it('fails closed when church-tax basis is not resolved', () => {
     const result = calculateBonusSettlement2026({
       bonus: { ...base, grossPaymentCents: 100000, insurancePath: 'private' },
@@ -170,8 +169,10 @@ describe('2026 bonus preparation', () => {
       unemploymentCoverage: 'mandatory_standard',
       healthRate: { mode: 'published_average' },
       care: {
-        calculationYear: 2026, payrollYear: 2026,
-        insurancePath: 'private', employmentState: 'other',
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'private',
+        employmentState: 'other',
         parentStatus: 'childless',
       },
       churchTaxCents: 'unknown',
@@ -183,18 +184,22 @@ describe('2026 bonus preparation', () => {
   })
 
   it('rejects invalid church tax cents', () => {
-    expect(() => calculateBonusSettlement2026({
-      bonus: { ...base, grossPaymentCents: 100000, insurancePath: 'private' },
-      pensionCoverage: 'general_statutory_mandatory',
-      unemploymentCoverage: 'mandatory_standard',
-      healthRate: { mode: 'published_average' },
-      care: {
-        calculationYear: 2026, payrollYear: 2026,
-        insurancePath: 'private', employmentState: 'other',
-        parentStatus: 'childless',
-      },
-      churchTaxCents: -1,
-    })).toThrow('churchTaxCents')
+    expect(() =>
+      calculateBonusSettlement2026({
+        bonus: { ...base, grossPaymentCents: 100000, insurancePath: 'private' },
+        pensionCoverage: 'general_statutory_mandatory',
+        unemploymentCoverage: 'mandatory_standard',
+        healthRate: { mode: 'published_average' },
+        care: {
+          calculationYear: 2026,
+          payrollYear: 2026,
+          insurancePath: 'private',
+          employmentState: 'other',
+          parentStatus: 'childless',
+        },
+        churchTaxCents: -1,
+      }),
+    ).toThrow('churchTaxCents')
   })
 
   it('rejects unsupported pension coverage without inventing net pay', () => {
@@ -204,8 +209,10 @@ describe('2026 bonus preparation', () => {
       unemploymentCoverage: 'mandatory_standard',
       healthRate: { mode: 'published_average' },
       care: {
-        calculationYear: 2026, payrollYear: 2026,
-        insurancePath: 'private', employmentState: 'other',
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'private',
+        employmentState: 'other',
         parentStatus: 'childless',
       },
       churchTaxCents: 0,

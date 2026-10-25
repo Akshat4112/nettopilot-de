@@ -40,11 +40,15 @@ export function SalaryPrintReport({
       <dl>
         <div>
           <dt>Entered gross salary</dt>
-          <dd>{inputs.gross} EUR ({inputs.period})</dd>
+          <dd>
+            {inputs.gross} EUR ({inputs.period})
+          </dd>
         </div>
         <div>
           <dt>Tax class and federal state</dt>
-          <dd>{inputs.taxClass} / {inputs.federalState}</dd>
+          <dd>
+            {inputs.taxClass} / {inputs.federalState}
+          </dd>
         </div>
         <div>
           <dt>Church-tax status</dt>
@@ -52,7 +56,9 @@ export function SalaryPrintReport({
         </div>
         <div>
           <dt>Date of birth and children</dt>
-          <dd>{inputs.dateOfBirth} / {inputs.children}</dd>
+          <dd>
+            {inputs.dateOfBirth} / {inputs.children}
+          </dd>
         </div>
         <div>
           <dt>Health insurance</dt>
@@ -87,12 +93,12 @@ export function SalaryPrintReport({
         </div>
       </dl>
       <p>
-        All values were calculated locally in this browser. This report
-        contains personal payroll information: store and share it carefully.
+        All values were calculated locally in this browser. This report contains
+        personal payroll information: store and share it carefully.
       </p>
       <p>
-        Report is informational and reflects only the admitted 2026 scenario
-        and inputs printed above.
+        Report is informational and reflects only the admitted 2026 scenario and
+        inputs printed above.
       </p>
     </section>
   )

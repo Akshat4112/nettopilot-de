@@ -129,5 +129,4 @@ describe('NP-CALC-017 complete official Annex 2 matrix', () => {
       expect(result.wageTaxCents).toBe(expectedCents)
     },
   )
-
 })

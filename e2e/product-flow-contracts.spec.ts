@@ -33,7 +33,7 @@ test.describe('product-flow smoke contracts', () => {
     ).toBeVisible()
     await expect(page.getByLabel('Gross salary (EUR)')).toHaveValue('5000')
 
-    await page.getByRole('button', { name: 'Reset' }).click()
+    await page.getByRole('button', { name: 'Reset', exact: true }).click()
     await expect(
       page.getByRole('heading', { name: 'Salary summary' }),
     ).toHaveCount(0)
@@ -57,6 +57,21 @@ test.describe('product-flow smoke contracts', () => {
       ),
     ).toBeVisible()
     await expect(page.getByText('Net payroll pay')).toHaveCount(0)
+  })
+
+  test('restores only safe shared settings and clears them on reset', async ({
+    page,
+  }) => {
+    await page.goto('./?np=1&year=2026&period=annual&state=DE-BE')
+    await expect(page.getByLabel('Salary frequency')).toHaveValue('annual')
+    await expect(page.getByLabel('Federal state')).toHaveValue('DE-BE')
+    await expect(page.getByLabel('Gross salary (EUR)')).toHaveValue('')
+    await expect(page.getByText('Safe URL settings restored')).toBeVisible()
+    await page
+      .getByRole('button', { name: 'Clear shared settings and reset' })
+      .click()
+    await expect(page).not.toHaveURL(/np=1/)
+    await expect(page.getByLabel('Federal state')).toHaveValue('')
   })
 
   test('compares two job offers', () => {

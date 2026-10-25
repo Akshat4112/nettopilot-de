@@ -38,6 +38,13 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Print formatted bonus test for repair
+        run: |
+          npx prettier --write src/domain/salary/bonus.test.ts
+          echo START_BONUS_TEST
+          cat src/domain/salary/bonus.test.ts
+          echo END_BONUS_TEST
+
       - name: Check formatting
         run: npm run format:check
 

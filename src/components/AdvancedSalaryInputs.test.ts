@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   validateAdvancedSalaryDraft,
   type AdvancedSalaryDraft,
-} from './AdvancedSalaryInputs'
+} from './advanced-salary-validation'
 
 const blank: AdvancedSalaryDraft = {
   annualTaxAllowanceEur: '',

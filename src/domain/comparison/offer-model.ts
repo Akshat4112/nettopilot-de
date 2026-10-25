@@ -155,11 +155,12 @@ export const createEmptyOfferComparison = (): OfferComparisonDraft => ({
 })
 
 /**
- * Supports the later independent calculation gate; comparisons must not imply
- * two compatible payroll results merely because a user entered both offers.
+ * Input-presence check only, not proof of valid payroll calculations,
+ * comparable tax assumptions or calculation-engine compatibility.
  */
-export const canComparePayroll = (
+export const haveBothBaseSalaryInputs = (
   value: OfferComparisonDraft,
 ): boolean =>
-  value.payrollMetadata.state === 'provided' &&
-  value.offers.every((offer) => offer.compensation.baseSalary.state === 'provided')
+  value.offers.every(
+    (offer) => offer.compensation.baseSalary.state === 'provided',
+  )

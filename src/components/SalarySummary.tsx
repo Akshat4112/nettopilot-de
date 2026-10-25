@@ -26,7 +26,7 @@ function SummaryFigures({
       ? annual
       : result.recurringMonthlyNetIsStable &&
           result.recurringMonthlyNetCents !== null
-        ? result.months[0]
+        ? (result.months[0] ?? null)
         : null
 
   if (values === null)

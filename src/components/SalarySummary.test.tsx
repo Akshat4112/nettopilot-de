@@ -107,7 +107,7 @@ describe('SalarySummary', () => {
   })
 
   it('prints a local-only report with input assumptions and exact annual totals', () => {
-    const print = vi.spyOn(window, 'print').mockImplementation(() => {})
+    const print = vi.spyOn(window, 'print').mockImplementation(vi.fn())
     render(
       <SalarySummary
         result={complete()}
@@ -142,8 +142,12 @@ describe('SalarySummary', () => {
     expect(report).toHaveTextContent('Reconciled calculation summary (annual)')
     expect(report).toHaveTextContent('Generated (UTC)')
     expect(report).toHaveTextContent('All values were calculated locally')
-    expect(screen.getByText(/Printing includes your personal salary/)).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Print or save as PDF' }))
+    expect(
+      screen.getByText(/Printing includes your personal salary/),
+    ).toBeInTheDocument()
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Print or save as PDF' }),
+    )
     expect(print).toHaveBeenCalledTimes(1)
     print.mockRestore()
   })

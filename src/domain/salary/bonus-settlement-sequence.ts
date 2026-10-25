@@ -32,7 +32,8 @@ const safe = (value: bigint): number => {
 }
 
 /** Payment order is stable; each current bonus consumes headroom for subsequent payments. */
-export type BonusSequenceHistoryMode = 'reported_includes_batch' | 'reported_excludes_batch'
+export type BonusSequenceHistoryMode =
+  'reported_includes_batch' | 'reported_excludes_batch'
 
 export const calculateBonusSettlementSequence2026 = (
   historyMode: BonusSequenceHistoryMode,
@@ -67,13 +68,16 @@ export const calculateBonusSettlementSequence2026 = (
     const current = {
       ...b,
       priorOtherRemunerationCents: safe(
-        BigInt(b.priorOtherRemunerationCents) + (historyMode === 'reported_excludes_batch' ? earlierOther : 0n),
+        BigInt(b.priorOtherRemunerationCents) +
+          (historyMode === 'reported_excludes_batch' ? earlierOther : 0n),
       ),
       priorKvPvContributoryPayCents: safe(
-        BigInt(b.priorKvPvContributoryPayCents) + (historyMode === 'reported_excludes_batch' ? earlierKv : 0n),
+        BigInt(b.priorKvPvContributoryPayCents) +
+          (historyMode === 'reported_excludes_batch' ? earlierKv : 0n),
       ),
       priorRvAvContributoryPayCents: safe(
-        BigInt(b.priorRvAvContributoryPayCents) + (historyMode === 'reported_excludes_batch' ? earlierRv : 0n),
+        BigInt(b.priorRvAvContributoryPayCents) +
+          (historyMode === 'reported_excludes_batch' ? earlierRv : 0n),
       ),
     }
     const prepared = prepareBonus2026(current)

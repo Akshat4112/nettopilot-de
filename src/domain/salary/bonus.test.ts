@@ -179,7 +179,7 @@ describe('2026 bonus preparation', () => {
     })
     expect(result).toMatchObject({
       state: 'incomplete',
-      reason: 'church_tax_calculation_required',
+      reason: 'church_tax_status_unknown',
     })
   })
 
@@ -225,7 +225,6 @@ describe('2026 bonus preparation', () => {
       reason: 'pension_or_unemployment_scope_unsupported',
     })
   })
-
 
   it('allows a January bonus when previous-year employment is ruled out', () => {
     const result = prepareBonus2026({

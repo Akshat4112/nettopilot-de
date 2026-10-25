@@ -6,7 +6,7 @@
 
 ## Method
 
-The executable suites currently cover six official BMF general-table rows, four statutory insurance scenarios and two private subsidy scenarios. Additional families below remain unverified. The initial executable suite reads the checked-in fixture JSON, selects the six
+The executable suites currently cover six official BMF general-table rows, four statutory insurance scenarios, two private subsidy scenarios, three solidarity surcharge cases, a church-tax evidence gate, a July one-off allocation case and a March-clause admission case. Additional families below remain unverified. The initial executable suite reads the checked-in fixture JSON, selects the six
 `official_exact` BMF general annual check-table scenarios (classes I–VI),
 and compares the 2026 PAP engine output to every explicitly sourced expected
 value at zero-cent tolerance. It verifies the source IDs and fixture-set
@@ -25,11 +25,12 @@ branch is therefore classified separately and is not silently admitted.
 | General annual BMF wage tax; 6 classes | Official exact | Implemented in `reference-validation.test.ts` |
 | Full 516-cell BMF check table | Official exact | Pending extended reference runner |
 | BMF special annual table | Official exact | Scope/admission classification only; numeric adapter comparison pending |
-| Statutory RV/AV/GKV/PV; 4 fixtures | Source-derived exact | Implemented in `reference-insurance-validation.test.ts`; CI verification pending |
+| Statutory RV/AV/GKV/PV; 4 fixtures | Source-derived exact | Implemented in `reference-insurance-validation.test.ts`; passing CI |
 | Private subsidy ceilings; 2 fixtures | Source-derived exact | Implemented in `reference-insurance-validation.test.ts`; CI verification pending |
-| Soli and church-tax arithmetic | Source-derived exact | Pending fixture-driven integration runner |
-| Bonus social-insurance allocation | Source-derived exact | Pending fixture-driven integration runner |
-| Admission gates, March clause, source-gated church tax | Admission gate | Pending fixture-driven integration runner |
+| Solidarity surcharge; 3 fixtures | Source-derived exact | Implemented in `reference-admission-validation.test.ts`; passing CI |
+| Church-tax numerical withholding | Source-derived exact | Pending approved rate/rounding and fixture-driven verification |
+| July bonus proportional allocation; 1 fixture | Source-derived exact | Implemented in `reference-bonus-validation.test.ts`; passing CI |
+| March prior-year-unknown and church-rate evidence gates; 2 fixtures | Admission gate | Implemented and passing CI |
 | Ordinary 12-month salary aggregation | Source-derived integration | Requires independent upstream result fixtures |
 
 The existing component test suite includes some independently documented

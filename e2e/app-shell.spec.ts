@@ -27,6 +27,6 @@ test('loads the production application shell without browser errors', async ({
   ).toHaveAttribute('href', '/nettopilot-de/')
   await expect(
     page.getByRole('complementary', { name: 'Application status' }),
-  ).toContainText('The calculation engine is not available yet.')
+  ).toContainText('A limited 2026 gross-to-net estimate is available.')
   expect(browserErrors).toEqual([])
 })

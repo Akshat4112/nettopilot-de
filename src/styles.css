@@ -476,3 +476,99 @@ footer a {
   background: var(--np-color-ink);
   color: #fff;
 }
+
+.np-print-report {
+  display: none;
+}
+
+.np-print-action {
+  margin: var(--np-space-4) 0;
+}
+
+.np-print-action p {
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  :root,
+  body,
+  .app-shell,
+  main,
+  .salary-inputs,
+  .salary-inputs.np-panel,
+  .salary-inputs .np-panel {
+    display: block !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  .site-header,
+  .hero,
+  footer,
+  .salary-inputs > p,
+  .salary-inputs > [role='status'],
+  .salary-inputs > [role='alert'],
+  .salary-inputs form,
+  #salary-input-heading,
+  #salary-summary-heading,
+  .np-period-toggle,
+  .np-print-action,
+  .salary-summary-figures,
+  .np-gross-net-figure,
+  .salary-deduction-scroll {
+    display: none !important;
+  }
+
+  .np-print-report {
+    display: block !important;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+
+  .np-print-report h3 {
+    margin: 0 0 0.75rem;
+    font-size: 19pt;
+  }
+
+  .np-print-report h4 {
+    margin: 1.2rem 0 0.5rem;
+    font-size: 12pt;
+  }
+
+  .np-print-report dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem 1.2rem;
+  }
+
+  .np-print-report dl > div {
+    break-inside: avoid;
+    border-bottom: 1px solid #bbb;
+    padding: 0.4rem 0;
+  }
+
+  .np-print-report dt {
+    font-size: 9pt;
+    color: #555;
+  }
+
+  .np-print-report dd {
+    margin: 0.2rem 0 0;
+    overflow-wrap: anywhere;
+    font-weight: 650;
+  }
+}

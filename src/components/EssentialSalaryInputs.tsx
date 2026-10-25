@@ -147,11 +147,6 @@ export function EssentialSalaryInputs() {
             id="np-class"
             aria-invalid={submitted && Boolean(fieldErrors.taxClass)}
             aria-describedby={errorId('taxClass')}
-            aria-describedby={
-              submitted && fieldErrors.taxClass
-                ? 'np-error-taxClass'
-                : undefined
-            }
             value={draft.taxClass}
             required
             onChange={(event) => {
@@ -173,11 +168,6 @@ export function EssentialSalaryInputs() {
             id="np-state"
             aria-invalid={submitted && Boolean(fieldErrors.federalState)}
             aria-describedby={errorId('federalState')}
-            aria-describedby={
-              submitted && fieldErrors.federalState
-                ? 'np-error-federalState'
-                : undefined
-            }
             required
             value={draft.federalState}
             onChange={(event) => {
@@ -199,11 +189,6 @@ export function EssentialSalaryInputs() {
             id="np-church"
             aria-invalid={submitted && Boolean(fieldErrors.churchTax)}
             aria-describedby={errorId('churchTax')}
-            aria-describedby={
-              submitted && fieldErrors.churchTax
-                ? 'np-error-churchTax'
-                : undefined
-            }
             required
             value={draft.churchTax}
             onChange={(event) => {
@@ -223,11 +208,6 @@ export function EssentialSalaryInputs() {
             id="np-birth"
             aria-invalid={submitted && Boolean(fieldErrors.dateOfBirth)}
             aria-describedby={errorId('dateOfBirth')}
-            aria-describedby={
-              submitted && fieldErrors.dateOfBirth
-                ? 'np-error-dateOfBirth'
-                : undefined
-            }
             type="date"
             value={draft.dateOfBirth}
             required
@@ -243,11 +223,6 @@ export function EssentialSalaryInputs() {
             id="np-children"
             aria-invalid={submitted && Boolean(fieldErrors.children)}
             aria-describedby={errorId('children')}
-            aria-describedby={
-              submitted && fieldErrors.children
-                ? 'np-error-children'
-                : undefined
-            }
             type="number"
             min="0"
             max="20"
@@ -266,11 +241,6 @@ export function EssentialSalaryInputs() {
             id="np-insurance"
             aria-invalid={submitted && Boolean(fieldErrors.insurance)}
             aria-describedby={errorId('insurance')}
-            aria-describedby={
-              submitted && fieldErrors.insurance
-                ? 'np-error-insurance'
-                : undefined
-            }
             required
             value={draft.insurance}
             onChange={(event) => {

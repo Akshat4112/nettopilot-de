@@ -22,6 +22,7 @@ function SummaryFigures({
 }) {
   const annual = result.annual
   const first = result.months[0]
+  const firstPrivateOutflow = first?.privateInsuranceOutflowCents
   const stable =
     first !== undefined &&
     result.months.length === 12 &&
@@ -32,7 +33,7 @@ function SummaryFigures({
         month.netPayrollCents === first.netPayrollCents &&
         month.allDeductionsCents === first.allDeductionsCents &&
         month.employerCostCents === first.employerCostCents &&
-        month.privateInsuranceOutflowCents === first.privateInsuranceOutflowCents,
+        month.privateInsuranceOutflowCents === firstPrivateOutflow,
     )
   const values = period === 'annual' ? annual : stable ? first : null
 

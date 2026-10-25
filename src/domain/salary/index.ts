@@ -217,4 +217,7 @@ export { prepareBonusSequence2026 } from './bonus-sequence'
 export type { BonusSequence2026 } from './bonus-sequence'
 
 export { calculateBonusSettlement2026 } from './bonus-settlement'
-export type { BonusSettlementInput2026, BonusSettlement2026 } from './bonus-settlement'
+export type {
+  BonusSettlementInput2026,
+  BonusSettlement2026,
+} from './bonus-settlement'

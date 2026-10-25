@@ -47,6 +47,7 @@ export interface BonusPreparationInput2026 {
   readonly priorKvPvContributoryPayCents: number | 'unknown'
   readonly priorRvAvContributoryPayCents: number | 'unknown'
   readonly insurancePath: 'statutory' | 'private' | 'unknown'
+  readonly statutoryHealthCoverage?: 'mandatory' | 'voluntary' | 'unknown'
   readonly sameEmployerPreviousYear: boolean | 'unknown'
   readonly pap: PapInput
   readonly specialCase?: boolean
@@ -157,11 +158,19 @@ export const prepareBonus2026 = (
   if (input.paymentMonth <= 3) {
     if (input.sameEmployerPreviousYear === 'unknown')
       return { state: 'incomplete', reason: 'march_clause_history_unknown' }
-    if (
-      input.sameEmployerPreviousYear &&
-      (input.insurancePath === 'statutory' ? kv < gross : rv < gross)
-    )
-      return { state: 'unsupported', reason: 'march_clause_prior_year' }
+    if (input.sameEmployerPreviousYear) {
+      if (
+        input.insurancePath === 'statutory' &&
+        (input.statutoryHealthCoverage === undefined ||
+          input.statutoryHealthCoverage === 'unknown')
+      )
+        return { state: 'incomplete', reason: 'march_clause_coverage_unknown' }
+      const useKvThreshold =
+        input.insurancePath === 'statutory' &&
+        input.statutoryHealthCoverage === 'mandatory'
+      if (useKvThreshold ? kv < gross : rv < gross)
+        return { state: 'unsupported', reason: 'march_clause_prior_year' }
+    }
   }
   const annualBase = running + earlier
   const tax = calculatePayrollTax2026({

@@ -98,7 +98,7 @@ export function SalarySummary({
     result.state === 'calculated'
       ? period === 'annual'
         ? result.annual
-        : monthlyStable
+        : monthlyStable && first !== undefined
           ? first
           : null
       : null

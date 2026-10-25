@@ -366,10 +366,13 @@ describe('2026 bonus preparation', () => {
       },
       churchTaxStatus: 'not_liable' as const,
     }
-    const result = calculateBonusSettlementSequence2026('reported_excludes_batch', [
-      { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
-      { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
-    ])
+    const result = calculateBonusSettlementSequence2026(
+      'reported_excludes_batch',
+      [
+        { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
+        { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
+      ],
+    )
     expect(result.state).toBe('calculated')
     if (result.state === 'calculated') {
       expect(result.totalGrossCents).toBe(200000)
@@ -412,7 +415,9 @@ describe('2026 bonus preparation', () => {
   })
 
   it('keeps empty and incomplete bonus settlement sequences distinct', () => {
-    expect(calculateBonusSettlementSequence2026('reported_excludes_batch', [])).toMatchObject({
+    expect(
+      calculateBonusSettlementSequence2026('reported_excludes_batch', []),
+    ).toMatchObject({
       state: 'calculated',
       payments: [],
       totalGrossCents: 0,
@@ -505,28 +510,31 @@ describe('2026 bonus preparation', () => {
       statutoryHealthCoverage: 'voluntary' as const,
     }
     expect(prepareBonus2026(voluntary).state).toBe('prepared')
-    expect(prepareBonus2026({
-      ...voluntary,
-      statutoryHealthCoverage: 'mandatory',
-    })).toMatchObject({
+    expect(
+      prepareBonus2026({
+        ...voluntary,
+        statutoryHealthCoverage: 'mandatory',
+      }),
+    ).toMatchObject({
       state: 'unsupported',
       reason: 'march_clause_prior_year',
     })
   })
 
   it('fails closed when the March-clause health coverage type is unknown', () => {
-    expect(prepareBonus2026({
-      ...base,
-      paymentMonth: 2,
-      sameEmployerPreviousYear: true,
-      statutoryHealthCoverage: 'unknown',
-      grossPaymentCents: 100000,
-    })).toMatchObject({
+    expect(
+      prepareBonus2026({
+        ...base,
+        paymentMonth: 2,
+        sameEmployerPreviousYear: true,
+        statutoryHealthCoverage: 'unknown',
+        grossPaymentCents: 100000,
+      }),
+    ).toMatchObject({
       state: 'incomplete',
       reason: 'march_clause_coverage_unknown',
     })
   })
-
 
   it('matches standalone settlement when histories already include earlier bonuses', () => {
     const common = {
@@ -577,5 +585,4 @@ describe('2026 bonus preparation', () => {
       )
     }
   })
-
 })

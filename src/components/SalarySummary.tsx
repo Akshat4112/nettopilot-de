@@ -1,4 +1,8 @@
-import type { SalaryAggregationResult2026 } from '../domain/salary/salary-aggregation'
+import { useState } from 'react'
+import type {
+  SalaryAggregationResult2026,
+  SalaryPeriodTotals2026,
+} from '../domain/salary/salary-aggregation'
 import { SalaryDeductionBreakdown } from './SalaryDeductionBreakdown'
 import { SalaryGrossToNetChart } from './SalaryGrossToNetChart'
 
@@ -37,37 +41,10 @@ const reasonText: Record<string, string> = {
 }
 
 function SummaryFigures({
-  result,
-  period,
+  values,
 }: {
-  readonly result: Calculated
-  readonly period: 'monthly' | 'annual'
+  readonly values: SalaryPeriodTotals2026
 }) {
-  const annual = result.annual
-  const first = result.months[0]
-  const firstPrivateOutflow = first?.privateInsuranceOutflowCents
-  const stable =
-    first !== undefined &&
-    result.months.length === 12 &&
-    result.months.every(
-      (month) =>
-        month.oneOffGrossCents === 0 &&
-        month.grossCents === first.grossCents &&
-        month.netPayrollCents === first.netPayrollCents &&
-        month.allDeductionsCents === first.allDeductionsCents &&
-        month.employerCostCents === first.employerCostCents &&
-        month.privateInsuranceOutflowCents === firstPrivateOutflow,
-    )
-  const values = period === 'annual' ? annual : stable ? first : null
-
-  if (values === null)
-    return (
-      <p role="status">
-        Monthly payroll changes across the year. Select annual totals to compare
-        the complete result; no monthly average is inferred.
-      </p>
-    )
-
   return (
     <dl className="salary-summary-figures">
       <div>
@@ -104,18 +81,69 @@ export function SalarySummary({
   result,
   displayPeriod = 'annual',
 }: SalarySummaryProps) {
+  const [period, setPeriod] = useState<'monthly' | 'annual'>(displayPeriod)
+  const first = result.state === 'calculated' ? result.months[0] : undefined
+  const fields =
+    result.state === 'calculated'
+      ? (Object.keys(result.annual) as (keyof SalaryPeriodTotals2026)[])
+      : []
+  const monthlyStable =
+    result.state === 'calculated' &&
+    first !== undefined &&
+    result.months.length === 12 &&
+    result.months.every((month) =>
+      fields.every((field) => month[field] === first[field]),
+    )
+  const values =
+    result.state === 'calculated'
+      ? period === 'annual'
+        ? result.annual
+        : monthlyStable
+          ? first
+          : null
+      : null
+
   return (
     <section className="np-panel" aria-labelledby="salary-summary-heading">
       <h2 id="salary-summary-heading">Salary summary</h2>
       {result.state === 'calculated' ? (
         <>
+          <div
+            className="np-period-toggle"
+            role="group"
+            aria-label="Salary display period"
+          >
+            <button
+              type="button"
+              aria-pressed={period === 'monthly'}
+              onClick={() => setPeriod('monthly')}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              aria-pressed={period === 'annual'}
+              onClick={() => setPeriod('annual')}
+            >
+              Annual
+            </button>
+          </div>
           <p>
             Estimated payroll result for {result.calculationYear} —{' '}
-            {displayPeriod === 'annual' ? 'annual' : 'monthly'} display.
+            {period === 'annual' ? 'annual' : 'monthly'} display.
           </p>
-          <SummaryFigures result={result} period={displayPeriod} />
-          <SalaryGrossToNetChart totals={result.annual} />
-          <SalaryDeductionBreakdown totals={result.annual} />
+          {values === null ? (
+            <p role="status">
+              Monthly payroll changes across the year. Select annual totals to
+              compare the complete result; no monthly average is inferred.
+            </p>
+          ) : (
+            <>
+              <SummaryFigures values={values} />
+              <SalaryGrossToNetChart totals={values} period={period} />
+              <SalaryDeductionBreakdown totals={values} period={period} />
+            </>
+          )}
         </>
       ) : (
         <p role="status">

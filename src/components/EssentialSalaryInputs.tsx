@@ -93,7 +93,9 @@ export function EssentialSalaryInputs() {
           <input
             id="np-gross"
             aria-invalid={submitted && Boolean(fieldErrors.gross)}
-            aria-describedby={submitted && fieldErrors.gross ? 'np-error-gross' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.gross ? 'np-error-gross' : undefined
+            }
             type="text"
             inputMode="decimal"
             value={draft.gross}
@@ -109,7 +111,9 @@ export function EssentialSalaryInputs() {
           <select
             id="np-period"
             aria-invalid={submitted && Boolean(fieldErrors.period)}
-            aria-describedby={submitted && fieldErrors.period ? 'np-error-period' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.period ? 'np-error-period' : undefined
+            }
             value={draft.period}
             onChange={(event) => {
               change('period', event.target.value)
@@ -125,7 +129,9 @@ export function EssentialSalaryInputs() {
           <select
             id="np-year"
             aria-invalid={submitted && Boolean(fieldErrors.year)}
-            aria-describedby={submitted && fieldErrors.year ? 'np-error-year' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.year ? 'np-error-year' : undefined
+            }
             value={draft.year}
             onChange={(event) => {
               change('year', event.target.value)
@@ -140,7 +146,9 @@ export function EssentialSalaryInputs() {
           <select
             id="np-class"
             aria-invalid={submitted && Boolean(fieldErrors.taxClass)}
-            aria-describedby={submitted && fieldErrors.taxClass ? 'np-error-taxClass' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.taxClass ? 'np-error-taxClass' : undefined
+            }
             value={draft.taxClass}
             required
             onChange={(event) => {
@@ -161,7 +169,9 @@ export function EssentialSalaryInputs() {
           <select
             id="np-state"
             aria-invalid={submitted && Boolean(fieldErrors.federalState)}
-            aria-describedby={submitted && fieldErrors.federalState ? 'np-error-federalState' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.federalState ? 'np-error-federalState' : undefined
+            }
             required
             value={draft.federalState}
             onChange={(event) => {
@@ -182,7 +192,9 @@ export function EssentialSalaryInputs() {
           <select
             id="np-church"
             aria-invalid={submitted && Boolean(fieldErrors.churchTax)}
-            aria-describedby={submitted && fieldErrors.churchTax ? 'np-error-churchTax' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.churchTax ? 'np-error-churchTax' : undefined
+            }
             required
             value={draft.churchTax}
             onChange={(event) => {
@@ -201,7 +213,9 @@ export function EssentialSalaryInputs() {
           <input
             id="np-birth"
             aria-invalid={submitted && Boolean(fieldErrors.dateOfBirth)}
-            aria-describedby={submitted && fieldErrors.dateOfBirth ? 'np-error-dateOfBirth' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.dateOfBirth ? 'np-error-dateOfBirth' : undefined
+            }
             type="date"
             value={draft.dateOfBirth}
             required
@@ -216,7 +230,9 @@ export function EssentialSalaryInputs() {
           <input
             id="np-children"
             aria-invalid={submitted && Boolean(fieldErrors.children)}
-            aria-describedby={submitted && fieldErrors.children ? 'np-error-children' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.children ? 'np-error-children' : undefined
+            }
             type="number"
             min="0"
             max="20"
@@ -234,7 +250,9 @@ export function EssentialSalaryInputs() {
           <select
             id="np-insurance"
             aria-invalid={submitted && Boolean(fieldErrors.insurance)}
-            aria-describedby={submitted && fieldErrors.insurance ? 'np-error-insurance' : undefined}
+            aria-describedby={
+              submitted && fieldErrors.insurance ? 'np-error-insurance' : undefined
+            }
             required
             value={draft.insurance}
             onChange={(event) => {

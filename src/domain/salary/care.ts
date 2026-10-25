@@ -377,15 +377,11 @@ export const calculateAllocatedOneOffCareContribution2026 = (
     includesOneOffPay: false,
   })
   if ('state' in validation) return validation
-  const base = assertSafeNonNegativeInteger(input.liablePayCents, 'liablePayCents')
-  return calculateFromExactBase(
-    input,
-    base,
-    1n,
-    base,
-    false,
-    validation,
+  const base = assertSafeNonNegativeInteger(
+    input.liablePayCents,
+    'liablePayCents',
   )
+  return calculateFromExactBase(input, base, 1n, base, false, validation)
 }
 
 const aggregateAnnualResult = (

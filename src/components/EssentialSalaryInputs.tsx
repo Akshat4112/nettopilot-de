@@ -233,10 +233,14 @@ export function EssentialSalaryInputs() {
             </button>
           ))}
         </div>
-        <div className="salary-actions" role="group" aria-label="Private sharing">
+        <div
+          className="salary-actions"
+          role="group"
+          aria-label="Private sharing"
+        >
           <p>
-            Share only the 2026 year, frequency and selected federal state.
-            Your gross pay, tax class, birth date, church-tax status, children,
+            Share only the 2026 year, frequency and selected federal state. Your
+            gross pay, tax class, birth date, church-tax status, children,
             health insurance and bonuses are never included in the link.
           </p>
           <button

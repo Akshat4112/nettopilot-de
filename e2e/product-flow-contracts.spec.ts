@@ -20,6 +20,18 @@ test.describe('product-flow smoke contracts', () => {
     await expect(page.getByText('Gross pay', { exact: true })).toBeVisible()
     await expect(page.getByText('Net payroll pay')).toBeVisible()
     await expect(page.getByText('Employer cost')).toBeVisible()
+    await page.getByRole('button', { name: 'Monthly', exact: true }).click()
+    await expect(
+      page.getByText('From monthly gross to available pay'),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('table', { name: /Monthly employee deductions/ }),
+    ).toBeVisible()
+    await page.getByRole('button', { name: 'Annual', exact: true }).click()
+    await expect(
+      page.getByText('From annual gross to available pay'),
+    ).toBeVisible()
+    await expect(page.getByLabel('Gross salary (EUR)')).toHaveValue('5000')
 
     await page.getByRole('button', { name: 'Reset' }).click()
     await expect(

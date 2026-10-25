@@ -128,15 +128,11 @@ describe('2026 bonus preparation', () => {
   })
 
   it('rejects zero bonuses and unsupported special cases', () => {
-    expect(
-      prepareBonus2026({ ...base, grossPaymentCents: 0 }),
-    ).toMatchObject({
+    expect(prepareBonus2026({ ...base, grossPaymentCents: 0 })).toMatchObject({
       state: 'incomplete',
       reason: 'payment_amount_required',
     })
-    expect(
-      prepareBonus2026({ ...base, specialCase: true }),
-    ).toMatchObject({
+    expect(prepareBonus2026({ ...base, specialCase: true })).toMatchObject({
       state: 'unsupported',
       reason: 'special_payment_unsupported',
     })
@@ -161,9 +157,9 @@ describe('2026 bonus preparation', () => {
       state: 'incomplete',
       reason: 'insurance_path_unknown',
     })
-    expect(() =>
-      prepareBonus2026({ ...base, paymentMonth: 13 }),
-    ).toThrow('paymentMonth')
+    expect(() => prepareBonus2026({ ...base, paymentMonth: 13 })).toThrow(
+      'paymentMonth',
+    )
   })
 
   it('applies bonuses in chronological order without counting future bonuses in JRE4', () => {
@@ -216,9 +212,13 @@ describe('2026 bonus preparation', () => {
     expect(result.state).toBe('calculated')
     if (result.state === 'calculated') {
       expect(result.grossCents).toBe(100000)
-      expect(result.netBonusCents + result.wageTaxCents +
-        result.solidarityCents + result.churchTaxCents +
-        result.employeeInsuranceCents).toBe(result.grossCents)
+      expect(
+        result.netBonusCents +
+          result.wageTaxCents +
+          result.solidarityCents +
+          result.churchTaxCents +
+          result.employeeInsuranceCents,
+      ).toBe(result.grossCents)
       expect(result.incrementalEmployerCostCents).toBe(
         result.grossCents + result.employerInsuranceCents,
       )
@@ -232,8 +232,10 @@ describe('2026 bonus preparation', () => {
       unemploymentCoverage: 'mandatory_standard',
       healthRate: { mode: 'published_average' },
       care: {
-        calculationYear: 2026, payrollYear: 2026,
-        insurancePath: 'statutory', employmentState: 'other',
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'statutory',
+        employmentState: 'other',
         parentStatus: 'childless',
       },
       churchTaxCents: 0,
@@ -243,5 +245,4 @@ describe('2026 bonus preparation', () => {
       reason: 'one_time_above_monthly_module_limit',
     })
   })
-
 })

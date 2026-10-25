@@ -38,11 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Diagnose example formatting
-        run: |
-          npx --no-install prettier --write src/components/EssentialSalaryInputs.tsx src/components/EssentialSalaryInputs.test.tsx
-          git diff -- src/components/EssentialSalaryInputs.tsx src/components/EssentialSalaryInputs.test.tsx
-
       - name: Check formatting
         run: npm run format:check
 

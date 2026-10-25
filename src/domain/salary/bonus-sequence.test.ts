@@ -3,7 +3,7 @@ import { prepareBonusSequence2026 } from './bonus-sequence'
 
 describe('bonus sequence', () => {
   it('accepts an empty batch without inventing payments', () => {
-    expect(prepareBonusSequence2026([])).toEqual({
+    expect(prepareBonusSequence2026('reported_excludes_batch', [])).toEqual({
       state: 'prepared',
       payments: [],
       totalGrossCents: 0,

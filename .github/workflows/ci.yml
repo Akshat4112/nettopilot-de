@@ -38,11 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Preview salary summary formatting
-        run: |
-          npx --no-install prettier --write src/components/SalarySummary.tsx
-          git diff -- src/components/SalarySummary.tsx
-
       - name: Check formatting
         run: npm run format:check
 

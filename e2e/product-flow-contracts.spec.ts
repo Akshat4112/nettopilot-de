@@ -12,9 +12,7 @@ test.describe('product-flow smoke contracts', () => {
     await page.getByLabel('Date of birth').fill('1990-01-01')
     await page.getByLabel('Number of children').fill('0')
     await page.getByLabel('Health insurance').selectOption('statutory')
-    await page
-      .getByRole('checkbox', { name: /I confirm full-year ordinary employment/ })
-      .check()
+    await page.getByRole('checkbox').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
     await expect(
       page.getByRole('heading', { name: 'Salary summary' }),
@@ -39,9 +37,7 @@ test.describe('product-flow smoke contracts', () => {
     await page.getByLabel('Date of birth').fill('1990-01-01')
     await page.getByLabel('Number of children').fill('0')
     await page.getByLabel('Health insurance').selectOption('private')
-    await page
-      .getByRole('checkbox', { name: /I confirm full-year ordinary employment/ })
-      .check()
+    await page.getByRole('checkbox').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
     await expect(
       page.getByText(/Salary result unavailable: this payroll scenario is not supported/),

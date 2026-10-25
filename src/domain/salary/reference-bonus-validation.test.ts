@@ -62,11 +62,13 @@ const find = (id: string) => {
 describe('NP-CALC-017 bonus and March admission reference fixtures', () => {
   it('matches approved July proportional ceiling and bonus liability', () => {
     const fixture = find('BONUS-JULY-FULL-LIABLE')
-    if (!('currentBonusCents' in fixture.inputs) ||
-        !('socialInsuranceDays' in fixture.inputs) ||
-        !('priorRecurringPayThroughPaymentMonthCents' in fixture.inputs) ||
-        !('kvPvLiableBonusCents' in fixture.expected) ||
-        !('rvAvLiableBonusCents' in fixture.expected))
+    if (
+      !('currentBonusCents' in fixture.inputs) ||
+      !('socialInsuranceDays' in fixture.inputs) ||
+      !('priorRecurringPayThroughPaymentMonthCents' in fixture.inputs) ||
+      !('kvPvLiableBonusCents' in fixture.expected) ||
+      !('rvAvLiableBonusCents' in fixture.expected)
+    )
       throw new Error('Invalid July bonus reference')
     const result = prepareBonus2026({
       ...base,
@@ -80,15 +82,18 @@ describe('NP-CALC-017 bonus and March admission reference fixtures', () => {
       sameEmployerPreviousYear: false,
     })
     expect(result.state).toBe('prepared')
-    if (result.state !== 'prepared') throw new Error('Unexpected July bonus admission')
+    if (result.state !== 'prepared')
+      throw new Error('Unexpected July bonus admission')
     expect(result.kvPvLiableCents).toBe(fixture.expected.kvPvLiableBonusCents)
     expect(result.rvAvLiableCents).toBe(fixture.expected.rvAvLiableBonusCents)
   })
 
   it('preserves incomplete March state instead of fabricating previous-year allocation', () => {
     const fixture = find('BONUS-MARCH-PRIOR-YEAR-UNKNOWN')
-    if (!('currentBonusCents' in fixture.inputs) ||
-        !('resultState' in fixture.expected))
+    if (
+      !('currentBonusCents' in fixture.inputs) ||
+      !('resultState' in fixture.expected)
+    )
       throw new Error('Invalid March fixture')
     const result = prepareBonus2026({
       ...base,

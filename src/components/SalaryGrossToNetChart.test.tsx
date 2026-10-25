@@ -38,8 +38,12 @@ describe('NP-UI-008 annual gross-to-net visualization', () => {
     expect(result.state).toBe('calculated')
     if (result.state !== 'calculated') return
     render(<SalaryGrossToNetChart totals={result.annual} />)
-    expect(screen.getByText('From annual gross to available pay')).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: /Available:.*Deductions:/ })).toBeInTheDocument()
+    expect(
+      screen.getByText('From annual gross to available pay'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('img', { name: /Available:.*Deductions:/ }),
+    ).toBeInTheDocument()
     expect(screen.getByText('Annual gross pay')).toBeInTheDocument()
   })
 

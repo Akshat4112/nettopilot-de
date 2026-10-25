@@ -6,12 +6,15 @@ import {
 
 describe('NP-CMP-002 validated offer base salary admission', () => {
   it('preserves unknown instead of treating empty or invalid as zero', () => {
-    expect(validateOfferSalary({ grossEur: '', period: 'annual' }).state)
-      .toBe('incomplete')
-    expect(validateOfferSalary({ grossEur: '100.123', period: 'annual' }).state)
-      .toBe('invalid')
-    expect(validateOfferSalary({ grossEur: '0', period: 'monthly' }).state)
-      .toBe('invalid')
+    expect(validateOfferSalary({ grossEur: '', period: 'annual' }).state).toBe(
+      'incomplete',
+    )
+    expect(
+      validateOfferSalary({ grossEur: '100.123', period: 'annual' }).state,
+    ).toBe('invalid')
+    expect(
+      validateOfferSalary({ grossEur: '0', period: 'monthly' }).state,
+    ).toBe('invalid')
     const draft = buildOfferPairFromEntries(
       { grossEur: '45000', period: 'annual' },
       { grossEur: '', period: 'monthly' },

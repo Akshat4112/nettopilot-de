@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { prepareBonus2026, type BonusPreparationInput2026 } from './bonus'
 import { prepareBonusSequence2026 } from './bonus-sequence'
 import { calculateBonusSettlement2026 } from './bonus-settlement'
+import { calculateBonusSettlementSequence2026 } from './bonus-settlement-sequence'
 import type { PapInput } from './taxable-pay'
 
 const pap: PapInput = {
@@ -345,4 +346,66 @@ describe('2026 bonus preparation', () => {
       expect(result.employerInsuranceCents).toBeGreaterThan(0)
     }
   })
+  it('settles two ordinary private bonuses without double counting headroom', () => {
+    const template = {
+      bonus: {
+        ...base,
+        insurancePath: 'private' as const,
+        grossPaymentCents: 100000,
+      },
+      pensionCoverage: 'general_statutory_mandatory' as const,
+      unemploymentCoverage: 'mandatory_standard' as const,
+      healthRate: { mode: 'published_average' as const },
+      care: {
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'private' as const,
+        employmentState: 'other' as const,
+        parentStatus: 'childless' as const,
+      },
+      churchTaxStatus: 'not_liable' as const,
+    }
+    const result = calculateBonusSettlementSequence2026([
+      { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
+      { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
+    ])
+    expect(result.state).toBe('calculated')
+    if (result.state === 'calculated') {
+      expect(result.totalGrossCents).toBe(200000)
+      expect(result.payments).toHaveLength(2)
+      expect(result.totalNetCents).toBe(
+        result.payments.reduce((sum, item) => sum + item.netBonusCents, 0),
+      )
+    }
+  })
+
+  it('rejects reversed bonus settlement months', () => {
+    const template = {
+      bonus: {
+        ...base,
+        insurancePath: 'private' as const,
+        grossPaymentCents: 100000,
+      },
+      pensionCoverage: 'general_statutory_mandatory' as const,
+      unemploymentCoverage: 'mandatory_standard' as const,
+      healthRate: { mode: 'published_average' as const },
+      care: {
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'private' as const,
+        employmentState: 'other' as const,
+        parentStatus: 'childless' as const,
+      },
+      churchTaxStatus: 'not_liable' as const,
+    }
+    expect(calculateBonusSettlementSequence2026([
+      { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
+      { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
+    ])).toMatchObject({
+      state: 'unsupported',
+      paymentIndex: 1,
+      reason: 'payments_not_chronological',
+    })
+  })
+
 })

@@ -58,6 +58,43 @@ const emptyAdvanced: AdvancedSalaryDraft = {
   oneOffBonusMonth: '',
 }
 
+const examples = [
+  {
+    id: 'monthly-class-i',
+    label: '€3,500 monthly · Class I · Baden-Württemberg',
+    draft: {
+      ...empty,
+      gross: '3500',
+      period: 'monthly',
+      taxClass: '1',
+      federalState: 'DE-BW',
+      churchTax: 'not_liable',
+      dateOfBirth: '1995-05-01',
+      children: '0',
+      insurance: 'statutory',
+    },
+  },
+  {
+    id: 'annual-class-iv',
+    label: '€48,000 annually · Class IV · Berlin',
+    draft: {
+      ...empty,
+      gross: '48000',
+      period: 'annual',
+      taxClass: '4',
+      federalState: 'DE-BE',
+      churchTax: 'not_liable',
+      dateOfBirth: '1990-05-01',
+      children: '0',
+      insurance: 'statutory',
+    },
+  },
+] as const satisfies readonly {
+  readonly id: string
+  readonly label: string
+  readonly draft: EssentialSalaryDraft
+}[]
+
 type Field = keyof EssentialSalaryDraft
 
 export function EssentialSalaryInputs() {
@@ -77,6 +114,14 @@ export function EssentialSalaryInputs() {
       setAdvancedErrors([])
       setAdvancedDraft(emptyAdvanced)
     }
+  }
+  const loadExample = (example: EssentialSalaryDraft) => {
+    setDraft(example)
+    setSubmitted(false)
+    setResetToken((previous) => previous + 1)
+    setAdvancedErrors([])
+    setAdvancedDraft(emptyAdvanced)
+    setStandardEmploymentConfirmed(false)
   }
   const fieldErrors = validateEssentialSalaryDraft(draft)
   const errors = [...Object.values(fieldErrors), ...advancedErrors]
@@ -117,6 +162,29 @@ export function EssentialSalaryInputs() {
         }}
         noValidate
       >
+        <div
+          className="salary-actions"
+          role="group"
+          aria-label="Fictional salary examples"
+        >
+          <p>
+            Try a fictional 2026 example to fill the form. Examples are
+            illustrative, not personalized advice. Selecting one resets advanced
+            inputs and requires a fresh payroll confirmation.
+          </p>
+          {examples.map((example) => (
+            <button
+              key={example.id}
+              type="button"
+              className="np-button-secondary"
+              onClick={() => {
+                loadExample(example.draft)
+              }}
+            >
+              Load example: {example.label}
+            </button>
+          ))}
+        </div>
         <div className="np-field">
           <label htmlFor="np-gross">Gross salary (EUR)</label>
           <input

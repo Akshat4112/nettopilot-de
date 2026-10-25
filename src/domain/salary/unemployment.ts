@@ -256,7 +256,13 @@ export const calculateAllocatedOneOffUnemploymentContribution2026 = (
   if (admission.state !== 'calculated') return admission
   if (!Number.isSafeInteger(input.liablePayCents) || input.liablePayCents < 0)
     throw new RangeError('Allocated bonus base must be safe non-negative cents')
-  return contributionResult(input, BigInt(input.liablePayCents), BigInt(input.liablePayCents), 1n, false)
+  return contributionResult(
+    input,
+    BigInt(input.liablePayCents),
+    BigInt(input.liablePayCents),
+    1n,
+    false,
+  )
 }
 
 const aggregateAnnualResult = (

@@ -162,6 +162,60 @@ describe('2026 bonus preparation', () => {
     )
   })
 
+
+  it('fails closed when church-tax basis is not resolved', () => {
+    const result = calculateBonusSettlement2026({
+      bonus: { ...base, grossPaymentCents: 100000, insurancePath: 'private' },
+      pensionCoverage: 'general_statutory_mandatory',
+      unemploymentCoverage: 'mandatory_standard',
+      healthRate: { mode: 'published_average' },
+      care: {
+        calculationYear: 2026, payrollYear: 2026,
+        insurancePath: 'private', employmentState: 'other',
+        parentStatus: 'childless',
+      },
+      churchTaxCents: 'unknown',
+    })
+    expect(result).toMatchObject({
+      state: 'incomplete',
+      reason: 'church_tax_calculation_required',
+    })
+  })
+
+  it('rejects invalid church tax cents', () => {
+    expect(() => calculateBonusSettlement2026({
+      bonus: { ...base, grossPaymentCents: 100000, insurancePath: 'private' },
+      pensionCoverage: 'general_statutory_mandatory',
+      unemploymentCoverage: 'mandatory_standard',
+      healthRate: { mode: 'published_average' },
+      care: {
+        calculationYear: 2026, payrollYear: 2026,
+        insurancePath: 'private', employmentState: 'other',
+        parentStatus: 'childless',
+      },
+      churchTaxCents: -1,
+    })).toThrow('churchTaxCents')
+  })
+
+  it('rejects unsupported pension coverage without inventing net pay', () => {
+    const result = calculateBonusSettlement2026({
+      bonus: { ...base, grossPaymentCents: 100000, insurancePath: 'private' },
+      pensionCoverage: 'unknown',
+      unemploymentCoverage: 'mandatory_standard',
+      healthRate: { mode: 'published_average' },
+      care: {
+        calculationYear: 2026, payrollYear: 2026,
+        insurancePath: 'private', employmentState: 'other',
+        parentStatus: 'childless',
+      },
+      churchTaxCents: 0,
+    })
+    expect(result).toMatchObject({
+      state: 'unsupported',
+      reason: 'pension_or_unemployment_scope_unsupported',
+    })
+  })
+
   it('applies bonuses in chronological order without counting future bonuses in JRE4', () => {
     const result = prepareBonusSequence2026([
       { ...base, paymentMonth: 11, grossPaymentCents: 100000 },

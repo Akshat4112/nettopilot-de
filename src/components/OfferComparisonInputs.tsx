@@ -36,7 +36,10 @@ export function OfferComparisonInputs() {
   )
 
   return (
-    <section className="np-panel offer-comparison" aria-labelledby="offer-input-title">
+    <section
+      className="np-panel offer-comparison"
+      aria-labelledby="offer-input-title"
+    >
       <h2 id="offer-input-title">Compare two job offers</h2>
       <p>
         Enter base salary for Offer A and Offer B. Each offer stays independent
@@ -54,7 +57,9 @@ export function OfferComparisonInputs() {
             <fieldset className="offer-card" key={id}>
               <legend>{label}</legend>
               <div className="np-field">
-                <label htmlFor={id + '-gross'}>{label} gross salary (EUR)</label>
+                <label htmlFor={id + '-gross'}>
+                  {label} gross salary (EUR)
+                </label>
                 <input
                   id={id + '-gross'}
                   type="text"
@@ -66,7 +71,7 @@ export function OfferComparisonInputs() {
                   aria-invalid={showIssue}
                   aria-describedby={showIssue ? id + '-error' : undefined}
                 />
-                {showIssue && issue.state !== 'valid' && (
+                {showIssue && (
                   <small id={id + '-error'} role="alert">
                     {issue.reason}
                   </small>
@@ -93,14 +98,18 @@ export function OfferComparisonInputs() {
                 <button
                   type="button"
                   className="np-button-secondary"
-                  onClick={() => { copy(side) }}
+                  onClick={() => {
+                    copy(side)
+                  }}
                 >
                   Copy {label} to {side === 0 ? 'Offer B' : 'Offer A'}
                 </button>
                 <button
                   type="button"
                   className="np-button-secondary"
-                  onClick={() => { setEntry(side, blank()) }}
+                  onClick={() => {
+                    setEntry(side, blank())
+                  }}
                 >
                   Clear {label}
                 </button>
@@ -113,7 +122,9 @@ export function OfferComparisonInputs() {
         <button
           className="np-button-primary"
           type="button"
-          onClick={() => { setChecked(true) }}
+          onClick={() => {
+            setChecked(true)
+          }}
         >
           Check both offers
         </button>

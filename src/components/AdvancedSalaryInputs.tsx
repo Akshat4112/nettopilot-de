@@ -18,14 +18,17 @@ const empty: AdvancedSalaryDraft = {
 export function AdvancedSalaryInputs({
   insurance,
   onErrorsChange,
+  onDraftChange,
 }: {
   readonly insurance: string
   readonly onErrorsChange: (errors: readonly string[]) => void
+  readonly onDraftChange?: (draft: AdvancedSalaryDraft) => void
 }) {
   const [draft, setDraft] = useState<AdvancedSalaryDraft>(empty)
   const change = (field: keyof AdvancedSalaryDraft, value: string) => {
     const next = { ...draft, [field]: value }
     setDraft(next)
+    onDraftChange?.(next)
     onErrorsChange(validateAdvancedSalaryDraft(next, insurance))
   }
   return (

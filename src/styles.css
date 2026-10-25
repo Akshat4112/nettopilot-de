@@ -301,3 +301,41 @@ footer a {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.salary-inputs input[type='checkbox'] {
+  width: auto;
+  min-width: 1.15rem;
+  min-height: 1.15rem;
+  margin-right: 0.55rem;
+  vertical-align: middle;
+}
+
+.salary-inputs details.np-panel {
+  grid-column: 1 / -1;
+}
+
+.salary-summary-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--np-space-4);
+  margin: var(--np-space-6) 0 0;
+}
+
+.salary-summary-figures > div {
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+  background: var(--np-color-canvas);
+}
+
+.salary-summary-figures dt {
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+}
+
+.salary-summary-figures dd {
+  margin: var(--np-space-2) 0 0;
+  font-size: clamp(1.15rem, 2.8vw, 1.6rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

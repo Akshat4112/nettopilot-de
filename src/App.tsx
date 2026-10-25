@@ -18,7 +18,7 @@ export function App() {
         >
           NettoPilot <span>DE</span>
         </a>
-        <span className="status">Foundation preview</span>
+        <span className="status">2026 calculator preview</span>
       </header>
 
       <main>
@@ -37,10 +37,12 @@ export function App() {
           </ul>
 
           <aside className="notice" aria-label="Application status">
-            <strong>The calculation engine is not available yet.</strong>
+            <strong>A limited 2026 gross-to-net estimate is available.</strong>
             <span>
-              This verified shell establishes the application foundation for the
-              next implementation tasks.
+              The calculator currently supports confirmed standard employee
+              scenarios with compulsory statutory insurance, no children, no
+              church tax and no special payments. Other cases are explicitly
+              excluded.
             </span>
           </aside>
         </section>

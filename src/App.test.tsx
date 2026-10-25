@@ -28,11 +28,11 @@ describe('App', () => {
     ).toHaveAttribute('href', 'https://github.com/Akshat4112/nettopilot-de')
   })
 
-  it('labels the unavailable calculation state clearly', () => {
+  it('labels the calculation scope clearly', () => {
     renderWithUser(<App />)
 
     expect(
       screen.getByRole('complementary', { name: 'Application status' }),
-    ).toHaveTextContent('The calculation engine is not available yet.')
+    ).toHaveTextContent('A limited 2026 gross-to-net estimate is available.')
   })
 })

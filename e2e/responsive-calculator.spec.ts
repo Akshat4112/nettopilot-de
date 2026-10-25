@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test'
 
 for (const width of [320, 375, 768, 1024, 1440]) {
-  test(`calculator has no page overflow at ${String(width)}px`, async ({ page }) => {
+  test(`calculator has no page overflow at ${String(width)}px`, async ({
+    page,
+  }) => {
     await page.setViewportSize({ width, height: 900 })
     await page.goto('./')
     await expect(
@@ -13,7 +15,7 @@ for (const width of [320, 375, 768, 1024, 1440]) {
     )
     expect(rootWidth).toBeLessThanOrEqual(width)
 
-    await page.getByRole('button', { name: /Load example:.*Class I/ }).click()
+    await page.getByRole('button', { name: /Load example:.*Class I ·/ }).click()
     await page.getByRole('checkbox').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
 

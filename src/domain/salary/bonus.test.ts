@@ -320,7 +320,7 @@ describe('2026 bonus preparation', () => {
     }
   })
 
-  it('rejects one-time bases that cannot fit the monthly insurance engine', () => {
+  it('calculates larger one-time bases using proportional headroom without a monthly re-cap', () => {
     const result = calculateBonusSettlement2026({
       bonus: { ...base, grossPaymentCents: 2000000 },
       pensionCoverage: 'general_statutory_mandatory',
@@ -332,12 +332,15 @@ describe('2026 bonus preparation', () => {
         insurancePath: 'statutory',
         employmentState: 'other',
         parentStatus: 'childless',
+        birthDate: '1990-01-01',
       },
       churchTaxCents: 0,
     })
-    expect(result).toMatchObject({
-      state: 'unsupported',
-      reason: 'one_time_above_monthly_module_limit',
-    })
+    expect(result.state).toBe('calculated')
+    if (result.state === 'calculated') {
+      expect(result.grossCents).toBe(2000000)
+      expect(result.employeeInsuranceCents).toBeGreaterThan(0)
+      expect(result.employerInsuranceCents).toBeGreaterThan(0)
+    }
   })
 })

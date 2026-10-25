@@ -125,6 +125,7 @@ describe('2026 bonus preparation', () => {
       reason: 'contribution_history_required',
     })
   })
+
   it('applies bonuses in chronological order without counting future bonuses in JRE4', () => {
     const result = prepareBonusSequence2026([
       { ...base, paymentMonth: 11, grossPaymentCents: 100000 },
@@ -141,10 +142,12 @@ describe('2026 bonus preparation', () => {
   })
 
   it('rejects reverse chronological payments', () => {
-    expect(prepareBonusSequence2026([
-      { ...base, paymentMonth: 12 },
-      { ...base, paymentMonth: 11 },
-    ])).toMatchObject({
+    expect(
+      prepareBonusSequence2026([
+        { ...base, paymentMonth: 12 },
+        { ...base, paymentMonth: 11 },
+      ]),
+    ).toMatchObject({
       state: 'unsupported',
       reason: 'payments_not_chronological',
       paymentIndex: 1,

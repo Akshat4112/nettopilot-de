@@ -5,7 +5,7 @@ test.describe('product-flow smoke contracts', () => {
     page,
   }) => {
     await page.goto('./')
-    await page.getByLabel('Gross salary (EUR)', { exact: true }).fill('5000')
+    await page.locator('#np-gross').fill('5000')
     await page.getByLabel('Tax class').selectOption('4')
     await page.getByLabel('Federal state').selectOption('DE-BW')
     await page.getByLabel('Church-tax liability').selectOption('not_liable')
@@ -33,18 +33,18 @@ test.describe('product-flow smoke contracts', () => {
     await expect(
       page.getByText('From annual gross to available pay'),
     ).toBeVisible()
-    await expect(page.getByLabel('Gross salary (EUR)', { exact: true })).toHaveValue('5000')
+    await expect(page.locator('#np-gross')).toHaveValue('5000')
 
     await page.getByRole('button', { name: 'Reset', exact: true }).click()
     await expect(
       page.getByRole('heading', { name: 'Salary summary' }),
     ).toHaveCount(0)
-    await expect(page.getByLabel('Gross salary (EUR)', { exact: true })).toHaveValue('')
+    await expect(page.locator('#np-gross')).toHaveValue('')
   })
 
   test('does not fabricate private-insurance results', async ({ page }) => {
     await page.goto('./')
-    await page.getByLabel('Gross salary (EUR)', { exact: true }).fill('5000')
+    await page.locator('#np-gross').fill('5000')
     await page.getByLabel('Tax class').selectOption('4')
     await page.getByLabel('Federal state').selectOption('DE-BW')
     await page.getByLabel('Church-tax liability').selectOption('not_liable')
@@ -67,7 +67,7 @@ test.describe('product-flow smoke contracts', () => {
     await page.goto('./?np=1&year=2026&period=annual&state=DE-BE')
     await expect(page.getByLabel('Salary frequency')).toHaveValue('annual')
     await expect(page.getByLabel('Federal state')).toHaveValue('DE-BE')
-    await expect(page.getByLabel('Gross salary (EUR)', { exact: true })).toHaveValue('')
+    await expect(page.locator('#np-gross')).toHaveValue('')
     await expect(page.getByText('Safe URL settings restored')).toBeVisible()
     await page
       .getByRole('button', { name: 'Clear shared settings and reset' })

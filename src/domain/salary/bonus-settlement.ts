@@ -44,7 +44,7 @@ export const calculateBonusSettlement2026 = (
     return { state: 'incomplete', reason: 'church_tax_calculation_required' }
   if (!Number.isSafeInteger(input.churchTaxCents) || input.churchTaxCents < 0)
     throw new RangeError('churchTaxCents must be non-negative integer cents')
-  const pension = calculatePensionContribution2026({
+  // Existing monthly insurance modules cap the contribution basis at one month.\n  // Do not undercharge a large one-time payment by applying that cap twice.\n  if (bonus.rvAvLiableCents > 845000 || bonus.kvPvLiableCents > 581250)\n    return { state: 'unsupported', reason: 'one_time_above_monthly_module_limit' }\n  const pension = calculatePensionContribution2026({
     calculationYear: 2026, contributionDays: 30,
     liablePayCents: bonus.rvAvLiableCents, coverageStatus: input.pensionCoverage,
   })

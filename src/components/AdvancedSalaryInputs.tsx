@@ -1,14 +1,6 @@
 import { useState } from 'react'
 
-export interface AdvancedSalaryDraft {
-  readonly annualTaxAllowanceEur: string
-  readonly annualTaxAdditionEur: string
-  readonly additionalHealthRatePercent: string
-  readonly privateHealthPremiumEur: string
-  readonly privateCarePremiumEur: string
-  readonly oneOffBonusEur: string
-  readonly oneOffBonusMonth: string
-}
+import { validateAdvancedSalaryDraft, type AdvancedSalaryDraft } from './advanced-salary-validation'
 
 const empty: AdvancedSalaryDraft = {
   annualTaxAllowanceEur: '',
@@ -20,85 +12,21 @@ const empty: AdvancedSalaryDraft = {
   oneOffBonusMonth: '',
 }
 
-const euro = (value: string): boolean =>
-  value === '' || /^(?:0|[1-9]\d{0,7})(?:\.\d{1,2})?$/.test(value)
-
-export function validateAdvancedSalaryDraft(
-  draft: AdvancedSalaryDraft,
-  insurance: string,
-): readonly string[] {
-  const errors: string[] = []
-  for (const [field, value] of [
-    ['Annual allowance', draft.annualTaxAllowanceEur],
-    ['Annual addition', draft.annualTaxAdditionEur],
-    ['Private health premium', draft.privateHealthPremiumEur],
-    ['Private care premium', draft.privateCarePremiumEur],
-    ['One-off bonus', draft.oneOffBonusEur],
-  ]) {
-    if (!euro(value))
-      errors.push(
-        field + ' must be a non-negative EUR amount with up to two decimals.',
-      )
-  }
-  if (
-    draft.additionalHealthRatePercent &&
-    (!/^\d{1,2}(?:\.\d{1,3})?$/.test(draft.additionalHealthRatePercent) ||
-      Number(draft.additionalHealthRatePercent) > 10)
-  )
-    errors.push('Additional statutory health rate must be between 0 and 10%.')
-  if (
-    draft.oneOffBonusEur &&
-    (!draft.oneOffBonusMonth ||
-      Number(draft.oneOffBonusMonth) < 1 ||
-      Number(draft.oneOffBonusMonth) > 12)
-  )
-    errors.push('Choose a payment month for the one-off bonus.')
-  if (!draft.oneOffBonusEur && draft.oneOffBonusMonth)
-    errors.push('Enter the one-off amount or clear the payment month.')
-  if (
-    insurance !== 'private' &&
-    (draft.privateHealthPremiumEur || draft.privateCarePremiumEur)
-  )
-    errors.push(
-      'Private premiums are available only with private health insurance.',
-    )
-  if (insurance !== 'statutory' && draft.additionalHealthRatePercent)
-    errors.push(
-      'Statutory additional rate is available only with statutory health insurance.',
-    )
-  return errors
-}
-
 export function AdvancedSalaryInputs({
   insurance,
-  resetToken,
   onErrorsChange,
 }: {
   readonly insurance: string
-  readonly resetToken: number
   readonly onErrorsChange: (errors: readonly string[]) => void
 }) {
-  const [previousResetToken, setPreviousResetToken] = useState(resetToken)
   const [draft, setDraft] = useState<AdvancedSalaryDraft>(empty)
-  const [expanded, setExpanded] = useState(false)
-  if (previousResetToken !== resetToken) {
-    setPreviousResetToken(resetToken)
-    setDraft(empty)
-    setExpanded(false)
-  }
   const change = (field: keyof AdvancedSalaryDraft, value: string) => {
     const next = { ...draft, [field]: value }
     setDraft(next)
     onErrorsChange(validateAdvancedSalaryDraft(next, insurance))
   }
   return (
-    <details
-      open={expanded}
-      onToggle={(event) => {
-        setExpanded(event.currentTarget.open)
-      }}
-      className="np-panel"
-    >
+    <details className="np-panel">
       <summary>Advanced settings (optional)</summary>
       <p>
         Only fill in items on your payroll record. Amounts are not stored or
@@ -110,9 +38,7 @@ export function AdvancedSalaryInputs({
           id="np-allowance"
           inputMode="decimal"
           value={draft.annualTaxAllowanceEur}
-          onChange={(event) =>
-            change('annualTaxAllowanceEur', event.target.value)
-          }
+          onChange={(event) => { change('annualTaxAllowanceEur', event.target.value) }}
         />
         <small>
           Use an officially confirmed annual allowance, not a guess.
@@ -124,9 +50,7 @@ export function AdvancedSalaryInputs({
           id="np-addition"
           inputMode="decimal"
           value={draft.annualTaxAdditionEur}
-          onChange={(event) =>
-            change('annualTaxAdditionEur', event.target.value)
-          }
+          onChange={(event) => { change('annualTaxAdditionEur', event.target.value) }}
         />
       </div>
       {insurance === 'statutory' && (
@@ -138,9 +62,7 @@ export function AdvancedSalaryInputs({
             id="np-health-rate"
             inputMode="decimal"
             value={draft.additionalHealthRatePercent}
-            onChange={(event) =>
-              change('additionalHealthRatePercent', event.target.value)
-            }
+            onChange={(event) => { change('additionalHealthRatePercent', event.target.value) }}
           />
           <small>
             Leave blank to use the published average rate assumption.
@@ -157,9 +79,7 @@ export function AdvancedSalaryInputs({
               id="np-private-health"
               inputMode="decimal"
               value={draft.privateHealthPremiumEur}
-              onChange={(event) =>
-                change('privateHealthPremiumEur', event.target.value)
-              }
+              onChange={(event) => { change('privateHealthPremiumEur', event.target.value) }}
             />
           </div>
           <div className="np-field">
@@ -170,9 +90,7 @@ export function AdvancedSalaryInputs({
               id="np-private-care"
               inputMode="decimal"
               value={draft.privateCarePremiumEur}
-              onChange={(event) =>
-                change('privateCarePremiumEur', event.target.value)
-              }
+              onChange={(event) => { change('privateCarePremiumEur', event.target.value) }}
             />
           </div>
         </>
@@ -183,7 +101,7 @@ export function AdvancedSalaryInputs({
           id="np-bonus"
           inputMode="decimal"
           value={draft.oneOffBonusEur}
-          onChange={(event) => change('oneOffBonusEur', event.target.value)}
+          onChange={(event) => { change('oneOffBonusEur', event.target.value) }}
         />
       </div>
       <div className="np-field">
@@ -191,7 +109,7 @@ export function AdvancedSalaryInputs({
         <select
           id="np-bonus-month"
           value={draft.oneOffBonusMonth}
-          onChange={(event) => change('oneOffBonusMonth', event.target.value)}
+          onChange={(event) => { change('oneOffBonusMonth', event.target.value) }}
         >
           <option value="">Select month (if applicable)</option>
           {Array.from({ length: 12 }, (_, index) => (

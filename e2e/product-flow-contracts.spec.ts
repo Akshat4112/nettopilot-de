@@ -33,7 +33,7 @@ test.describe('product-flow smoke contracts', () => {
     ).toBeVisible()
     await expect(page.getByLabel('Gross salary (EUR)')).toHaveValue('5000')
 
-    await page.getByRole('button', { name: 'Reset' }).click()
+    await page.getByRole('button', { name: 'Reset', exact: true }).click()
     await expect(
       page.getByRole('heading', { name: 'Salary summary' }),
     ).toHaveCount(0)

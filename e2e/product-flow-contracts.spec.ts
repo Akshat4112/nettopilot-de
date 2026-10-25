@@ -18,7 +18,9 @@ test.describe('product-flow smoke contracts', () => {
       page.getByRole('heading', { name: 'Salary summary' }),
     ).toBeVisible()
     await expect(page.getByText('Gross pay', { exact: true })).toBeVisible()
-    await expect(page.getByText('Net payroll pay', { exact: true })).toBeVisible()
+    await expect(
+      page.getByText('Net payroll pay', { exact: true }),
+    ).toBeVisible()
     await expect(page.getByText('Employer cost')).toBeVisible()
     await page.getByRole('button', { name: 'Monthly', exact: true }).click()
     await expect(

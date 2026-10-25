@@ -23,9 +23,10 @@ export function validateAdvancedSalaryDraft(
     ['Private care premium', draft.privateCarePremiumEur],
     ['One-off bonus', draft.oneOffBonusEur],
   ]) {
-    if (!euro(value))
+    if (!euro(value ?? ''))
       errors.push(
-        String(field) + ' must be a non-negative EUR amount with up to two decimals.',
+        String(field) +
+          ' must be a non-negative EUR amount with up to two decimals.',
       )
   }
   if (
@@ -56,4 +57,3 @@ export function validateAdvancedSalaryDraft(
     )
   return errors
 }
-

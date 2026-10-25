@@ -38,13 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Print conformance formatting
-        run: |
-          npx prettier --write src/domain/salary/reference-full-bmf-table.test.ts
-          echo BEGIN_FULL_BMF_FORMAT
-          cat src/domain/salary/reference-full-bmf-table.test.ts
-          echo END_FULL_BMF_FORMAT
-
       - name: Check formatting
         run: npm run format:check
 

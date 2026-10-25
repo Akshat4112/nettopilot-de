@@ -48,7 +48,7 @@ export function OfferComparisonInputs() {
           const side = index as 0 | 1
           const id = side === 0 ? 'offer-a' : 'offer-b'
           const label = side === 0 ? 'Offer A' : 'Offer B'
-          const issue = validation[side]
+          const issue = validateOfferSalary(entry)
           const showIssue = checked && issue.state !== 'valid'
           return (
             <fieldset className="offer-card" key={id}>
@@ -66,7 +66,7 @@ export function OfferComparisonInputs() {
                   aria-invalid={showIssue}
                   aria-describedby={showIssue ? id + '-error' : undefined}
                 />
-                {showIssue && (
+                {showIssue && issue.state !== 'valid' && (
                   <small id={id + '-error'} role="alert">
                     {issue.reason}
                   </small>

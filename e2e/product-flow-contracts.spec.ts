@@ -11,7 +11,7 @@ test.describe('product-flow smoke contracts', () => {
     await page.getByLabel('Church-tax liability').selectOption('not_liable')
     await page.getByLabel('Date of birth').fill('1990-01-01')
     await page.getByLabel('Number of children').fill('0')
-    await page.getByLabel('Health insurance').selectOption('statutory')
+    await page.getByLabel('Health insurance', { exact: true }).selectOption('statutory')
     await page.getByRole('checkbox').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
     await expect(
@@ -36,11 +36,13 @@ test.describe('product-flow smoke contracts', () => {
     await page.getByLabel('Church-tax liability').selectOption('not_liable')
     await page.getByLabel('Date of birth').fill('1990-01-01')
     await page.getByLabel('Number of children').fill('0')
-    await page.getByLabel('Health insurance').selectOption('private')
+    await page.getByLabel('Health insurance', { exact: true }).selectOption('private')
     await page.getByRole('checkbox').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
     await expect(
-      page.getByText(/Salary result unavailable: this payroll scenario is not supported/),
+      page.getByText(
+        /Salary result unavailable: this payroll scenario is not supported/,
+      ),
     ).toBeVisible()
     await expect(page.getByText('Net payroll pay')).toHaveCount(0)
   })

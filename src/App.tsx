@@ -39,9 +39,10 @@ export function App() {
           <aside className="notice" aria-label="Application status">
             <strong>A limited 2026 gross-to-net estimate is available.</strong>
             <span>
-              The calculator currently supports confirmed standard employee scenarios
-              with compulsory statutory insurance, no children, no church tax
-              and no special payments. Other cases are explicitly excluded.
+              The calculator currently supports confirmed standard employee
+              scenarios with compulsory statutory insurance, no children, no
+              church tax and no special payments. Other cases are explicitly
+              excluded.
             </span>
           </aside>
         </section>

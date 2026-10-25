@@ -22,7 +22,7 @@ const headers = [
 ] as const
 
 const exactCents = (decimal: string): number => {
-  if (!/^\\d+\\.\\d{2}$/.test(decimal))
+  if (!/^\d+\.\d{2}$/.test(decimal))
     throw new Error('Invalid official reference decimal: ' + decimal)
   const [whole, cents] = decimal.split('.')
   const value = Number(whole) * 100 + Number(cents)
@@ -31,14 +31,14 @@ const exactCents = (decimal: string): number => {
   return value
 }
 
-const rows = officialCsv.trim().split('\\n')
+const rows = officialCsv.trim().split('\n')
 const columns = rows[0]?.split(',')
 if (columns?.join(',') !== headers.join(','))
   throw new Error('BMF check-table header contract mismatch')
 const data = rows.slice(1).map((line, index) => {
   const values = line.trim().split(',')
   if (values.length !== headers.length)
-    throw new Error('BMF CSV width mismatch at row ' + (index + 2))
+    throw new Error(`BMF CSV width mismatch at row ${index + 2}`)
   return values.map(exactCents)
 })
 

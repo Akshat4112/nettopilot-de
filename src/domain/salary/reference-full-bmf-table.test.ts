@@ -38,7 +38,7 @@ if (columns?.join(',') !== headers.join(','))
 const data = rows.slice(1).map((line, index) => {
   const values = line.trim().split(',')
   if (values.length !== headers.length)
-    throw new Error(`BMF CSV width mismatch at row ${index + 2}`)
+    throw new Error(`BMF CSV width mismatch at row ${String(index + 2)}`)
   return values.map(exactCents)
 })
 

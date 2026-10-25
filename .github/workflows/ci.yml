@@ -38,15 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Emit one-time bonus settlement formatter output
-        run: |
-          npx prettier --write src/domain/salary/bonus-settlement.ts src/domain/salary/bonus.test.ts src/domain/salary/index.ts
-          for path in src/domain/salary/bonus-settlement.ts src/domain/salary/bonus.test.ts src/domain/salary/index.ts; do
-            echo "BEGIN_FORMATTED_SETTLEMENT:$path"
-            cat "$path"
-            echo "END_FORMATTED_SETTLEMENT:$path"
-          done
-
       - name: Check formatting
         run: npm run format:check
 

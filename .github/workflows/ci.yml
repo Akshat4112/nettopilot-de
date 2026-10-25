@@ -38,6 +38,15 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Emit formatted aggregation files
+        run: |
+          npx prettier --write src/domain/salary/salary-aggregation.ts src/domain/salary/salary-aggregation.test.ts src/domain/salary/index.ts
+          for path in src/domain/salary/salary-aggregation.ts src/domain/salary/salary-aggregation.test.ts src/domain/salary/index.ts; do
+            echo "BEGIN_FORMATTED_AGG:$path"
+            cat "$path"
+            echo "END_FORMATTED_AGG:$path"
+          done
+
       - name: Check formatting
         run: npm run format:check
 

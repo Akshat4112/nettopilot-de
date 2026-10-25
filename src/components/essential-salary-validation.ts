@@ -18,7 +18,6 @@ export function validateEssentialSalaryDraft(
     errors.gross = 'Enter a positive gross salary within the supported range.'
   if (!['monthly', 'annual'].includes(draft.period))
     errors.period = 'Choose a supported pay frequency.'
-  if (draft.year !== '2026') errors.year = 'Only tax year 2026 is supported.'
   if (!['1', '2', '3', '4', '5', '6'].includes(draft.taxClass))
     errors.taxClass = 'Choose a valid tax class.'
   if (

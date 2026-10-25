@@ -215,10 +215,15 @@ describe('2026 salary result aggregation', () => {
       state: 'calculated',
       value: {
         ...baseline(4),
-        oneOffPayments: [{
-          guarantee: 'variable',
-          settlement: { state: 'incomplete', reason: 'payroll_evidence_missing' },
-        }],
+        oneOffPayments: [
+          {
+            guarantee: 'variable',
+            settlement: {
+              state: 'incomplete',
+              reason: 'payroll_evidence_missing',
+            },
+          },
+        ],
       },
     }
     expect(aggregateSalaryResults2026(months)).toMatchObject({
@@ -234,20 +239,22 @@ describe('2026 salary result aggregation', () => {
       state: 'calculated',
       value: {
         ...baseline(2),
-        oneOffPayments: [{
-          guarantee: 'guaranteed',
-          settlement: {
-            state: 'calculated',
-            grossCents: 10000,
-            wageTaxCents: 1000,
-            solidarityCents: 0,
-            churchTaxCents: 0,
-            employeeInsuranceCents: 1000,
-            employerInsuranceCents: 1000,
-            netBonusCents: 8000,
-            incrementalEmployerCostCents: 10000,
+        oneOffPayments: [
+          {
+            guarantee: 'guaranteed',
+            settlement: {
+              state: 'calculated',
+              grossCents: 10000,
+              wageTaxCents: 1000,
+              solidarityCents: 0,
+              churchTaxCents: 0,
+              employeeInsuranceCents: 1000,
+              employerInsuranceCents: 1000,
+              netBonusCents: 8000,
+              incrementalEmployerCostCents: 10000,
+            },
           },
-        }],
+        ],
       },
     }
     expect(aggregateSalaryResults2026(months)).toMatchObject({
@@ -256,6 +263,4 @@ describe('2026 salary result aggregation', () => {
       reason: 'bonus_employer_reconciliation_failed',
     })
   })
-
-
 })

@@ -339,3 +339,51 @@ footer a {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+
+.salary-deduction-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: var(--np-space-4);
+}
+
+.salary-deduction-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.salary-deduction-table :is(th, td) {
+  padding: var(--np-space-3);
+  border-bottom: 1px solid var(--np-color-line);
+  vertical-align: top;
+}
+
+.salary-deduction-table td {
+  white-space: nowrap;
+}
+
+.salary-deduction-table tbody tr:last-child {
+  font-weight: 700;
+}
+
+.salary-deduction-table details {
+  margin-top: var(--np-space-2);
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.salary-deduction-table summary {
+  color: var(--np-color-focus);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.salary-deduction-table caption {
+  padding: var(--np-space-2) 0;
+  color: var(--np-color-muted);
+  text-align: left;
+}

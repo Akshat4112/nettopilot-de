@@ -296,6 +296,7 @@ const calculateMonth = (
     employeeUnemploymentCents: month.employeeUnemploymentCents,
     employeeHealthCents: month.employeeHealthCents,
     employeeCareCents: month.employeeCareCents,
+    oneOffEmployeeSocialInsuranceCents: bonusEmployeeInsurance,
     employeeSocialInsuranceCents,
     privateInsuranceOutflowCents: month.privateInsuranceOutflowCents,
     allDeductionsCents,

@@ -528,4 +528,54 @@ describe('2026 bonus preparation', () => {
   })
 
 
+  it('matches standalone settlement when histories already include earlier bonuses', () => {
+    const common = {
+      pensionCoverage: 'general_statutory_mandatory' as const,
+      unemploymentCoverage: 'mandatory_standard' as const,
+      healthRate: { mode: 'published_average' as const },
+      care: {
+        calculationYear: 2026,
+        payrollYear: 2026,
+        insurancePath: 'private' as const,
+        employmentState: 'other' as const,
+        parentStatus: 'childless' as const,
+      },
+      churchTaxStatus: 'not_liable' as const,
+    }
+    const first = {
+      ...common,
+      bonus: {
+        ...base,
+        insurancePath: 'private' as const,
+        paymentMonth: 11,
+        grossPaymentCents: 100000,
+      },
+    }
+    const second = {
+      ...common,
+      bonus: {
+        ...base,
+        insurancePath: 'private' as const,
+        paymentMonth: 12,
+        grossPaymentCents: 100000,
+        priorOtherRemunerationCents: 100000,
+        priorKvPvContributoryPayCents: 4100000,
+        priorRvAvContributoryPayCents: 6100000,
+      },
+    }
+    const sequence = calculateBonusSettlementSequence2026(
+      'reported_includes_batch',
+      [first, second],
+    )
+    const standalone = calculateBonusSettlement2026(second)
+    expect(sequence.state).toBe('calculated')
+    expect(standalone.state).toBe('calculated')
+    if (sequence.state === 'calculated' && standalone.state === 'calculated') {
+      expect(sequence.payments[1]?.wageTaxCents).toBe(standalone.wageTaxCents)
+      expect(sequence.payments[1]?.employeeInsuranceCents).toBe(
+        standalone.employeeInsuranceCents,
+      )
+    }
+  })
+
 })

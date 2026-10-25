@@ -175,7 +175,7 @@ describe('2026 bonus preparation', () => {
         employmentState: 'other',
         parentStatus: 'childless',
       },
-      churchTaxCents: 'unknown',
+      churchTaxStatus: 'unknown',
     })
     expect(result).toMatchObject({
       state: 'incomplete',
@@ -183,8 +183,8 @@ describe('2026 bonus preparation', () => {
     })
   })
 
-  it('rejects invalid church tax cents', () => {
-    expect(() =>
+  it('rejects liable church-tax states without approved evidence', () => {
+    expect(
       calculateBonusSettlement2026({
         bonus: { ...base, grossPaymentCents: 100000, insurancePath: 'private' },
         pensionCoverage: 'general_statutory_mandatory',
@@ -197,7 +197,7 @@ describe('2026 bonus preparation', () => {
           employmentState: 'other',
           parentStatus: 'childless',
         },
-        churchTaxCents: -1,
+        churchTaxStatus: 'liable',
       }),
     ).toThrow('churchTaxCents')
   })
@@ -215,7 +215,7 @@ describe('2026 bonus preparation', () => {
         employmentState: 'other',
         parentStatus: 'childless',
       },
-      churchTaxCents: 0,
+      churchTaxStatus: 'not_liable',
     })
     expect(result).toMatchObject({
       state: 'unsupported',
@@ -302,7 +302,7 @@ describe('2026 bonus preparation', () => {
         employmentState: 'other',
         parentStatus: 'childless',
       },
-      churchTaxCents: 0,
+      churchTaxStatus: 'not_liable',
     })
     expect(result.state).toBe('calculated')
     if (result.state === 'calculated') {
@@ -334,7 +334,7 @@ describe('2026 bonus preparation', () => {
         parentStatus: 'childless',
         birthDate: '1990-01-01',
       },
-      churchTaxCents: 0,
+      churchTaxStatus: 'not_liable',
     })
     expect(result.state).toBe('calculated')
     if (result.state === 'calculated') {

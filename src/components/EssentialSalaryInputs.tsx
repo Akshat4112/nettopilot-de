@@ -162,11 +162,15 @@ export function EssentialSalaryInputs() {
         }}
         noValidate
       >
-        <div className="salary-actions" role="group" aria-label="Fictional salary examples">
+        <div
+          className="salary-actions"
+          role="group"
+          aria-label="Fictional salary examples"
+        >
           <p>
             Try a fictional 2026 example to fill the form. Examples are
-            illustrative, not personalized advice. Selecting one resets
-            advanced inputs and requires a fresh payroll confirmation.
+            illustrative, not personalized advice. Selecting one resets advanced
+            inputs and requires a fresh payroll confirmation.
           </p>
           {examples.map((example) => (
             <button

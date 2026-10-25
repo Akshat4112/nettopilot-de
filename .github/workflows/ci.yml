@@ -38,15 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Emit final reference formatting
-        run: |
-          npx prettier --write src/domain/salary/reference-full-bmf-table.test.ts src/domain/salary/reference-admission-validation.test.ts src/domain/salary/church-tax.ts
-          for path in src/domain/salary/reference-full-bmf-table.test.ts src/domain/salary/reference-admission-validation.test.ts src/domain/salary/church-tax.ts; do
-            echo "BEGIN_VERIFIED_FORMAT:$path"
-            cat "$path"
-            echo "END_VERIFIED_FORMAT:$path"
-          done
-
       - name: Check formatting
         run: npm run format:check
 

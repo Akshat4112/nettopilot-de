@@ -3,7 +3,7 @@ import reference from '../../../fixtures/reference/2026/nettopilot-reference-sce
 import { calculatePayrollTax2026 } from './payroll-tax'
 import type { PapInput } from './taxable-pay'
 
-type AnnualTaxFixture = {
+interface AnnualTaxFixture {
   id: string
   family: string
   verificationTier: string
@@ -83,9 +83,9 @@ describe('NP-CALC-017 official BMF annual-table conformance', () => {
     expect(reference.fixtureSetId).toBe('de-payroll-reference-2026-v1')
     expect(reference.calculationYear).toBe(2026)
     expect(selected).toHaveLength(6)
-    expect(selected.map((scenario) => scenario.inputs.taxClass).sort()).toEqual([
-      1, 2, 3, 4, 5, 6,
-    ])
+    expect(selected.map((scenario) => scenario.inputs.taxClass).sort()).toEqual(
+      [1, 2, 3, 4, 5, 6],
+    )
     for (const fixture of selected) {
       expect(fixture.sources).toContain('DE-BMF-PAP-2026-A2')
       expect(fixture.toleranceCents).toBe(0)
@@ -99,10 +99,18 @@ describe('NP-CALC-017 official BMF annual-table conformance', () => {
       const gross = annualTableUpperStepCents[fixture.id]
       const taxClass = fixture.inputs.taxClass
       const expected = fixture.expected.annualWageTaxCents
-      if (gross === undefined || taxClass === undefined || expected === undefined)
+      if (
+        gross === undefined ||
+        taxClass === undefined ||
+        expected === undefined
+      )
         throw new Error('Incomplete official BMF reference fixture')
       const result = calculatePayrollTax2026(
-        annualInput(gross, taxClass, Number(fixture.inputs.kvzPercent ?? '2.90')),
+        annualInput(
+          gross,
+          taxClass,
+          Number(fixture.inputs.kvzPercent ?? '2.90'),
+        ),
       )
       expect(Math.abs(result.wageTaxCents - expected)).toBeLessThanOrEqual(
         fixture.toleranceCents,

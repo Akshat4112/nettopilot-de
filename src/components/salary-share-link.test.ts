@@ -17,7 +17,9 @@ describe('privacy-safe salary share URLs', () => {
       status: 'valid',
       settings: { year: '2026', period: 'annual', federalState: 'DE-BW' },
     })
-    expect(url).not.toMatch(/gross|salary|birth|children|church|insurance|bonus|taxClass/i)
+    expect(url).not.toMatch(
+      /gross|salary|birth|children|church|insurance|bonus|taxClass/i,
+    )
   })
 
   it('supports no selected state without guessing a location', () => {

@@ -4,6 +4,11 @@ import { validateEssentialSalaryDraft } from './essential-salary-validation'
 import { SalarySummary } from './SalarySummary'
 import { calculateSimpleSalary2026 } from './calculate-simple-salary'
 import type { AdvancedSalaryDraft } from './advanced-salary-validation'
+import {
+  createShareableSalaryUrl,
+  readShareableSalarySettings,
+  type ShareReadResult,
+} from './salary-share-link'
 
 const stateOptions = [
   ['DE-BB', 'Brandenburg'],
@@ -98,7 +103,17 @@ const examples = [
 type Field = keyof EssentialSalaryDraft
 
 export function EssentialSalaryInputs() {
-  const [draft, setDraft] = useState<EssentialSalaryDraft>(empty)
+  const [restoration, setRestoration] = useState<ShareReadResult>(() =>
+    readShareableSalarySettings(
+      typeof window === 'undefined' ? '' : window.location.search,
+    ),
+  )
+  const [draft, setDraft] = useState<EssentialSalaryDraft>(() =>
+    restoration.status === 'valid'
+      ? { ...empty, ...restoration.settings }
+      : empty,
+  )
+  const [shareUrl, setShareUrl] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [resetToken, setResetToken] = useState(0)
   const [advancedErrors, setAdvancedErrors] = useState<readonly string[]>([])
@@ -106,7 +121,25 @@ export function EssentialSalaryInputs() {
     useState<AdvancedSalaryDraft>(emptyAdvanced)
   const [standardEmploymentConfirmed, setStandardEmploymentConfirmed] =
     useState(false)
+  const clearShareUrlFromBrowser = () => {
+    if (typeof window !== 'undefined' && window.location.search) {
+      window.history.replaceState(null, '', window.location.pathname)
+    }
+  }
+  const resetAll = () => {
+    setDraft(empty)
+    setSubmitted(false)
+    setResetToken((previous) => previous + 1)
+    setAdvancedErrors([])
+    setAdvancedDraft(emptyAdvanced)
+    setStandardEmploymentConfirmed(false)
+    setShareUrl('')
+    setRestoration({ status: 'none' })
+    clearShareUrlFromBrowser()
+  }
   const change = (field: Field, value: string) => {
+    setShareUrl('')
+    setRestoration({ status: 'none' })
     setDraft((previous) => ({ ...previous, [field]: value }))
     setSubmitted(false)
     if (field === 'insurance') {
@@ -116,6 +149,9 @@ export function EssentialSalaryInputs() {
     }
   }
   const loadExample = (example: EssentialSalaryDraft) => {
+    setShareUrl('')
+    setRestoration({ status: 'none' })
+    clearShareUrlFromBrowser()
     setDraft(example)
     setSubmitted(false)
     setResetToken((previous) => previous + 1)
@@ -155,6 +191,18 @@ export function EssentialSalaryInputs() {
         Inputs stay in your browser. A limited 2026 standard-employee estimate
         is available after confirming the payroll assumptions.
       </p>
+      {restoration.status === 'valid' && (
+        <p role="status">
+          Safe URL settings restored. Salary and other personal inputs are not
+          included; enter and confirm them before calculating.
+        </p>
+      )}
+      {restoration.status === 'invalid' && (
+        <p role="alert">
+          This shared link contains unsupported settings. No URL inputs were
+          restored; enter your own values.
+        </p>
+      )}
       <form
         onSubmit={(event) => {
           event.preventDefault()
@@ -184,6 +232,53 @@ export function EssentialSalaryInputs() {
               Load example: {example.label}
             </button>
           ))}
+        </div>
+        <div className="salary-actions" role="group" aria-label="Private sharing">
+          <p>
+            Share only the 2026 year, frequency and selected federal state.
+            Your gross pay, tax class, birth date, church-tax status, children,
+            health insurance and bonuses are never included in the link.
+          </p>
+          <button
+            type="button"
+            className="np-button-secondary"
+            onClick={() => {
+              setShareUrl(
+                createShareableSalaryUrl(window.location.href, {
+                  year: '2026',
+                  period: draft.period,
+                  ...(draft.federalState
+                    ? { federalState: draft.federalState }
+                    : {}),
+                }),
+              )
+            }}
+          >
+            Create privacy-safe link
+          </button>
+          {shareUrl !== '' && (
+            <div className="np-field">
+              <label htmlFor="np-share-url">
+                Private-settings link (select and copy)
+              </label>
+              <input
+                id="np-share-url"
+                type="text"
+                readOnly
+                value={shareUrl}
+                onFocus={(event) => {
+                  event.target.select()
+                }}
+              />
+            </div>
+          )}
+          <button
+            type="button"
+            className="np-button-secondary"
+            onClick={resetAll}
+          >
+            Clear shared settings and reset
+          </button>
         </div>
         <div className="np-field">
           <label htmlFor="np-gross">Gross salary (EUR)</label>
@@ -385,14 +480,7 @@ export function EssentialSalaryInputs() {
           <button
             type="button"
             className="np-button-secondary"
-            onClick={() => {
-              setDraft(empty)
-              setSubmitted(false)
-              setResetToken((previous) => previous + 1)
-              setAdvancedErrors([])
-              setAdvancedDraft(emptyAdvanced)
-              setStandardEmploymentConfirmed(false)
-            }}
+            onClick={resetAll}
           >
             Reset
           </button>

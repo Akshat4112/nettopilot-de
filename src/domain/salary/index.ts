@@ -234,5 +234,14 @@ export type {
   AggregatedBonus2026,
 } from './salary-aggregation'
 
-export { explainSalaryResults2026, SALARY_EXPLANATION_FIELDS_2026 } from './salary-explanations'
-export type { SalaryExplanation2026, SalaryExplanationField2026, SalaryExplanationInput2026, SalaryExplanationLineItem2026, SalaryLineItemProvenance2026 } from './salary-explanations'
+export {
+  explainSalaryResults2026,
+  SALARY_EXPLANATION_FIELDS_2026,
+} from './salary-explanations'
+export type {
+  SalaryExplanation2026,
+  SalaryExplanationField2026,
+  SalaryExplanationInput2026,
+  SalaryExplanationLineItem2026,
+  SalaryLineItemProvenance2026,
+} from './salary-explanations'

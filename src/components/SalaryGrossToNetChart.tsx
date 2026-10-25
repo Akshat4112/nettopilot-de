@@ -8,13 +8,15 @@ const money = (cents: number): string =>
   }).format(cents / 100)
 
 /**
- * A non-interactive, explicitly labeled 2026 annual gross-to-net figure.
+ * A non-interactive, explicitly labeled 2026 period gross-to-net figure.
  * All figures come from admitted totals, never an inferred tax percentage.
  */
 export function SalaryGrossToNetChart({
   totals,
+  period = 'annual',
 }: {
   readonly totals: SalaryPeriodTotals2026
+  readonly period?: 'monthly' | 'annual'
 }) {
   const gross = totals.grossCents
   const deductions = totals.allDeductionsCents
@@ -44,10 +46,10 @@ export function SalaryGrossToNetChart({
       aria-describedby="np-gross-net-description"
     >
       <figcaption id="np-gross-net-title">
-        From annual gross to available pay
+        From {period} gross to available pay
       </figcaption>
       <p id="np-gross-net-description">
-        The bar separates available annual pay from tax, social insurance and
+        The bar separates available {period} pay from tax, social insurance and
         any external private-insurance costs. Percentages show a share of gross,
         not a statutory tax rate.
       </p>
@@ -67,7 +69,7 @@ export function SalaryGrossToNetChart({
       </div>
       <dl className="np-gross-net-legend">
         <div>
-          <dt>Annual gross pay</dt>
+          <dt>{period === 'annual' ? 'Annual' : 'Monthly'} gross pay</dt>
           <dd>{money(gross)}</dd>
         </div>
         <div>

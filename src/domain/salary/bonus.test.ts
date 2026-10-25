@@ -126,6 +126,45 @@ describe('2026 bonus preparation', () => {
     })
   })
 
+  it('rejects zero bonuses and unsupported special cases', () => {
+    expect(
+      prepareBonus2026({ ...base, grossPaymentCents: 0 }),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'payment_amount_required',
+    })
+    expect(
+      prepareBonus2026({ ...base, specialCase: true }),
+    ).toMatchObject({
+      state: 'unsupported',
+      reason: 'special_payment_unsupported',
+    })
+  })
+
+  it('requires period context for a monthly recurring bonus', () => {
+    expect(
+      prepareBonus2026({
+        ...base,
+        classification: 'monthly_recurring_bonus',
+      }),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'running_pay_period_required',
+    })
+  })
+
+  it('rejects unknown insurance path and invalid payment month', () => {
+    expect(
+      prepareBonus2026({ ...base, insurancePath: 'unknown' }),
+    ).toMatchObject({
+      state: 'incomplete',
+      reason: 'insurance_path_unknown',
+    })
+    expect(() =>
+      prepareBonus2026({ ...base, paymentMonth: 13 }),
+    ).toThrow('paymentMonth')
+  })
+
   it('applies bonuses in chronological order without counting future bonuses in JRE4', () => {
     const result = prepareBonusSequence2026([
       { ...base, paymentMonth: 11, grossPaymentCents: 100000 },

@@ -50,6 +50,7 @@ const base: BonusPreparationInput2026 = {
   priorKvPvContributoryPayCents: 4_000_000,
   priorRvAvContributoryPayCents: 6_000_000,
   insurancePath: 'statutory',
+  statutoryHealthCoverage: 'mandatory',
   sameEmployerPreviousYear: false,
   pap,
 }
@@ -261,7 +262,7 @@ describe('2026 bonus preparation', () => {
   })
 
   it('applies bonuses in chronological order without counting future bonuses in JRE4', () => {
-    const result = prepareBonusSequence2026([
+    const result = prepareBonusSequence2026('reported_excludes_batch', [
       { ...base, paymentMonth: 11, grossPaymentCents: 100000 },
       { ...base, paymentMonth: 12, grossPaymentCents: 200000 },
     ])
@@ -277,7 +278,7 @@ describe('2026 bonus preparation', () => {
 
   it('rejects reverse chronological payments', () => {
     expect(
-      prepareBonusSequence2026([
+      prepareBonusSequence2026('reported_excludes_batch', [
         { ...base, paymentMonth: 12 },
         { ...base, paymentMonth: 11 },
       ]),
@@ -365,7 +366,7 @@ describe('2026 bonus preparation', () => {
       },
       churchTaxStatus: 'not_liable' as const,
     }
-    const result = calculateBonusSettlementSequence2026([
+    const result = calculateBonusSettlementSequence2026('reported_excludes_batch', [
       { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
       { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
     ])
@@ -399,7 +400,7 @@ describe('2026 bonus preparation', () => {
       churchTaxStatus: 'not_liable' as const,
     }
     expect(
-      calculateBonusSettlementSequence2026([
+      calculateBonusSettlementSequence2026('reported_excludes_batch', [
         { ...template, bonus: { ...template.bonus, paymentMonth: 12 } },
         { ...template, bonus: { ...template.bonus, paymentMonth: 11 } },
       ]),
@@ -411,7 +412,7 @@ describe('2026 bonus preparation', () => {
   })
 
   it('keeps empty and incomplete bonus settlement sequences distinct', () => {
-    expect(calculateBonusSettlementSequence2026([])).toMatchObject({
+    expect(calculateBonusSettlementSequence2026('reported_excludes_batch', [])).toMatchObject({
       state: 'calculated',
       payments: [],
       totalGrossCents: 0,
@@ -432,7 +433,7 @@ describe('2026 bonus preparation', () => {
       churchTaxStatus: 'not_liable' as const,
     }
     expect(
-      calculateBonusSettlementSequence2026([
+      calculateBonusSettlementSequence2026('reported_excludes_batch', [
         {
           ...context,
           bonus: {
@@ -449,7 +450,7 @@ describe('2026 bonus preparation', () => {
       reason: 'contribution_history_required',
     })
     expect(
-      calculateBonusSettlementSequence2026([
+      calculateBonusSettlementSequence2026('reported_excludes_batch', [
         {
           ...context,
           bonus: {
@@ -466,4 +467,65 @@ describe('2026 bonus preparation', () => {
       reason: 'classification_unknown',
     })
   })
+  it('does not double count fully reported year-to-date earlier bonuses', () => {
+    const result = prepareBonusSequence2026('reported_includes_batch', [
+      {
+        ...base,
+        paymentMonth: 11,
+        grossPaymentCents: 100000,
+        priorOtherRemunerationCents: 0,
+      },
+      {
+        ...base,
+        paymentMonth: 12,
+        grossPaymentCents: 100000,
+        priorOtherRemunerationCents: 100000,
+        priorKvPvContributoryPayCents: 4100000,
+        priorRvAvContributoryPayCents: 6100000,
+      },
+    ])
+    expect(result).toMatchObject({
+      state: 'prepared',
+      payments: [
+        { expectedAnnualTaxBaseCents: 6000000 },
+        { expectedAnnualTaxBaseCents: 6100000, kvPvLiableCents: 100000 },
+      ],
+    })
+  })
+
+  it('uses RV instead of KV for voluntarily insured statutory employees in March', () => {
+    const voluntary = {
+      ...base,
+      paymentMonth: 3,
+      grossPaymentCents: 100000,
+      contributionDays: 90,
+      priorKvPvContributoryPayCents: 1743750,
+      priorRvAvContributoryPayCents: 1950000,
+      sameEmployerPreviousYear: true,
+      statutoryHealthCoverage: 'voluntary' as const,
+    }
+    expect(prepareBonus2026(voluntary).state).toBe('prepared')
+    expect(prepareBonus2026({
+      ...voluntary,
+      statutoryHealthCoverage: 'mandatory',
+    })).toMatchObject({
+      state: 'unsupported',
+      reason: 'march_clause_prior_year',
+    })
+  })
+
+  it('fails closed when the March-clause health coverage type is unknown', () => {
+    expect(prepareBonus2026({
+      ...base,
+      paymentMonth: 2,
+      sameEmployerPreviousYear: true,
+      statutoryHealthCoverage: 'unknown',
+      grossPaymentCents: 100000,
+    })).toMatchObject({
+      state: 'incomplete',
+      reason: 'march_clause_coverage_unknown',
+    })
+  })
+
+
 })

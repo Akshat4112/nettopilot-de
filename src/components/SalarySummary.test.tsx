@@ -49,43 +49,58 @@ describe('SalarySummary', () => {
     expect(screen.getByText(/monthly display/i)).toBeInTheDocument()
   })
 
-  it('switches all displayed amounts without recalculating or rounding the stored results', () => {
+  it('switches exact period amounts without recalculation', () => {
     const result = complete()
     render(<SalarySummary result={result} />)
     const monthly = screen.getByRole('button', { name: 'Monthly' })
     const annual = screen.getByRole('button', { name: 'Annual' })
     expect(annual).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByText('From annual gross to available pay')).toBeInTheDocument()
+    expect(
+      screen.getByText('From annual gross to available pay'),
+    ).toBeInTheDocument()
 
-    const annualValue = screen.getByText('Net payroll pay').nextElementSibling?.textContent
+    const annualValue =
+      screen.getByText('Net payroll pay').nextElementSibling?.textContent
     fireEvent.click(monthly)
     expect(monthly).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByText(/monthly display/i)).toBeInTheDocument()
-    expect(screen.getByText('From monthly gross to available pay')).toBeInTheDocument()
+    expect(
+      screen.getByText('From monthly gross to available pay'),
+    ).toBeInTheDocument()
     expect(
       screen.getByRole('table', { name: /Monthly employee deductions/ }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Net payroll pay').nextElementSibling?.textContent).not.toBe(annualValue)
+    expect(
+      screen.getByText('Net payroll pay').nextElementSibling?.textContent,
+    ).not.toBe(annualValue)
 
     fireEvent.click(annual)
     expect(annual).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByText('Net payroll pay').nextElementSibling?.textContent).toBe(annualValue)
+    expect(
+      screen.getByText('Net payroll pay').nextElementSibling?.textContent,
+    ).toBe(annualValue)
     expect(
       screen.getByRole('table', { name: /Annual employee deductions/ }),
     ).toBeInTheDocument()
   })
 
-  it('does not invent a monthly average when admitted monthly results vary', () => {
+  it('rejects monthly averages when payroll months differ', () => {
     const result = complete()
     expect(result.state).toBe('calculated')
     if (result.state !== 'calculated') return
     const months = result.months.map((month, index) =>
-      index === 5 ? { ...month, netPayrollCents: month.netPayrollCents + 1 } : month,
+      index === 5
+        ? { ...month, netPayrollCents: month.netPayrollCents + 1 }
+        : month,
     )
     render(<SalarySummary result={{ ...result, months }} />)
     fireEvent.click(screen.getByRole('button', { name: 'Monthly' }))
-    expect(screen.getByRole('status')).toHaveTextContent('no monthly average is inferred')
-    expect(screen.queryByRole('img', { name: /Available:/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'no monthly average is inferred',
+    )
+    expect(
+      screen.queryByRole('img', { name: /Available:/ }),
+    ).not.toBeInTheDocument()
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Annual' }))
     expect(screen.getByText('Net payroll pay')).toBeInTheDocument()

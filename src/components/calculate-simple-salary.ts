@@ -56,15 +56,27 @@ export function calculateSimpleSalary2026(
   if (validateAdvancedSalaryDraft(advanced, input.insurance).length > 0)
     return unavailable('incomplete', 'advanced_payroll_inputs_invalid')
   if (!standardEmploymentConfirmed)
-    return unavailable('incomplete', 'standard_employment_confirmation_required')
+    return unavailable(
+      'incomplete',
+      'standard_employment_confirmation_required',
+    )
   if (input.insurance !== 'statutory')
-    return unavailable('unsupported', 'private_insurance_payslip_details_required')
+    return unavailable(
+      'unsupported',
+      'private_insurance_payslip_details_required',
+    )
   if (input.churchTax !== 'not_liable')
     return unavailable('unsupported', 'church_tax_evidence_not_in_scope')
   if (input.children !== '0' || input.taxClass === '2')
-    return unavailable('unsupported', 'child_allowance_and_care_status_required')
+    return unavailable(
+      'unsupported',
+      'child_allowance_and_care_status_required',
+    )
   if (input.dateOfBirth < '1963-01-01' || input.dateOfBirth > '2002-12-31')
-    return unavailable('unsupported', 'age_specific_pension_or_care_rules_required')
+    return unavailable(
+      'unsupported',
+      'age_specific_pension_or_care_rules_required',
+    )
   if (
     advanced.annualTaxAllowanceEur !== '' ||
     advanced.annualTaxAdditionEur !== '' ||
@@ -73,17 +85,26 @@ export function calculateSimpleSalary2026(
     advanced.oneOffBonusEur !== '' ||
     advanced.oneOffBonusMonth !== ''
   )
-    return unavailable('unsupported', 'advanced_payroll_settlement_not_connected')
+    return unavailable(
+      'unsupported',
+      'advanced_payroll_settlement_not_connected',
+    )
 
   const enteredCents = euroCents(input.gross)
   if (enteredCents === null) return unavailable('incomplete', 'invalid_gross')
   if (input.period === 'annual' && enteredCents % 12 !== 0)
-    return unavailable('unsupported', 'annual_salary_requires_monthly_cent_allocation')
+    return unavailable(
+      'unsupported',
+      'annual_salary_requires_monthly_cent_allocation',
+    )
   const monthlyCents =
     input.period === 'annual' ? enteredCents / 12 : enteredCents
   // Special midijob and compulsory-coverage histories require added inputs.
   if (monthlyCents <= 200000 || monthlyCents >= 580000)
-    return unavailable('unsupported', 'special_or_voluntary_insurance_check_required')
+    return unavailable(
+      'unsupported',
+      'special_or_voluntary_insurance_check_required',
+    )
 
   const additionalRate =
     advanced.additionalHealthRatePercent === ''
@@ -109,7 +130,10 @@ export function calculateSimpleSalary2026(
     childrenUnderRelevantAge: 0,
     health:
       additionalRate.mode === 'published_average'
-        ? { healthInsuranceType: 'statutory', additionalRateMode: 'published_average' }
+        ? {
+            healthInsuranceType: 'statutory',
+            additionalRateMode: 'published_average',
+          }
         : {
             healthInsuranceType: 'statutory',
             additionalRateMode: 'insurer_specific',
@@ -154,10 +178,12 @@ export function calculateSimpleSalary2026(
       additionalRate,
       calculationYear: 2026,
     })
-    if (pension.state !== 'calculated') return unavailable(pension.state, pension.reason)
+    if (pension.state !== 'calculated')
+      return unavailable(pension.state, pension.reason)
     if (unemployment.state !== 'calculated')
       return unavailable(unemployment.state, unemployment.reason)
-    if (health.state !== 'calculated') return unavailable(health.state, health.reason)
+    if (health.state !== 'calculated')
+      return unavailable(health.state, health.reason)
 
     const months: SalaryMonthAdmission2026[] = []
     for (let month = 1; month <= 12; month++) {
@@ -212,6 +238,9 @@ export function calculateSimpleSalary2026(
       ? admitted.result
       : unavailable(admitted.state, admitted.reason)
   } catch {
-    return unavailable('unsupported', 'payroll_calculation_could_not_be_validated')
+    return unavailable(
+      'unsupported',
+      'payroll_calculation_could_not_be_validated',
+    )
   }
 }

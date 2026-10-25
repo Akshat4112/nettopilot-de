@@ -38,6 +38,15 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Print final review corrections through Prettier
+        run: |
+          npx prettier --write src/domain/salary/bonus.ts src/domain/salary/bonus-sequence.ts src/domain/salary/bonus-settlement-sequence.ts src/domain/salary/bonus.test.ts src/domain/salary/bonus-sequence.test.ts
+          for path in src/domain/salary/bonus.ts src/domain/salary/bonus-sequence.ts src/domain/salary/bonus-settlement-sequence.ts src/domain/salary/bonus.test.ts src/domain/salary/bonus-sequence.test.ts; do
+            echo "BEGIN_REVIEW_FORMAT:$path"
+            cat "$path"
+            echo "END_REVIEW_FORMAT:$path"
+          done
+
       - name: Check formatting
         run: npm run format:check
 

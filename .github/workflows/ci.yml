@@ -38,15 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Capture boundary Prettier output
-        run: |
-          npx prettier --write src/domain/salary/salary-boundary.ts src/domain/salary/salary-boundary.test.ts
-          for path in src/domain/salary/salary-boundary.ts src/domain/salary/salary-boundary.test.ts; do
-            echo "START_BOUNDARY:$path"
-            cat "$path"
-            echo "END_BOUNDARY:$path"
-          done
-
       - name: Check formatting
         run: npm run format:check
 

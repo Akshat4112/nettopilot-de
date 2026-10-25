@@ -221,3 +221,6 @@ export type {
   BonusSettlementInput2026,
   BonusSettlement2026,
 } from './bonus-settlement'
+
+export { calculateBonusSettlementSequence2026 } from './bonus-settlement-sequence'
+export type { BonusSettlementSequence2026 } from './bonus-settlement-sequence'

@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import fixtures from '../../../fixtures/reference/2026/nettopilot-reference-scenarios.json'
 import { calculateSolidaritySurcharge2026 } from './solidarity-surcharge'
-import { calculateChurchTax2026, calculateChurchTaxComponent2026 } from './church-tax'
+import {
+  calculateChurchTax2026,
+  calculateChurchTaxComponent2026,
+} from './church-tax'
 
 const soli = fixtures.scenarios.filter(
   (item) => item.family === 'solidarity_surcharge',
@@ -31,25 +34,26 @@ describe('NP-CALC-017 verified withholding and admission fixtures', () => {
     },
   )
 
-  it.each(
-    fixtures.scenarios.filter((item) => item.family === 'church_tax'),
-  )('matches exact church-tax arithmetic fixture $id', (fixture) => {
-    if (
-      !('churchAssessmentBaseCents' in fixture.inputs) ||
-      !('rateBasisPoints' in fixture.inputs) ||
-      !('churchTaxCents' in fixture.expected)
-    )
-      throw new Error('Invalid church component reference')
-    const rate = fixture.inputs.rateBasisPoints
-    if (rate !== 800 && rate !== 900)
-      throw new Error('Unsupported reference rate')
-    expect(
-      calculateChurchTaxComponent2026(
-        fixture.inputs.churchAssessmentBaseCents,
-        rate,
-      ),
-    ).toBe(fixture.expected.churchTaxCents)
-  })
+  it.each(fixtures.scenarios.filter((item) => item.family === 'church_tax'))(
+    'matches exact church-tax arithmetic fixture $id',
+    (fixture) => {
+      if (
+        !('churchAssessmentBaseCents' in fixture.inputs) ||
+        !('rateBasisPoints' in fixture.inputs) ||
+        !('churchTaxCents' in fixture.expected)
+      )
+        throw new Error('Invalid church component reference')
+      const rate = fixture.inputs.rateBasisPoints
+      if (rate !== 800 && rate !== 900)
+        throw new Error('Unsupported reference rate')
+      expect(
+        calculateChurchTaxComponent2026(
+          fixture.inputs.churchAssessmentBaseCents,
+          rate,
+        ),
+      ).toBe(fixture.expected.churchTaxCents)
+    },
+  )
 
   it('gates church liability without approved state evidence', () => {
     const fixture = admission.find(

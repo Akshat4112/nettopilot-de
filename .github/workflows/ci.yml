@@ -38,6 +38,13 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Capture formatted salary result module
+        run: |
+          npx prettier --write src/domain/salary/salary-aggregation.ts
+          echo START_AGGREGATE_MODULE
+          cat src/domain/salary/salary-aggregation.ts
+          echo END_AGGREGATE_MODULE
+
       - name: Check formatting
         run: npm run format:check
 

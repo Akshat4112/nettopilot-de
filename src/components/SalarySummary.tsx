@@ -40,8 +40,8 @@ function SummaryFigures({
   if (values === null)
     return (
       <p role="status">
-        Monthly payroll changes across the year. Select annual totals to
-        compare the complete result; no monthly average is inferred.
+        Monthly payroll changes across the year. Select annual totals to compare
+        the complete result; no monthly average is inferred.
       </p>
     )
 
@@ -98,7 +98,7 @@ export function SalarySummary({
             ? 'Salary result unavailable: more validated payroll inputs are required.'
             : 'Salary result unavailable: this payroll scenario is not supported.'}{' '}
           Reason: {result.reason}.{' '}
-          {result.month > 0 ? `Affected month: ${result.month}.` : ''}
+          {result.month > 0 ? `Affected month: ${String(result.month)}.` : ''}
         </p>
       )}
     </section>

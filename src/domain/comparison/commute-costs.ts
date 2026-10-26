@@ -10,10 +10,7 @@ export interface CommuteCostEntry {
 }
 
 export type CommuteCostCategory =
-  | 'publicTransport'
-  | 'fuel'
-  | 'parking'
-  | 'other'
+  'publicTransport' | 'fuel' | 'parking' | 'other'
 
 export type CommuteCostResult =
   | {
@@ -41,12 +38,7 @@ export const blankCommuteCostEntry = (): CommuteCostEntry => ({
   otherPerOfficeDayEur: '',
 })
 
-const keys = [
-  'publicTransport',
-  'fuel',
-  'parking',
-  'other',
-] as const
+const keys = ['publicTransport', 'fuel', 'parking', 'other'] as const
 
 const cents = (raw: string): bigint | null => {
   if (!/^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/.test(raw)) return null
@@ -99,7 +91,8 @@ export const calculateCommuteCosts = (
   if (entered.some((value) => value === null))
     return {
       state: 'invalid',
-      reason: 'Each office-day cost must be 0–10,000 EUR with at most two decimal places.',
+      reason:
+        'Each office-day cost must be 0–10,000 EUR with at most two decimal places.',
     }
 
   const denominator = BigInt(working)

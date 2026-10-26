@@ -25,8 +25,8 @@
     "verify:pages": "npm run build && node scripts/verify-pages-build.mjs"
   },
   "dependencies": {
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

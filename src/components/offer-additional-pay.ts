@@ -1,4 +1,4 @@
-import type { DecimalString, RegistryOptionId } from '../domain/salary/types'
+import type { DecimalString, RegistryOptionId, ScenarioLabel } from '../domain/salary/types'
 import type {
   OfferComparisonDraft,
   OfferSide,
@@ -94,7 +94,7 @@ export const applyAdditionalPay = (
                     | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
                   classification: entry.oneOffClassification as RegistryOptionId,
                   guarantee: entry.oneOffGuarantee,
-                  label: 'User-entered one-time payment' as never,
+                  label: 'User-entered one-time payment' as ScenarioLabel,
                 },
               ],
       },

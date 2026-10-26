@@ -53,8 +53,8 @@ export function CommuteCostComparison({
             {euro(b.annualTotalCents - a.annualTotalCents)}
           </p>
           <p>
-            Figures are user-entered travel expenses, not payroll deductions
-            or a calculated net-income difference.
+            Figures are user-entered travel expenses, not payroll deductions or
+            a calculated net-income difference.
           </p>
         </>
       ) : (
@@ -65,9 +65,11 @@ export function CommuteCostComparison({
         </p>
       )}
       <p className="vacation-method">
-        52-week convention, adjusted proportionally for stated paid leave.
-        All four costs must be entered; 0 means confirmed free.
-        {both ? ' Totals combine four independently rounded annual amounts.' : ''}
+        52-week convention, adjusted proportionally for stated paid leave. All
+        four costs must be entered; 0 means confirmed free.
+        {both
+          ? ' Totals combine four independently rounded annual amounts.'
+          : ''}
       </p>
     </section>
   )

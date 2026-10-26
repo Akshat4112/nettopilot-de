@@ -3,6 +3,7 @@ import { OfferAdditionalPayInputs } from './OfferAdditionalPayInputs'
 import { OfferWorkingTimeInputs } from './OfferWorkingTimeInputs'
 import { VacationComparison } from './VacationComparison'
 import {
+  attachWorkingTime,
   blankWorkingTime,
   calculateAnnualContractualHours,
   type WorkingTimeEntry,
@@ -83,9 +84,12 @@ export function OfferComparisonInputs() {
   const accepted =
     extrasValid && workingValid &&
     validation.every((result) => result.state === 'valid')
-  const model = applyAdditionalPay(
-    buildOfferPairFromEntries(offers[0], offers[1]),
-    additional,
+  const model = attachWorkingTime(
+    applyAdditionalPay(
+      buildOfferPairFromEntries(offers[0], offers[1]),
+      additional,
+    ),
+    working,
   )
   const dataIsAdmitted = model.offers.every(
     (offer) => offer.compensation.baseSalary.state === 'provided',

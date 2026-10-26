@@ -50,12 +50,21 @@ describe('NP-CMP-003 additional compensation', () => {
   })
 
   it('refuses invalid amounts and incomplete one-time months', () => {
-    expect(validateAdditionalPay({ ...emptyAdditionalPay(), expectedVariableEur: '-10' })).toHaveLength(1)
-    expect(validateAdditionalPay({ ...emptyAdditionalPay(), oneOffEur: '50.001' })).toHaveLength(2)
-    expect(validateAdditionalPay({ ...emptyAdditionalPay(), oneOffEur: '50' })).toEqual([
-      'Choose the payment month for the one-time payment.',
-    ])
-    expect(validateAdditionalPay({ ...emptyAdditionalPay(), oneOffMonth: '12' })).toHaveLength(1)
+    expect(
+      validateAdditionalPay({
+        ...emptyAdditionalPay(),
+        expectedVariableEur: '-10',
+      }),
+    ).toHaveLength(1)
+    expect(
+      validateAdditionalPay({ ...emptyAdditionalPay(), oneOffEur: '50.001' }),
+    ).toHaveLength(2)
+    expect(
+      validateAdditionalPay({ ...emptyAdditionalPay(), oneOffEur: '50' }),
+    ).toEqual(['Choose the payment month for the one-time payment.'])
+    expect(
+      validateAdditionalPay({ ...emptyAdditionalPay(), oneOffMonth: '12' }),
+    ).toHaveLength(1)
     const draft = applyAdditionalPay(base(), [
       { ...emptyAdditionalPay(), oneOffEur: '100' },
       emptyAdditionalPay(),

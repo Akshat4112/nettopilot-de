@@ -119,7 +119,9 @@ export function OfferComparisonInputs() {
       entry.parkingPerOfficeDayEur,
       entry.otherPerOfficeDayEur,
     ].every((value) => value === '')
-    return empty || calculateCommuteCosts(commuteFor(side)).state === 'calculated'
+    return (
+      empty || calculateCommuteCosts(commuteFor(side)).state === 'calculated'
+    )
   })
   const accepted =
     commuteValid &&
@@ -246,9 +248,11 @@ export function OfferComparisonInputs() {
                   setCommuteEntry(side, next)
                 }}
               />
-              {checked && commuteEntered && commuteResult.state !== 'calculated' && (
-                <p role="alert">{commuteResult.reason}</p>
-              )}
+              {checked &&
+                commuteEntered &&
+                commuteResult.state !== 'calculated' && (
+                  <p role="alert">{commuteResult.reason}</p>
+                )}
               <div className="offer-actions">
                 <button
                   type="button"

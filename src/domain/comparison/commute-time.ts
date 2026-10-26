@@ -69,11 +69,7 @@ export const calculateAnnualCommuteTime = (
   const office = Number(entry.officeDaysPerWeek)
   const vacation = Number(entry.paidVacationDaysAnnual)
   const oneWay = Number(entry.oneWayMinutes)
-  if (
-    office > working ||
-    vacation > 52 * working ||
-    oneWay > 720
-  )
+  if (office > working || vacation > 52 * working || oneWay > 720)
     return {
       state: 'invalid',
       reason:
@@ -125,8 +121,7 @@ export const compareCommuteTime = (
     aHoursHundredths: first.annualCommuteHoursHundredths,
     bHoursHundredths: second.annualCommuteHoursHundredths,
     bMinusAHoursHundredths:
-      second.annualCommuteHoursHundredths -
-      first.annualCommuteHoursHundredths,
+      second.annualCommuteHoursHundredths - first.annualCommuteHoursHundredths,
     monetaryValue: 'not_calculated',
   }
 }

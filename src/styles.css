@@ -712,3 +712,23 @@ main {
     display: none !important;
   }
 }
+
+.offer-extra {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-4);
+}
+
+.offer-extra h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.offer-extra p {
+  margin: 0;
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}

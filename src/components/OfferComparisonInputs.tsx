@@ -79,10 +79,13 @@ export function OfferComparisonInputs() {
   )
   const workingValid = working.every((entry) => {
     const empty = Object.values(entry).every((value) => value === '')
-    return empty || calculateAnnualContractualHours(entry).state === 'calculated'
+    return (
+      empty || calculateAnnualContractualHours(entry).state === 'calculated'
+    )
   })
   const accepted =
-    extrasValid && workingValid &&
+    extrasValid &&
+    workingValid &&
     validation.every((result) => result.state === 'valid')
   const model = attachWorkingTime(
     applyAdditionalPay(
@@ -116,7 +119,9 @@ export function OfferComparisonInputs() {
           const extraProblems = validateAdditionalPay(extra)
           const timeEntry = working[side]
           const timeResult = calculateAnnualContractualHours(timeEntry)
-          const timeStarted = Object.values(timeEntry).some((value) => value !== '')
+          const timeStarted = Object.values(timeEntry).some(
+            (value) => value !== '',
+          )
           const showIssue = checked && issue.state !== 'valid'
           return (
             <fieldset className="offer-card" key={id}>

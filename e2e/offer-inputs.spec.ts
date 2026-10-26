@@ -161,3 +161,38 @@ test('commute costs require user-entered categories and respect paid leave', asy
     page.getByText(/Annual commute cost comparison unavailable/),
   ).toBeVisible()
 })
+
+test('annual round-trip commute hours are independent from expense inputs', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 900 })
+  await page.goto('./')
+  for (const side of ['Offer A', 'Offer B']) {
+    await page
+      .getByRole('combobox', { name: side + ' working days per week' })
+      .selectOption('5')
+    await page
+      .getByRole('textbox', { name: side + ' paid vacation days per year' })
+      .fill('30')
+    await page
+      .getByRole('combobox', { name: side + ' office days per week' })
+      .selectOption('3')
+    await page
+      .getByRole('textbox', { name: side + ' one-way commute (minutes)' })
+      .fill(side === 'Offer A' ? '35' : '20')
+  }
+  await expect(
+    page.getByText(/Annual commute time difference \(B − A\)/),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/Annual commute cost comparison unavailable/),
+  ).toBeVisible()
+  const width = await page.evaluate(() => document.documentElement.scrollWidth)
+  expect(width).toBeLessThanOrEqual(375)
+  await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
+  await expect(
+    page.getByRole('textbox', { name: 'Offer B one-way commute (minutes)' }),
+  ).toHaveValue('35')
+  await page.getByRole('button', { name: 'Clear Offer B' }).click()
+  await expect(page.getByText(/Annual commute time unavailable/)).toBeVisible()
+})

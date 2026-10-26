@@ -4,6 +4,11 @@ import { OfferWorkingTimeInputs } from './OfferWorkingTimeInputs'
 import { VacationComparison } from './VacationComparison'
 import { OfferCommuteCostInputs } from './OfferCommuteCostInputs'
 import { CommuteCostComparison } from './CommuteCostComparison'
+import { CommuteTimeComparison } from './CommuteTimeComparison'
+import {
+  calculateAnnualCommuteTime,
+  type CommuteTimeEntry,
+} from '../domain/comparison/commute-time'
 import {
   blankCommuteCostEntry,
   calculateCommuteCosts,
@@ -37,6 +42,9 @@ export function OfferComparisonInputs() {
   const [working, setWorking] = useState<
     readonly [WorkingTimeEntry, WorkingTimeEntry]
   >([blankWorkingTime(), blankWorkingTime()])
+  const [oneWayMinutes, setOneWayMinutes] = useState<readonly [string, string]>(
+    ['', ''],
+  )
   const [commute, setCommute] = useState<
     readonly [CommuteCostEntry, CommuteCostEntry]
   >([blankCommuteCostEntry(), blankCommuteCostEntry()])
@@ -93,6 +101,9 @@ export function OfferComparisonInputs() {
         ? [{ ...previous[1] }, previous[1]]
         : [previous[0], { ...previous[0] }],
     )
+    setOneWayMinutes((previous) =>
+      target === 0 ? [previous[1], previous[1]] : [previous[0], previous[0]],
+    )
     setChecked(false)
   }
   const validation = offers.map(validateOfferSalary)
@@ -110,6 +121,19 @@ export function OfferComparisonInputs() {
     workingDaysPerWeek: working[side].workingDaysPerWeek,
     paidVacationDaysAnnual: working[side].paidVacationDaysAnnual,
   })
+  const commuteTimeFor = (side: 0 | 1): CommuteTimeEntry => ({
+    workingDaysPerWeek: working[side].workingDaysPerWeek,
+    officeDaysPerWeek: commute[side].officeDaysPerWeek,
+    paidVacationDaysAnnual: working[side].paidVacationDaysAnnual,
+    oneWayMinutes: oneWayMinutes[side],
+  })
+  const commuteTimeValid = ([0, 1] as const).every((side) => {
+    const oneWay = oneWayMinutes[side]
+    return (
+      oneWay === '' ||
+      calculateAnnualCommuteTime(commuteTimeFor(side)).state === 'calculated'
+    )
+  })
   const commuteValid = ([0, 1] as const).every((side) => {
     const entry = commute[side]
     const empty = [
@@ -124,6 +148,7 @@ export function OfferComparisonInputs() {
     )
   })
   const accepted =
+    commuteTimeValid &&
     commuteValid &&
     extrasValid &&
     workingValid &&
@@ -167,6 +192,9 @@ export function OfferComparisonInputs() {
             commute[side].otherPerOfficeDayEur,
           ].some((value) => value !== '')
           const commuteResult = calculateCommuteCosts(commuteEntry)
+          const commuteTimeResult = calculateAnnualCommuteTime(
+            commuteTimeFor(side),
+          )
           const timeEntry = working[side]
           const timeResult = calculateAnnualContractualHours(timeEntry)
           const timeStarted = Object.values(timeEntry).some(
@@ -253,6 +281,29 @@ export function OfferComparisonInputs() {
                 commuteResult.state !== 'calculated' && (
                   <p role="alert">{commuteResult.reason}</p>
                 )}
+              <div className="np-field">
+                <label htmlFor={id + '-one-way-minutes'}>
+                  {label} one-way commute (minutes)
+                </label>
+                <input
+                  id={id + '-one-way-minutes'}
+                  type="text"
+                  inputMode="numeric"
+                  value={oneWayMinutes[side]}
+                  onChange={(event) => {
+                    const value = event.target.value
+                    setOneWayMinutes((current) =>
+                      side === 0 ? [value, current[1]] : [current[0], value],
+                    )
+                    setChecked(false)
+                  }}
+                />
+              </div>
+              {checked &&
+                oneWayMinutes[side] !== '' &&
+                commuteTimeResult.state !== 'calculated' && (
+                  <p role="alert">{commuteTimeResult.reason}</p>
+                )}
               <div className="offer-actions">
                 <button
                   type="button"
@@ -271,6 +322,9 @@ export function OfferComparisonInputs() {
                     setExtra(side, emptyAdditionalPay())
                     setWorkingEntry(side, blankWorkingTime())
                     setCommuteEntry(side, blankCommuteCostEntry())
+                    setOneWayMinutes((current) =>
+                      side === 0 ? ['', current[1]] : [current[0], ''],
+                    )
                   }}
                 >
                   Clear {label}
@@ -282,6 +336,10 @@ export function OfferComparisonInputs() {
       </div>
       <VacationComparison offerA={working[0]} offerB={working[1]} />
       <CommuteCostComparison offerA={commuteFor(0)} offerB={commuteFor(1)} />
+      <CommuteTimeComparison
+        offerA={commuteTimeFor(0)}
+        offerB={commuteTimeFor(1)}
+      />
       <div className="offer-review">
         <button
           className="np-button-primary"

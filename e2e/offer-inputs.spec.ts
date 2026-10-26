@@ -118,3 +118,48 @@ test('vacation comparison updates for two independently editable schedules', asy
   await page.getByRole('button', { name: 'Clear Offer B' }).click()
   await expect(page.getByText(/Vacation comparison unavailable/)).toBeVisible()
 })
+
+test('commute costs require user-entered categories and respect paid leave', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 900 })
+  await page.goto('./')
+  await expect(
+    page.getByText(/Annual commute cost comparison unavailable/),
+  ).toBeVisible()
+  for (const side of ['Offer A', 'Offer B']) {
+    await page
+      .getByRole('combobox', { name: side + ' working days per week' })
+      .selectOption('5')
+    await page
+      .getByRole('textbox', { name: side + ' paid vacation days per year' })
+      .fill('30')
+    await page
+      .getByRole('combobox', { name: side + ' office days per week' })
+      .selectOption('3')
+    for (const category of [
+      'public transport',
+      'fuel',
+      'parking',
+      'other costs',
+    ]) {
+      await page
+        .getByRole('textbox', {
+          name: side + ' ' + category + ' per office day (EUR)',
+        })
+        .fill(category === 'public transport' ? '4.20' : '0')
+    }
+  }
+  await expect(
+    page.getByText(/Annual commute difference \(B − A\)/),
+  ).toBeVisible()
+  await expect(page.getByText(/€0.00/)).toBeVisible()
+  const width = await page.evaluate(
+    () => document.documentElement.scrollWidth,
+  )
+  expect(width).toBeLessThanOrEqual(375)
+  await page.getByRole('button', { name: 'Clear Offer B' }).click()
+  await expect(
+    page.getByText(/Annual commute cost comparison unavailable/),
+  ).toBeVisible()
+})

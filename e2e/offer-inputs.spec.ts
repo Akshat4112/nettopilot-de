@@ -154,9 +154,7 @@ test('commute costs require user-entered categories and respect paid leave', asy
     page.getByText(/Annual commute difference \(B − A\)/),
   ).toBeVisible()
   await expect(page.getByText(/€0.00/)).toBeVisible()
-  const width = await page.evaluate(
-    () => document.documentElement.scrollWidth,
-  )
+  const width = await page.evaluate(() => document.documentElement.scrollWidth)
   expect(width).toBeLessThanOrEqual(375)
   await page.getByRole('button', { name: 'Clear Offer B' }).click()
   await expect(

@@ -41,14 +41,14 @@ export function CommuteTimeComparison({
             {formatHours(result.bMinusAHoursHundredths)} hours.
           </p>
           <p>
-            Travel time is not a salary deduction and has no invented euro
-            value in this comparison.
+            Travel time is not a salary deduction and has no invented euro value
+            in this comparison.
           </p>
         </>
       ) : (
         <p>
-          Annual commute time unavailable. Enter workdays, office days,
-          paid vacation and one-way commute minutes for both offers.
+          Annual commute time unavailable. Enter workdays, office days, paid
+          vacation and one-way commute minutes for both offers.
           {result.offerA === 'invalid' ? ' Review Offer A.' : ''}
           {result.offerB === 'invalid' ? ' Review Offer B.' : ''}
         </p>

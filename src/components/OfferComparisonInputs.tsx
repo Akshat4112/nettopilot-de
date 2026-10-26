@@ -1,5 +1,12 @@
 import { useState } from 'react'
 import { OfferAdditionalPayInputs } from './OfferAdditionalPayInputs'
+import { OfferWorkingTimeInputs } from './OfferWorkingTimeInputs'
+import { VacationComparison } from './VacationComparison'
+import {
+  blankWorkingTime,
+  calculateAnnualContractualHours,
+  type WorkingTimeEntry,
+} from '../domain/comparison/working-time'
 import {
   applyAdditionalPay,
   emptyAdditionalPay,
@@ -19,9 +26,23 @@ export function OfferComparisonInputs() {
     readonly [OfferSalaryEntry, OfferSalaryEntry]
   >([blank(), blank()])
   const [checked, setChecked] = useState(false)
+  const [working, setWorking] = useState<
+    readonly [WorkingTimeEntry, WorkingTimeEntry]
+  >([blankWorkingTime(), blankWorkingTime()])
   const [additional, setAdditional] = useState<
     readonly [AdditionalPayEntry, AdditionalPayEntry]
   >([emptyAdditionalPay(), emptyAdditionalPay()])
+
+  const setWorking = (side: 0 | 1, next: WorkingTimeEntry) => {
+    setWorkingEntry(side, next)
+  }
+
+  const setWorkingEntry = (side: 0 | 1, next: WorkingTimeEntry) => {
+    setWorking((current) =>
+      side === 0 ? [next, current[1]] : [current[0], next],
+    )
+    setChecked(false)
+  }
 
   const setExtra = (side: 0 | 1, next: AdditionalPayEntry) => {
     setAdditional((current) =>
@@ -48,14 +69,24 @@ export function OfferComparisonInputs() {
         ? [{ ...previous[1] }, previous[1]]
         : [previous[0], { ...previous[0] }],
     )
+    setWorking((previous) =>
+      target === 0
+        ? [{ ...previous[1] }, previous[1]]
+        : [previous[0], { ...previous[0] }],
+    )
     setChecked(false)
   }
   const validation = offers.map(validateOfferSalary)
   const extrasValid = additional.every(
     (entry) => validateAdditionalPay(entry).length === 0,
   )
+  const workingValid = working.every((entry) => {
+    const empty = Object.values(entry).every((value) => value === '')
+    return empty || calculateAnnualContractualHours(entry).state === 'calculated'
+  })
   const accepted =
-    extrasValid && validation.every((result) => result.state === 'valid')
+    extrasValid && workingValid &&
+    validation.every((result) => result.state === 'valid')
   const model = applyAdditionalPay(
     buildOfferPairFromEntries(offers[0], offers[1]),
     additional,
@@ -83,6 +114,9 @@ export function OfferComparisonInputs() {
           const issue = validateOfferSalary(entry)
           const extra = additional[side]
           const extraProblems = validateAdditionalPay(extra)
+          const timeEntry = working[side]
+          const timeResult = calculateAnnualContractualHours(timeEntry)
+          const timeStarted = Object.values(timeEntry).some((value) => value !== '')
           const showIssue = checked && issue.state !== 'valid'
           return (
             <fieldset className="offer-card" key={id}>
@@ -140,6 +174,17 @@ export function OfferComparisonInputs() {
                   ))}
                 </div>
               )}
+              <OfferWorkingTimeInputs
+                id={id}
+                label={label}
+                value={timeEntry}
+                onChange={(next) => {
+                  setWorking(side, next)
+                }}
+              />
+              {checked && timeStarted && timeResult.state !== 'calculated' && (
+                <p role="alert">{timeResult.reason}</p>
+              )}
               <div className="offer-actions">
                 <button
                   type="button"
@@ -156,6 +201,7 @@ export function OfferComparisonInputs() {
                   onClick={() => {
                     setEntry(side, blank())
                     setExtra(side, emptyAdditionalPay())
+                    setWorking(side, blankWorkingTime())
                   }}
                 >
                   Clear {label}
@@ -165,6 +211,7 @@ export function OfferComparisonInputs() {
           )
         })}
       </div>
+      <VacationComparison offerA={working[0]} offerB={working[1]} />
       <div className="offer-review">
         <button
           className="np-button-primary"

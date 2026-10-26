@@ -1,4 +1,8 @@
-import type { DecimalString, RegistryOptionId, ScenarioLabel } from '../domain/salary/types'
+import type {
+  DecimalString,
+  RegistryOptionId,
+  ScenarioLabel,
+} from '../domain/salary/types'
 import type {
   OfferComparisonDraft,
   OfferSide,
@@ -38,7 +42,9 @@ export const validateAdditionalPay = (
   ] as const) {
     if (value === '') continue
     if (!amountPattern.test(value)) {
-      issues.push(label + ' must be a positive EUR amount with up to two decimals.')
+      issues.push(
+        label + ' must be a positive EUR amount with up to two decimals.',
+      )
       continue
     }
     const [whole = '0', fraction = ''] = value.split('.')
@@ -91,8 +97,9 @@ export const applyAdditionalPay = (
                 {
                   amount: asEuro(entry.oneOffEur),
                   paymentMonth: Number(entry.oneOffMonth) as
-                    | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
-                  classification: entry.oneOffClassification as RegistryOptionId,
+                    1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
+                  classification:
+                    entry.oneOffClassification as RegistryOptionId,
                   guarantee: entry.oneOffGuarantee,
                   label: 'User-entered one-time payment' as ScenarioLabel,
                 },

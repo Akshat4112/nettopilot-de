@@ -63,18 +63,36 @@ describe('NP-CMP-004 standard working-time estimate', () => {
       state: 'provided',
       value: 4,
     })
-    expect(data.offers[1].workingTime.overtimeHoursAnnual.state).toBe(
-      'unknown',
-    )
+    expect(data.offers[1].workingTime.overtimeHoursAnnual.state).toBe('unknown')
   })
 
   it('rejects impossible work and leave conventions', () => {
     for (const input of [
-      { weeklyHours: '0', workingDaysPerWeek: '5', paidVacationDaysAnnual: '25' },
-      { weeklyHours: '85', workingDaysPerWeek: '5', paidVacationDaysAnnual: '25' },
-      { weeklyHours: '40', workingDaysPerWeek: '0', paidVacationDaysAnnual: '25' },
-      { weeklyHours: '40', workingDaysPerWeek: '5', paidVacationDaysAnnual: '261' },
-      { weeklyHours: '40.123', workingDaysPerWeek: '5', paidVacationDaysAnnual: '25' },
+      {
+        weeklyHours: '0',
+        workingDaysPerWeek: '5',
+        paidVacationDaysAnnual: '25',
+      },
+      {
+        weeklyHours: '85',
+        workingDaysPerWeek: '5',
+        paidVacationDaysAnnual: '25',
+      },
+      {
+        weeklyHours: '40',
+        workingDaysPerWeek: '0',
+        paidVacationDaysAnnual: '25',
+      },
+      {
+        weeklyHours: '40',
+        workingDaysPerWeek: '5',
+        paidVacationDaysAnnual: '261',
+      },
+      {
+        weeklyHours: '40.123',
+        workingDaysPerWeek: '5',
+        paidVacationDaysAnnual: '25',
+      },
     ]) {
       expect(calculateAnnualContractualHours(input).state).toBe('invalid')
     }

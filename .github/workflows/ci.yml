@@ -38,16 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-
-      - name: Temporary NP-CMP-007 formatting inspection
-        run: |
-          npx --no-install prettier --write src/components/CommuteTimeComparison.test.tsx src/components/CommuteTimeComparison.tsx src/components/OfferComparisonInputs.tsx src/domain/comparison/commute-time.ts e2e/offer-inputs.spec.ts
-          node <<'NODE'
-          const fs = require('node:fs')
-          for (const p of ["src/components/CommuteTimeComparison.test.tsx","src/components/CommuteTimeComparison.tsx","src/components/OfferComparisonInputs.tsx","src/domain/comparison/commute-time.ts","e2e/offer-inputs.spec.ts"]) {
-            console.log('FORMATTED_FILE::' + p + '::' + JSON.stringify(fs.readFileSync(p, 'utf8')))
-          }
-          NODE
       - name: Check formatting
         run: npm run format:check
 

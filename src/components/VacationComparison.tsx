@@ -14,7 +14,7 @@ function ComparisonNumbers({ result }: { readonly result: Extract<VacationResult
   const difference = result.vacationDifferenceBMinusA
   return (
     <>
-      <p role="status">
+      <p>
         Paid vacation difference (B − A): {difference > 0 ? '+' : ''}
         {difference} days per year.
       </p>

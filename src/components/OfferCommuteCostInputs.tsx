@@ -28,9 +28,9 @@ export function OfferCommuteCostInputs({
     <div className="offer-commute-inputs">
       <h3>Commute costs</h3>
       <p>
-        Enter costs per office day. Use 0 for a confirmed free category;
-        leave unknown amounts blank. Paid vacation and workdays are shared
-        with this offer’s working-time inputs.
+        Enter costs per office day. Use 0 for a confirmed free category; leave
+        unknown amounts blank. Paid vacation and workdays are shared with this
+        offer’s working-time inputs.
       </p>
       <div className="np-field">
         <label htmlFor={id + '-office-days'}>

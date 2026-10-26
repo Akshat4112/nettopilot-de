@@ -1,4 +1,11 @@
 import { useState } from 'react'
+import { OfferAdditionalPayInputs } from './OfferAdditionalPayInputs'
+import {
+  applyAdditionalPay,
+  emptyAdditionalPay,
+  validateAdditionalPay,
+  type AdditionalPayEntry,
+} from './offer-additional-pay'
 import {
   buildOfferPairFromEntries,
   validateOfferSalary,
@@ -12,6 +19,16 @@ export function OfferComparisonInputs() {
     readonly [OfferSalaryEntry, OfferSalaryEntry]
   >([blank(), blank()])
   const [checked, setChecked] = useState(false)
+  const [additional, setAdditional] = useState<
+    readonly [AdditionalPayEntry, AdditionalPayEntry]
+  >([emptyAdditionalPay(), emptyAdditionalPay()])
+
+  const setExtra = (side: 0 | 1, next: AdditionalPayEntry) => {
+    setAdditional((current) =>
+      side === 0 ? [next, current[1]] : [current[0], next],
+    )
+    setChecked(false)
+  }
 
   const setEntry = (side: 0 | 1, next: OfferSalaryEntry) => {
     setOffers((previous) =>
@@ -26,11 +43,23 @@ export function OfferComparisonInputs() {
         ? [{ ...previous[1] }, previous[1]]
         : [previous[0], { ...previous[0] }],
     )
+    setAdditional((previous) =>
+      target === 0
+        ? [{ ...previous[1] }, previous[1]]
+        : [previous[0], { ...previous[0] }],
+    )
     setChecked(false)
   }
   const validation = offers.map(validateOfferSalary)
-  const accepted = validation.every((result) => result.state === 'valid')
-  const model = buildOfferPairFromEntries(offers[0], offers[1])
+  const extrasValid = additional.every(
+    (entry) => validateAdditionalPay(entry).length === 0,
+  )
+  const accepted =
+    extrasValid && validation.every((result) => result.state === 'valid')
+  const model = applyAdditionalPay(
+    buildOfferPairFromEntries(offers[0], offers[1]),
+    additional,
+  )
   const dataIsAdmitted = model.offers.every(
     (offer) => offer.compensation.baseSalary.state === 'provided',
   )
@@ -52,6 +81,8 @@ export function OfferComparisonInputs() {
           const id = side === 0 ? 'offer-a' : 'offer-b'
           const label = side === 0 ? 'Offer A' : 'Offer B'
           const issue = validateOfferSalary(entry)
+          const extra = additional[side]
+          const extraProblems = validateAdditionalPay(extra)
           const showIssue = checked && issue.state !== 'valid'
           return (
             <fieldset className="offer-card" key={id}>
@@ -94,6 +125,21 @@ export function OfferComparisonInputs() {
                   <option value="monthly">Monthly</option>
                 </select>
               </div>
+              <OfferAdditionalPayInputs
+                id={id}
+                label={label}
+                value={extra}
+                onChange={(next) => {
+                  setExtra(side, next)
+                }}
+              />
+              {checked && extraProblems.length > 0 && (
+                <div role="alert">
+                  {extraProblems.map((problem) => (
+                    <p key={problem}>{problem}</p>
+                  ))}
+                </div>
+              )}
               <div className="offer-actions">
                 <button
                   type="button"
@@ -109,6 +155,7 @@ export function OfferComparisonInputs() {
                   className="np-button-secondary"
                   onClick={() => {
                     setEntry(side, blank())
+                    setExtra(side, emptyAdditionalPay())
                   }}
                 >
                   Clear {label}
@@ -137,8 +184,8 @@ export function OfferComparisonInputs() {
         )}
         {checked && !accepted && (
           <p role="status">
-            Complete both offer inputs to continue. Unknown inputs are not
-            treated as zero.
+            Complete or correct the offer inputs to continue. Unknown inputs are
+            not treated as zero.
           </p>
         )}
       </div>

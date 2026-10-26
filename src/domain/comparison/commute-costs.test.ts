@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  blankCommuteCostEntry,
-  calculateCommuteCosts,
-} from './commute-costs'
+import { blankCommuteCostEntry, calculateCommuteCosts } from './commute-costs'
 
 const entry = () => ({
   workingDaysPerWeek: '5',

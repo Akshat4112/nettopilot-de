@@ -67,7 +67,7 @@ export function VacationComparison({
       {result.state === 'comparable' ? (
         <ComparisonNumbers result={result} />
       ) : (
-        <p role="status">
+        <p>
           Vacation comparison unavailable. Enter valid weekly hours, working
           days per week and paid vacation days for both offers.
           {result.offerA === 'invalid' ? ' Review Offer A.' : ''}

@@ -39,16 +39,6 @@ jobs:
         run: npm ci
 
 
-      - name: Temporary format diagnostic for CMP-003
-        run: |
-          npx --no-install prettier --write src/components/offer-additional-pay.test.ts src/components/offer-additional-pay.ts src/components/OfferAdditionalPayInputs.tsx src/components/OfferComparisonInputs.test.tsx src/components/OfferComparisonInputs.tsx e2e/offer-inputs.spec.ts
-          node <<'NODE'
-          const fs = require('node:fs')
-          for (const p of ["src/components/offer-additional-pay.test.ts","src/components/offer-additional-pay.ts","src/components/OfferAdditionalPayInputs.tsx","src/components/OfferComparisonInputs.test.tsx","src/components/OfferComparisonInputs.tsx","e2e/offer-inputs.spec.ts"]) {
-            console.log('FORMATTED_FILE::' + p + '::' + JSON.stringify(fs.readFileSync(p, 'utf8')))
-          }
-          NODE
-
       - name: Check formatting
         run: npm run format:check
 

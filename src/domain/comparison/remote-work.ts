@@ -136,6 +136,7 @@ export const attachRemoteWork = (
       arrangement: value.arrangement,
       remoteDaysPerWeek: toInput(value.remoteDaysPerWeek),
       homeOfficeCostMonthly: toEuroInput(value.homeOfficeCostMonthlyCents),
+      employerAllowanceMonthly: toEuroInput(value.employerAllowanceMonthlyCents),
     }
   }
   return {

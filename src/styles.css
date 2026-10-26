@@ -732,3 +732,55 @@ main {
   font-size: 0.875rem;
   line-height: 1.5;
 }
+
+.offer-working-time {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-4);
+}
+
+.offer-working-time h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.offer-working-time p {
+  margin: 0;
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.vacation-comparison {
+  margin-top: var(--np-space-6);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.vacation-comparison h3 {
+  margin-top: 0;
+}
+
+.vacation-comparison-values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: var(--np-space-3);
+}
+
+.vacation-comparison-values > div {
+  min-width: 0;
+}
+
+.vacation-comparison-values dt,
+.vacation-method {
+  color: var(--np-color-muted);
+}
+
+.vacation-comparison-values dd {
+  margin: var(--np-space-1) 0 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

@@ -61,7 +61,9 @@ describe('NP-CMP-002 offer salary inputs', () => {
   it('copies and clears optional variable and one-time compensation independently', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
     await user.type(
-      screen.getByRole('textbox', { name: 'Offer A expected annual variable pay (EUR)' }),
+      screen.getByRole('textbox', {
+        name: 'Offer A expected annual variable pay (EUR)',
+      }),
       '4500.50',
     )
     await user.type(
@@ -76,7 +78,9 @@ describe('NP-CMP-002 offer salary inputs', () => {
       screen.getByRole('button', { name: 'Copy Offer A to Offer B' }),
     )
     expect(
-      screen.getByRole('textbox', { name: 'Offer B expected annual variable pay (EUR)' }),
+      screen.getByRole('textbox', {
+        name: 'Offer B expected annual variable pay (EUR)',
+      }),
     ).toHaveValue('4500.50')
     expect(
       screen.getByRole('combobox', { name: 'Offer B one-time payment month' }),
@@ -92,9 +96,13 @@ describe('NP-CMP-002 offer salary inputs', () => {
 
   it('requires a payment month when a one-time payment is entered', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
-    await user.type(screen.getByRole('textbox', { name: 'Offer A one-time payment (EUR)' }), '500')
+    await user.type(
+      screen.getByRole('textbox', { name: 'Offer A one-time payment (EUR)' }),
+      '500',
+    )
     await user.click(screen.getByRole('button', { name: 'Check both offers' }))
-    expect(screen.getByText('Choose the payment month for the one-time payment.')).toBeInTheDocument()
+    expect(
+      screen.getByText('Choose the payment month for the one-time payment.'),
+    ).toBeInTheDocument()
   })
-
 })

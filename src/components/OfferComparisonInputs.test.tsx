@@ -134,5 +134,4 @@ describe('NP-CMP-002 offer salary inputs', () => {
     ).toHaveValue('')
     expect(transportA).toHaveValue('4.20')
   })
-
 })

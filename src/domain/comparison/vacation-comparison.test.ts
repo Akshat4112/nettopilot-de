@@ -4,21 +4,41 @@ import { blankWorkingTime } from './working-time'
 
 describe('NP-CMP-005 vacation comparison', () => {
   it('does not fabricate a difference from missing or invalid time inputs', () => {
-    expect(compareVacation(blankWorkingTime(), blankWorkingTime())).toMatchObject({
+    expect(
+      compareVacation(blankWorkingTime(), blankWorkingTime()),
+    ).toMatchObject({
       state: 'unavailable',
       offerA: 'incomplete',
       offerB: 'incomplete',
     })
-    expect(compareVacation(
-      { weeklyHours: '40', workingDaysPerWeek: '5', paidVacationDaysAnnual: '20' },
-      { weeklyHours: '40', workingDaysPerWeek: '5', paidVacationDaysAnnual: '261' },
-    )).toMatchObject({ state: 'unavailable', offerB: 'invalid' })
+    expect(
+      compareVacation(
+        {
+          weeklyHours: '40',
+          workingDaysPerWeek: '5',
+          paidVacationDaysAnnual: '20',
+        },
+        {
+          weeklyHours: '40',
+          workingDaysPerWeek: '5',
+          paidVacationDaysAnnual: '261',
+        },
+      ),
+    ).toMatchObject({ state: 'unavailable', offerB: 'invalid' })
   })
 
   it('compares paid vacation days and its annual-hours denominator', () => {
     const result = compareVacation(
-      { weeklyHours: '40', workingDaysPerWeek: '5', paidVacationDaysAnnual: '20' },
-      { weeklyHours: '40', workingDaysPerWeek: '5', paidVacationDaysAnnual: '30' },
+      {
+        weeklyHours: '40',
+        workingDaysPerWeek: '5',
+        paidVacationDaysAnnual: '20',
+      },
+      {
+        weeklyHours: '40',
+        workingDaysPerWeek: '5',
+        paidVacationDaysAnnual: '30',
+      },
     )
     expect(result).toEqual({
       state: 'comparable',
@@ -35,8 +55,16 @@ describe('NP-CMP-005 vacation comparison', () => {
 
   it('compares distinct workweeks without treating leave as cash', () => {
     const result = compareVacation(
-      { weeklyHours: '37.5', workingDaysPerWeek: '5', paidVacationDaysAnnual: '25' },
-      { weeklyHours: '40', workingDaysPerWeek: '4', paidVacationDaysAnnual: '20' },
+      {
+        weeklyHours: '37.5',
+        workingDaysPerWeek: '5',
+        paidVacationDaysAnnual: '25',
+      },
+      {
+        weeklyHours: '40',
+        workingDaysPerWeek: '4',
+        paidVacationDaysAnnual: '20',
+      },
     )
     expect(result).toMatchObject({
       state: 'comparable',
@@ -48,7 +76,11 @@ describe('NP-CMP-005 vacation comparison', () => {
   })
 
   it('preserves equality at zero leave and equal schedules', () => {
-    const entry = { weeklyHours: '30', workingDaysPerWeek: '4', paidVacationDaysAnnual: '0' }
+    const entry = {
+      weeklyHours: '30',
+      workingDaysPerWeek: '4',
+      paidVacationDaysAnnual: '0',
+    }
     expect(compareVacation(entry, entry)).toMatchObject({
       state: 'comparable',
       vacationDifferenceBMinusA: 0,

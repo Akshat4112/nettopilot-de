@@ -38,6 +38,16 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+
+      - name: Temporary CMP-004 formatter inspection
+        run: |
+          npx --no-install prettier --write src/domain/comparison/working-time.ts src/domain/comparison/working-time.test.ts
+          node <<'NODE'
+          const fs = require('node:fs')
+          for (const p of ["src/domain/comparison/working-time.ts","src/domain/comparison/working-time.test.ts"]) {
+            console.log('FORMATTED_FILE::' + p + '::' + JSON.stringify(fs.readFileSync(p, 'utf8')))
+          }
+          NODE
       - name: Check formatting
         run: npm run format:check
 

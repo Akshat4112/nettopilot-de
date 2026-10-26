@@ -58,7 +58,17 @@ const halfUp = (numerator: bigint, denominator: bigint): bigint =>
 export const calculateCommuteCosts = (
   entry: CommuteCostEntry,
 ): CommuteCostResult => {
-  if (Object.values(entry).some((value) => value.trim() === ''))
+  if (
+    [
+      entry.workingDaysPerWeek,
+      entry.officeDaysPerWeek,
+      entry.paidVacationDaysAnnual,
+      entry.publicTransportPerOfficeDayEur,
+      entry.fuelPerOfficeDayEur,
+      entry.parkingPerOfficeDayEur,
+      entry.otherPerOfficeDayEur,
+    ].some((value) => value.trim() === '')
+  )
     return {
       state: 'incomplete',
       reason:

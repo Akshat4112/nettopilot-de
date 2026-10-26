@@ -15,8 +15,8 @@ export function OfferWorkingTimeInputs({
     <div className="offer-working-time">
       <h3>Working time and vacation</h3>
       <p>
-        Optional, contractual terms. No public holidays or overtime are
-        deducted from the standardized 52-week estimate.
+        Optional, contractual terms. No public holidays or overtime are deducted
+        from the standardized 52-week estimate.
       </p>
       <div className="np-field">
         <label htmlFor={id + '-weekly-hours'}>

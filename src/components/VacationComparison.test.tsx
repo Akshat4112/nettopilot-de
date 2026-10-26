@@ -18,8 +18,16 @@ describe('NP-CMP-005 vacation display', () => {
   it('explains the time denominator, but not fictitious cash value', () => {
     render(
       <VacationComparison
-        offerA={{ weeklyHours: '40', workingDaysPerWeek: '5', paidVacationDaysAnnual: '20' }}
-        offerB={{ weeklyHours: '40', workingDaysPerWeek: '5', paidVacationDaysAnnual: '30' }}
+        offerA={{
+          weeklyHours: '40',
+          workingDaysPerWeek: '5',
+          paidVacationDaysAnnual: '20',
+        }}
+        offerB={{
+          weeklyHours: '40',
+          workingDaysPerWeek: '5',
+          paidVacationDaysAnnual: '30',
+        }}
       />,
     )
     expect(screen.getByText(/difference \(B − A\): \+10 days/)).toBeVisible()

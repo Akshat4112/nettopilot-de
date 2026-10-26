@@ -184,8 +184,8 @@ export function OfferComparisonInputs() {
         )}
         {checked && !accepted && (
           <p role="status">
-            Complete or correct the offer inputs to continue. Unknown amounts
-            are not treated as zero.
+            Complete or correct the offer inputs to continue. Unknown inputs are not
+            treated as zero.
           </p>
         )}
       </div>

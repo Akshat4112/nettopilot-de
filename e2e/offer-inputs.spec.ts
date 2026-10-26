@@ -51,7 +51,9 @@ test('variable and one-time pay stay separate and require an explicit month', as
 }) => {
   await page.goto('./')
   await page
-    .getByRole('textbox', { name: 'Offer A expected annual variable pay (EUR)' })
+    .getByRole('textbox', {
+      name: 'Offer A expected annual variable pay (EUR)',
+    })
     .fill('5000.25')
   await page
     .getByRole('textbox', { name: 'Offer A one-time payment (EUR)' })
@@ -68,7 +70,9 @@ test('variable and one-time pay stay separate and require an explicit month', as
     .selectOption('guaranteed')
   await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
   await expect(
-    page.getByRole('textbox', { name: 'Offer B expected annual variable pay (EUR)' }),
+    page.getByRole('textbox', {
+      name: 'Offer B expected annual variable pay (EUR)',
+    }),
   ).toHaveValue('5000.25')
   await expect(
     page.getByRole('combobox', { name: 'Offer B one-time payment certainty' }),

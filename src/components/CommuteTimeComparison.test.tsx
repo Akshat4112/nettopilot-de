@@ -78,5 +78,4 @@ describe('NP-CMP-007 annual commute time display', () => {
     expect(screen.getByText(/Review Offer B\./)).toBeVisible()
     expect(screen.queryByText(/Review Offer A\./)).not.toBeInTheDocument()
   })
-
 })

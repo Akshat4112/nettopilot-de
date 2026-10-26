@@ -10,7 +10,11 @@ const hours = (hundredths: number) =>
     maximumFractionDigits: 2,
   })
 
-function ComparisonNumbers({ result }: { readonly result: Extract<VacationResult, { state: 'comparable' }> }) {
+function ComparisonNumbers({
+  result,
+}: {
+  readonly result: Extract<VacationResult, { state: 'comparable' }>
+}) {
   const difference = result.vacationDifferenceBMinusA
   return (
     <>
@@ -42,9 +46,9 @@ function ComparisonNumbers({ result }: { readonly result: Extract<VacationResult
         {hours(result.annualHoursDifferenceBMinusA)} hours per year.
       </p>
       <p>
-        Paid vacation changes each offer’s annual-hours denominator, which
-        can affect effective hourly compensation. Net per hour remains
-        unavailable until both offers have validated payroll results.
+        Paid vacation changes each offer’s annual-hours denominator, which can
+        affect effective hourly compensation. Net per hour remains unavailable
+        until both offers have validated payroll results.
       </p>
     </>
   )
@@ -75,9 +79,9 @@ export function VacationComparison({
         </p>
       )}
       <p className="vacation-method">
-        Basis: 52 calendar weeks minus paid leave at the stated working
-        days per week. Public holidays, sickness, overtime and unpaid leave
-        are excluded. No cash value is assigned to vacation days.
+        Basis: 52 calendar weeks minus paid leave at the stated working days per
+        week. Public holidays, sickness, overtime and unpaid leave are excluded.
+        No cash value is assigned to vacation days.
       </p>
     </section>
   )

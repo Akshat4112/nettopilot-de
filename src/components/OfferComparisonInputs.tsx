@@ -33,10 +33,6 @@ export function OfferComparisonInputs() {
     readonly [AdditionalPayEntry, AdditionalPayEntry]
   >([emptyAdditionalPay(), emptyAdditionalPay()])
 
-  const setWorking = (side: 0 | 1, next: WorkingTimeEntry) => {
-    setWorkingEntry(side, next)
-  }
-
   const setWorkingEntry = (side: 0 | 1, next: WorkingTimeEntry) => {
     setWorking((current) =>
       side === 0 ? [next, current[1]] : [current[0], next],
@@ -179,7 +175,7 @@ export function OfferComparisonInputs() {
                 label={label}
                 value={timeEntry}
                 onChange={(next) => {
-                  setWorking(side, next)
+                  setWorkingEntry(side, next)
                 }}
               />
               {checked && timeStarted && timeResult.state !== 'calculated' && (
@@ -201,7 +197,7 @@ export function OfferComparisonInputs() {
                   onClick={() => {
                     setEntry(side, blank())
                     setExtra(side, emptyAdditionalPay())
-                    setWorking(side, blankWorkingTime())
+                    setWorkingEntry(side, blankWorkingTime())
                   }}
                 >
                   Clear {label}

@@ -1,7 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { CommuteTimeComparison } from './CommuteTimeComparison'
-import { blankCommuteTime, type CommuteTimeEntry } from '../domain/comparison/commute-time'
+import {
+  blankCommuteTime,
+  type CommuteTimeEntry,
+} from '../domain/comparison/commute-time'
 
 const entry = (): CommuteTimeEntry => ({
   workingDaysPerWeek: '5',
@@ -13,13 +16,12 @@ const entry = (): CommuteTimeEntry => ({
 describe('NP-CMP-007 annual commute time display', () => {
   it('keeps unknown commute time unavailable', () => {
     render(
-      <CommuteTimeComparison
-        offerA={entry()}
-        offerB={blankCommuteTime()}
-      />,
+      <CommuteTimeComparison offerA={entry()} offerB={blankCommuteTime()} />,
     )
     expect(screen.getByText(/Annual commute time unavailable/)).toBeVisible()
-    expect(screen.queryByText(/Annual commute time difference/)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Annual commute time difference/),
+    ).not.toBeInTheDocument()
   })
 
   it('explains the round-trip time basis without converting hours to salary', () => {

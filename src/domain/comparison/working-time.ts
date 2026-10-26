@@ -53,7 +53,8 @@ export const calculateAnnualContractualHours = (
   )
     return {
       state: 'incomplete',
-      reason: 'Enter weekly hours, working days per week and paid vacation days.',
+      reason:
+        'Enter weekly hours, working days per week and paid vacation days.',
     }
   if (
     !/^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/.test(entry.weeklyHours) ||
@@ -62,7 +63,8 @@ export const calculateAnnualContractualHours = (
   )
     return {
       state: 'invalid',
-      reason: 'Enter valid positive weekly hours, 1–7 working days and whole vacation days.',
+      reason:
+        'Enter valid positive weekly hours, 1–7 working days and whole vacation days.',
     }
 
   const [hours = '0', fraction = ''] = entry.weeklyHours.split('.')
@@ -73,11 +75,11 @@ export const calculateAnnualContractualHours = (
   if (hundredths < 1n || hundredths > 8_400n || vacation > totalDays)
     return {
       state: 'invalid',
-      reason: 'Weekly hours must be at most 84, and vacation cannot exceed working days in 52 weeks.',
+      reason:
+        'Weekly hours must be at most 84, and vacation cannot exceed working days in 52 weeks.',
     }
   const workingHundredths =
-    (hundredths * (totalDays - vacation) + BigInt(days) / 2n) /
-    BigInt(days)
+    (hundredths * (totalDays - vacation) + BigInt(days) / 2n) / BigInt(days)
   return {
     state: 'calculated',
     annualContractualHoursHundredths: Number(workingHundredths),
@@ -119,13 +121,11 @@ export const attachWorkingTime = (
     offers: [
       {
         ...draft.offers[0],
-        workingTime:
-          workingTimeToDomain(a) ?? draft.offers[0].workingTime,
+        workingTime: workingTimeToDomain(a) ?? draft.offers[0].workingTime,
       },
       {
         ...draft.offers[1],
-        workingTime:
-          workingTimeToDomain(b) ?? draft.offers[1].workingTime,
+        workingTime: workingTimeToDomain(b) ?? draft.offers[1].workingTime,
       },
     ],
   }

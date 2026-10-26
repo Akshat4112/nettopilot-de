@@ -12,7 +12,10 @@ export function OfferAdditionalPayInputs({
   readonly onChange: (next: AdditionalPayEntry) => void
 }) {
   return (
-    <div className="offer-extra" aria-label={label + ' additional compensation'}>
+    <div
+      className="offer-extra"
+      aria-label={label + ' additional compensation'}
+    >
       <h3>Additional compensation</h3>
       <p>
         Optional amounts are not guaranteed take-home pay. Expected variable
@@ -90,7 +93,8 @@ export function OfferAdditionalPayInputs({
           onChange={(event) => {
             onChange({
               ...value,
-              oneOffClassification: event.target.value as AdditionalPayEntry['oneOffClassification'],
+              oneOffClassification: event.target
+                .value as AdditionalPayEntry['oneOffClassification'],
             })
           }}
         >

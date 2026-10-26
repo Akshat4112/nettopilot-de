@@ -50,6 +50,7 @@ export interface OfferRemoteWork {
   readonly arrangement: 'onsite' | 'hybrid' | 'remote' | 'unknown'
   readonly remoteDaysPerWeek: OfferInput<number>
   readonly homeOfficeCostMonthly: OfferInput<EuroAmount>
+  readonly employerAllowanceMonthly: OfferInput<EuroAmount>
 }
 
 export interface OfferCommute {
@@ -125,6 +126,7 @@ const emptySide = (id: 'offer_a' | 'offer_b'): OfferSide => ({
     arrangement: 'unknown',
     remoteDaysPerWeek: unknown<number>(),
     homeOfficeCostMonthly: unknown<EuroAmount>(),
+    employerAllowanceMonthly: unknown<EuroAmount>(),
   },
   commute: {
     oneWayDistanceKm: unknown<number>(),

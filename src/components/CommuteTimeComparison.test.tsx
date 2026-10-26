@@ -47,4 +47,36 @@ describe('NP-CMP-007 annual commute time display', () => {
     )
     expect(screen.getByText(/Review Offer A\. Review Offer B\./)).toBeVisible()
   })
+
+  it('marks a positive B-minus-A commute time difference explicitly', () => {
+    render(
+      <CommuteTimeComparison
+        offerA={{ ...entry(), oneWayMinutes: '20' }}
+        offerB={entry()}
+      />,
+    )
+    expect(
+      screen.getByText(/Annual commute time difference \(B − A\): \+/),
+    ).toBeVisible()
+  })
+
+  it('labels only the offer with an invalid commute schedule', () => {
+    const { rerender } = render(
+      <CommuteTimeComparison
+        offerA={{ ...entry(), officeDaysPerWeek: '7' }}
+        offerB={entry()}
+      />,
+    )
+    expect(screen.getByText(/Review Offer A\./)).toBeVisible()
+    expect(screen.queryByText(/Review Offer B\./)).not.toBeInTheDocument()
+    rerender(
+      <CommuteTimeComparison
+        offerA={entry()}
+        offerB={{ ...entry(), oneWayMinutes: '721' }}
+      />,
+    )
+    expect(screen.getByText(/Review Offer B\./)).toBeVisible()
+    expect(screen.queryByText(/Review Offer A\./)).not.toBeInTheDocument()
+  })
+
 })

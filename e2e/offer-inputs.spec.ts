@@ -82,3 +82,39 @@ test('variable and one-time pay stay separate and require an explicit month', as
     page.getByRole('textbox', { name: 'Offer A one-time payment (EUR)' }),
   ).toHaveValue('1200')
 })
+
+test('vacation comparison updates for two independently editable schedules', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 900 })
+  await page.goto('./')
+  await expect(page.getByText(/Vacation comparison unavailable/)).toBeVisible()
+  for (const side of ['Offer A', 'Offer B']) {
+    await page
+      .getByRole('textbox', { name: side + ' contractual weekly hours' })
+      .fill('40')
+    await page
+      .getByRole('combobox', { name: side + ' working days per week' })
+      .selectOption('5')
+  }
+  await page
+    .getByRole('textbox', { name: 'Offer A paid vacation days per year' })
+    .fill('20')
+  await page
+    .getByRole('textbox', { name: 'Offer B paid vacation days per year' })
+    .fill('30')
+  await expect(
+    page.getByText(/Paid vacation difference \(B − A\): \+10 days/),
+  ).toBeVisible()
+  await expect(page.getByText(/Net per hour remains unavailable/)).toBeVisible()
+  const scrollWidth = await page.evaluate(
+    () => document.documentElement.scrollWidth,
+  )
+  expect(scrollWidth).toBeLessThanOrEqual(375)
+  await page.getByRole('button', { name: 'Copy Offer B to Offer A' }).click()
+  await expect(
+    page.getByText(/Paid vacation difference \(B − A\): 0 days/),
+  ).toBeVisible()
+  await page.getByRole('button', { name: 'Clear Offer B' }).click()
+  await expect(page.getByText(/Vacation comparison unavailable/)).toBeVisible()
+})

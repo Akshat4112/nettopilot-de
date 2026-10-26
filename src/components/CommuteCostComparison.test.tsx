@@ -25,7 +25,9 @@ describe('NP-CMP-006 commute-cost display', () => {
     expect(
       screen.getByText(/Annual commute cost comparison unavailable/),
     ).toBeVisible()
-    expect(screen.queryByText(/Annual commute difference/)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Annual commute difference/),
+    ).not.toBeInTheDocument()
   })
 
   it('shows both entered annual costs and a neutral signed difference', () => {
@@ -34,9 +36,7 @@ describe('NP-CMP-006 commute-cost display', () => {
       screen.getByText(/Annual commute difference \(B − A\)/),
     ).toBeVisible()
     expect(screen.getAllByText(/expected office days/)).toHaveLength(2)
-    expect(
-      screen.getByText(/not payroll deductions/),
-    ).toBeVisible()
+    expect(screen.getByText(/not payroll deductions/)).toBeVisible()
   })
 
   it('keeps incomplete Offer B unavailable even if Offer A is known', () => {
@@ -47,6 +47,8 @@ describe('NP-CMP-006 commute-cost display', () => {
       />,
     )
     expect(screen.getByText(/Complete Offer B costs/)).toBeVisible()
-    expect(screen.queryByText(/Annual commute difference/)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Annual commute difference/),
+    ).not.toBeInTheDocument()
   })
 })

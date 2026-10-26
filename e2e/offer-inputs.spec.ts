@@ -187,16 +187,12 @@ test('annual round-trip commute hours are independent from expense inputs', asyn
   await expect(
     page.getByText(/Annual commute cost comparison unavailable/),
   ).toBeVisible()
-  const width = await page.evaluate(
-    () => document.documentElement.scrollWidth,
-  )
+  const width = await page.evaluate(() => document.documentElement.scrollWidth)
   expect(width).toBeLessThanOrEqual(375)
   await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
   await expect(
     page.getByRole('textbox', { name: 'Offer B one-way commute (minutes)' }),
   ).toHaveValue('35')
   await page.getByRole('button', { name: 'Clear Offer B' }).click()
-  await expect(
-    page.getByText(/Annual commute time unavailable/),
-  ).toBeVisible()
+  await expect(page.getByText(/Annual commute time unavailable/)).toBeVisible()
 })

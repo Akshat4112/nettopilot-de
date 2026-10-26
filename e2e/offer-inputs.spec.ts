@@ -45,3 +45,36 @@ test('offer drafts are excluded from salary report printing', async ({
   await page.emulateMedia({ media: 'print' })
   await expect(page.locator('.offer-comparison')).toBeHidden()
 })
+
+test('variable and one-time pay stay separate and require an explicit month', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page
+    .getByRole('textbox', { name: 'Offer A expected annual variable pay (EUR)' })
+    .fill('5000.25')
+  await page
+    .getByRole('textbox', { name: 'Offer A one-time payment (EUR)' })
+    .fill('1200')
+  await page.getByRole('button', { name: 'Check both offers' }).click()
+  await expect(
+    page.getByText('Choose the payment month for the one-time payment.'),
+  ).toBeVisible()
+  await page
+    .getByRole('combobox', { name: 'Offer A one-time payment month' })
+    .selectOption('11')
+  await page
+    .getByRole('combobox', { name: 'Offer A one-time payment certainty' })
+    .selectOption('guaranteed')
+  await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
+  await expect(
+    page.getByRole('textbox', { name: 'Offer B expected annual variable pay (EUR)' }),
+  ).toHaveValue('5000.25')
+  await expect(
+    page.getByRole('combobox', { name: 'Offer B one-time payment certainty' }),
+  ).toHaveValue('guaranteed')
+  await page.getByRole('button', { name: 'Clear Offer B' }).click()
+  await expect(
+    page.getByRole('textbox', { name: 'Offer A one-time payment (EUR)' }),
+  ).toHaveValue('1200')
+})

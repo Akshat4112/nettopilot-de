@@ -105,4 +105,34 @@ describe('NP-CMP-002 offer salary inputs', () => {
       screen.getByText('Choose the payment month for the one-time payment.'),
     ).toBeInTheDocument()
   })
+
+  it('keeps commute cost entries independent and copies confirmed zero categories', async () => {
+    const { user } = renderWithUser(<OfferComparisonInputs />)
+    const transportA = screen.getByRole('textbox', {
+      name: 'Offer A public transport per office day (EUR)',
+    })
+    await user.type(transportA, '4.20')
+    await user.type(
+      screen.getByRole('textbox', {
+        name: 'Offer A fuel per office day (EUR)',
+      }),
+      '0',
+    )
+    await user.click(
+      screen.getByRole('button', { name: 'Copy Offer A to Offer B' }),
+    )
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Offer B public transport per office day (EUR)',
+      }),
+    ).toHaveValue('4.20')
+    await user.click(screen.getByRole('button', { name: 'Clear Offer B' }))
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Offer B public transport per office day (EUR)',
+      }),
+    ).toHaveValue('')
+    expect(transportA).toHaveValue('4.20')
+  })
+
 })

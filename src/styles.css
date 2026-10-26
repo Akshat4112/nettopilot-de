@@ -784,3 +784,40 @@ main {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+
+.offer-commute-inputs {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-4);
+}
+
+.offer-commute-inputs h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.offer-commute-inputs p {
+  margin: 0;
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.commute-cost-comparison {
+  min-width: 0;
+  margin-top: var(--np-space-6);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.commute-cost-comparison h3 {
+  margin-top: 0;
+}
+
+.commute-cost-comparison p,
+.commute-cost-comparison dd {
+  overflow-wrap: anywhere;
+}

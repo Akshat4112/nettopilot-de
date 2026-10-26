@@ -38,7 +38,6 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-
       - name: Check formatting
         run: npm run format:check
 

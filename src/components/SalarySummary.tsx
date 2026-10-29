@@ -109,7 +109,11 @@ export function SalarySummary({
       : null
 
   return (
-    <section className="np-panel" aria-labelledby="salary-summary-heading">
+    <section
+      className="np-panel"
+      aria-labelledby="salary-summary-heading"
+      tabIndex={-1}
+    >
       <h2 id="salary-summary-heading">Salary summary</h2>
       {result.state === 'calculated' ? (
         <>

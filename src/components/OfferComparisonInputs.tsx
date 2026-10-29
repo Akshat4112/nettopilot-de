@@ -5,6 +5,13 @@ import { VacationComparison } from './VacationComparison'
 import { OfferCommuteCostInputs } from './OfferCommuteCostInputs'
 import { CommuteCostComparison } from './CommuteCostComparison'
 import { CommuteTimeComparison } from './CommuteTimeComparison'
+import { RemoteWorkComparison } from './RemoteWorkComparison'
+import {
+  attachRemoteWork,
+  blankRemoteWork,
+  evaluateRemoteWork,
+  type RemoteWorkEntry,
+} from '../domain/comparison/remote-work'
 import {
   calculateAnnualCommuteTime,
   type CommuteTimeEntry,
@@ -48,6 +55,9 @@ export function OfferComparisonInputs() {
   const [commute, setCommute] = useState<
     readonly [CommuteCostEntry, CommuteCostEntry]
   >([blankCommuteCostEntry(), blankCommuteCostEntry()])
+  const [remote, setRemote] = useState<
+    readonly [RemoteWorkEntry, RemoteWorkEntry]
+  >([blankRemoteWork(), blankRemoteWork()])
   const [additional, setAdditional] = useState<
     readonly [AdditionalPayEntry, AdditionalPayEntry]
   >([emptyAdditionalPay(), emptyAdditionalPay()])
@@ -61,6 +71,13 @@ export function OfferComparisonInputs() {
 
   const setCommuteEntry = (side: 0 | 1, next: CommuteCostEntry) => {
     setCommute((current) =>
+      side === 0 ? [next, current[1]] : [current[0], next],
+    )
+    setChecked(false)
+  }
+
+  const setRemoteEntry = (side: 0 | 1, next: RemoteWorkEntry) => {
+    setRemote((current) =>
       side === 0 ? [next, current[1]] : [current[0], next],
     )
     setChecked(false)
@@ -104,6 +121,11 @@ export function OfferComparisonInputs() {
     setOneWayMinutes((previous) =>
       target === 0 ? [previous[1], previous[1]] : [previous[0], previous[0]],
     )
+    setRemote((previous) =>
+      target === 0
+        ? [{ ...previous[1] }, previous[1]]
+        : [previous[0], { ...previous[0] }],
+    )
     setChecked(false)
   }
   const validation = offers.map(validateOfferSalary)
@@ -121,6 +143,15 @@ export function OfferComparisonInputs() {
     workingDaysPerWeek: working[side].workingDaysPerWeek,
     paidVacationDaysAnnual: working[side].paidVacationDaysAnnual,
   })
+  const remoteFor = (side: 0 | 1): RemoteWorkEntry => ({
+    ...remote[side],
+    workingDaysPerWeek: working[side].workingDaysPerWeek,
+    officeDaysPerWeek: commute[side].officeDaysPerWeek,
+  })
+  const remoteStarted = (side: 0 | 1) =>
+    remote[side].arrangement !== 'unknown' ||
+    remote[side].employerAllowanceMonthlyEur !== '' ||
+    remote[side].homeOfficeCostMonthlyEur !== ''
   const commuteTimeFor = (side: 0 | 1): CommuteTimeEntry => ({
     workingDaysPerWeek: working[side].workingDaysPerWeek,
     officeDaysPerWeek: commute[side].officeDaysPerWeek,
@@ -147,18 +178,27 @@ export function OfferComparisonInputs() {
       empty || calculateCommuteCosts(commuteFor(side)).state === 'calculated'
     )
   })
+  const remoteValid = ([0, 1] as const).every(
+    (side) =>
+      !remoteStarted(side) ||
+      evaluateRemoteWork(remoteFor(side)).state === 'valid',
+  )
   const accepted =
+    remoteValid &&
     commuteTimeValid &&
     commuteValid &&
     extrasValid &&
     workingValid &&
     validation.every((result) => result.state === 'valid')
-  const model = attachWorkingTime(
-    applyAdditionalPay(
-      buildOfferPairFromEntries(offers[0], offers[1]),
-      additional,
+  const model = attachRemoteWork(
+    attachWorkingTime(
+      applyAdditionalPay(
+        buildOfferPairFromEntries(offers[0], offers[1]),
+        additional,
+      ),
+      working,
     ),
-    working,
+    [remoteFor(0), remoteFor(1)],
   )
   const dataIsAdmitted = model.offers.every(
     (offer) => offer.compensation.baseSalary.state === 'provided',
@@ -200,6 +240,8 @@ export function OfferComparisonInputs() {
           const timeStarted = Object.values(timeEntry).some(
             (value) => value !== '',
           )
+          const remoteEntry = remote[side]
+          const remoteResult = evaluateRemoteWork(remoteFor(side))
           const showIssue = checked && issue.state !== 'valid'
           return (
             <fieldset className="offer-card" key={id}>
@@ -304,6 +346,84 @@ export function OfferComparisonInputs() {
                 commuteTimeResult.state !== 'calculated' && (
                   <p role="alert">{commuteTimeResult.reason}</p>
                 )}
+              <div className="offer-remote-work">
+                <h3>Remote and home-office terms</h3>
+                <p>
+                  Working days and office days are shared with the working-time
+                  and commute sections. Home-office amounts are monthly and
+                  entered separately; no tax or net-pay adjustment is assumed.
+                </p>
+                <div className="np-field">
+                  <label htmlFor={id + '-arrangement'}>
+                    {label} work arrangement
+                  </label>
+                  <select
+                    id={id + '-arrangement'}
+                    value={remoteEntry.arrangement}
+                    onChange={(event) => {
+                      const arrangement = event.target
+                        .value as RemoteWorkEntry['arrangement']
+                      setRemoteEntry(side, { ...remoteEntry, arrangement })
+                    }}
+                  >
+                    <option value="unknown">Not specified</option>
+                    <option value="onsite">On-site</option>
+                    <option value="hybrid">Hybrid</option>
+                    <option value="remote">Fully remote</option>
+                  </select>
+                </div>
+                <div className="np-field">
+                  <label htmlFor={id + '-home-allowance'}>
+                    {label} employer home-office allowance monthly (EUR)
+                  </label>
+                  <input
+                    id={id + '-home-allowance'}
+                    type="text"
+                    inputMode="decimal"
+                    value={remoteEntry.employerAllowanceMonthlyEur}
+                    onChange={(event) => {
+                      setRemoteEntry(side, {
+                        ...remoteEntry,
+                        employerAllowanceMonthlyEur: event.target.value,
+                      })
+                    }}
+                    aria-invalid={
+                      checked &&
+                      remoteStarted(side) &&
+                      remoteResult.state === 'invalid'
+                    }
+                  />
+                </div>
+                <div className="np-field">
+                  <label htmlFor={id + '-home-costs'}>
+                    {label} home-office expenses monthly (EUR)
+                  </label>
+                  <input
+                    id={id + '-home-costs'}
+                    type="text"
+                    inputMode="decimal"
+                    value={remoteEntry.homeOfficeCostMonthlyEur}
+                    onChange={(event) => {
+                      setRemoteEntry(side, {
+                        ...remoteEntry,
+                        homeOfficeCostMonthlyEur: event.target.value,
+                      })
+                    }}
+                    aria-invalid={
+                      checked &&
+                      remoteStarted(side) &&
+                      remoteResult.state === 'invalid'
+                    }
+                  />
+                </div>
+                {checked &&
+                  remoteStarted(side) &&
+                  remoteResult.state === 'invalid' && (
+                    <p role="alert">
+                      {label}: {remoteResult.reason}
+                    </p>
+                  )}
+              </div>
               <div className="offer-actions">
                 <button
                   type="button"
@@ -325,6 +445,7 @@ export function OfferComparisonInputs() {
                     setOneWayMinutes((current) =>
                       side === 0 ? ['', current[1]] : [current[0], ''],
                     )
+                    setRemoteEntry(side, blankRemoteWork())
                   }}
                 >
                   Clear {label}
@@ -340,6 +461,7 @@ export function OfferComparisonInputs() {
         offerA={commuteTimeFor(0)}
         offerB={commuteTimeFor(1)}
       />
+      <RemoteWorkComparison offerA={remoteFor(0)} offerB={remoteFor(1)} />
       <div className="offer-review">
         <button
           className="np-button-primary"

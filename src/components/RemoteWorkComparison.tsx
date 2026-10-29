@@ -22,9 +22,7 @@ function RemoteTerms({
       <dt>{label} remote-work terms</dt>
       {result.state === 'valid' ? (
         <dd>
-          <p>
-            Work arrangement: {result.arrangement}
-          </p>
+          <p>Work arrangement: {result.arrangement}</p>
           <p>
             Expected remote work:{' '}
             {result.remoteDaysPerWeek.state === 'provided'

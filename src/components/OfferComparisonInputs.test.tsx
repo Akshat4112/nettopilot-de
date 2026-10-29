@@ -134,4 +134,77 @@ describe('NP-CMP-002 offer salary inputs', () => {
     ).toHaveValue('')
     expect(transportA).toHaveValue('4.20')
   })
+  it('keeps remote-work allowance and costs separate, including exact zero and copy/clear', async () => {
+    const { user } = renderWithUser(<OfferComparisonInputs />)
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Offer A working days per week' }),
+      '5',
+    )
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Offer A office days per week' }),
+      '3',
+    )
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Offer A work arrangement' }),
+      'hybrid',
+    )
+    await user.type(
+      screen.getByRole('textbox', {
+        name: 'Offer A employer home-office allowance monthly (EUR)',
+      }),
+      '0',
+    )
+    await user.type(
+      screen.getByRole('textbox', {
+        name: 'Offer A home-office expenses monthly (EUR)',
+      }),
+      '15.25',
+    )
+    expect(screen.getByText('2 days per week')).toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Copy Offer A to Offer B' }),
+    )
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Offer B employer home-office allowance monthly (EUR)',
+      }),
+    ).toHaveValue('0')
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Offer B home-office expenses monthly (EUR)',
+      }),
+    ).toHaveValue('15.25')
+    await user.click(screen.getByRole('button', { name: 'Clear Offer B' }))
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Offer B employer home-office allowance monthly (EUR)',
+      }),
+    ).toHaveValue('')
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Offer A home-office expenses monthly (EUR)',
+      }),
+    ).toHaveValue('15.25')
+  })
+
+  it('rejects contradictory remote-work arrangements on review', async () => {
+    const { user } = renderWithUser(<OfferComparisonInputs />)
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Offer A working days per week' }),
+      '5',
+    )
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Offer A office days per week' }),
+      '3',
+    )
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Offer A work arrangement' }),
+      'remote',
+    )
+    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    expect(
+      screen.getByText(/Offer A: Office-day inputs conflict/),
+    ).toBeInTheDocument()
+  })
+
 })

@@ -180,7 +180,8 @@ export function OfferComparisonInputs() {
   })
   const remoteValid = ([0, 1] as const).every(
     (side) =>
-      !remoteStarted(side) || evaluateRemoteWork(remoteFor(side)).state === 'valid',
+      !remoteStarted(side) ||
+      evaluateRemoteWork(remoteFor(side)).state === 'valid',
   )
   const accepted =
     remoteValid &&
@@ -387,7 +388,9 @@ export function OfferComparisonInputs() {
                       })
                     }}
                     aria-invalid={
-                      checked && remoteStarted(side) && remoteResult.state === 'invalid'
+                      checked &&
+                      remoteStarted(side) &&
+                      remoteResult.state === 'invalid'
                     }
                   />
                 </div>
@@ -414,7 +417,9 @@ export function OfferComparisonInputs() {
                 {checked &&
                   remoteStarted(side) &&
                   remoteResult.state === 'invalid' && (
-                    <p role="alert">{label}: {remoteResult.reason}</p>
+                    <p role="alert">
+                      {label}: {remoteResult.reason}
+                    </p>
                   )}
               </div>
               <div className="offer-actions">

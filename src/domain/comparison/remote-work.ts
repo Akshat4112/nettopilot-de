@@ -66,7 +66,8 @@ export const evaluateRemoteWork = (
   if (allowance === null || cost === null)
     return {
       state: 'invalid',
-      reason: 'Monthly allowance and costs must be 0–10,000 EUR, to two decimals.',
+      reason:
+        'Monthly allowance and costs must be 0–10,000 EUR, to two decimals.',
     }
 
   let officeDays: Known<number> = unknown()
@@ -89,7 +90,8 @@ export const evaluateRemoteWork = (
     )
       return {
         state: 'invalid',
-        reason: 'Office-day inputs conflict with the selected work arrangement.',
+        reason:
+          'Office-day inputs conflict with the selected work arrangement.',
       }
     officeDays = provided(office)
     remoteDays = provided(working - office)
@@ -139,7 +141,9 @@ export const attachRemoteWork = (
       arrangement: value.arrangement,
       remoteDaysPerWeek: toInput(value.remoteDaysPerWeek),
       homeOfficeCostMonthly: toEuroInput(value.homeOfficeCostMonthlyCents),
-      employerAllowanceMonthly: toEuroInput(value.employerAllowanceMonthlyCents),
+      employerAllowanceMonthly: toEuroInput(
+        value.employerAllowanceMonthlyCents,
+      ),
     }
   }
   return {

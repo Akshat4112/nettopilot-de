@@ -197,7 +197,9 @@ test('annual round-trip commute hours are independent from expense inputs', asyn
   await expect(page.getByText(/Annual commute time unavailable/)).toBeVisible()
 })
 
-test('remote-work comparison stays independent and mobile-safe', async ({ page }) => {
+test('remote-work comparison stays independent and mobile-safe', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 375, height: 900 })
   await page.goto('./')
   await page
@@ -219,7 +221,7 @@ test('remote-work comparison stays independent and mobile-safe', async ({ page }
       name: 'Offer A home-office expenses monthly (EUR)',
     })
     .fill('15.25')
-  await expect(page.getByText('2 days per week')).toBeVisible()
+  await expect(page.getByText(/Expected remote work: 2 days per week/)).toBeVisible()
   await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
   await expect(
     page.getByRole('textbox', {

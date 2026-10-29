@@ -160,7 +160,7 @@ describe('NP-CMP-002 offer salary inputs', () => {
       }),
       '15.25',
     )
-    expect(screen.getByText('2 days per week')).toBeInTheDocument()
+    expect(screen.getByText(/Expected remote work: 2 days per week/)).toBeInTheDocument()
     await user.click(
       screen.getByRole('button', { name: 'Copy Offer A to Offer B' }),
     )
@@ -206,5 +206,4 @@ describe('NP-CMP-002 offer salary inputs', () => {
       screen.getByText(/Offer A: Office-day inputs conflict/),
     ).toBeInTheDocument()
   })
-
 })

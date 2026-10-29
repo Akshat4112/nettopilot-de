@@ -221,7 +221,9 @@ test('remote-work comparison stays independent and mobile-safe', async ({
       name: 'Offer A home-office expenses monthly (EUR)',
     })
     .fill('15.25')
-  await expect(page.getByText(/Expected remote work: 2 days per week/)).toBeVisible()
+  await expect(
+    page.getByText(/Expected remote work: 2 days per week/),
+  ).toBeVisible()
   await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
   await expect(
     page.getByRole('textbox', {

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { EffectiveHourlyComparison } from './EffectiveHourlyComparison'
+import type { EffectiveHourlyInputs } from '../domain/comparison/effective-hourly'
 import type { OfferComparisonDraft } from '../domain/comparison/offer-model'
 import type { SalaryAggregationResult2026 } from '../domain/salary/salary-aggregation'
 import {
@@ -117,9 +119,11 @@ function NetResult({
 export function OfferNetCompensation({
   draft,
   inputValidity,
+  hourlyInputs,
 }: {
   readonly draft: OfferComparisonDraft
   readonly inputValidity: readonly [boolean, boolean]
+  readonly hourlyInputs?: Omit<EffectiveHourlyInputs, 'netResult'>
 }) {
   const [context, setContext] = useState<ComparisonPayrollContext>(
     emptyComparisonPayrollContext,
@@ -320,6 +324,12 @@ export function OfferNetCompensation({
                   Source references: {result.provenance.sourceIds.join(', ')}.
                 </p>
               </details>
+              {hourlyInputs !== undefined && (
+                <EffectiveHourlyComparison
+                  {...hourlyInputs}
+                  netResult={result}
+                />
+              )}
             </>
           )}
         </section>

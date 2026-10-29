@@ -17,5 +17,8 @@ The remote-work evaluation is not a tax engine and intentionally leaves
 allowance tax treatment `not_calculated`. Commute cost/time projections stay
 separate and must only use office frequency explicitly supplied by users.
 
-Current domain model is intended for separate UI integration and remaining
-NP-CMP-008 tests; do not mark the task Done until both are verified.
+The offer-comparison interface captures each arrangement and both monetary
+terms, reuses the existing per-offer working-day and office-day fields, and
+shows a non-monetized summary. Copy and clear preserve offer independence.
+Unit/component and browser tests cover contradictory arrangements, blank versus
+zero cash, mobile layout, and copy/clear. Merge only after CI validation.

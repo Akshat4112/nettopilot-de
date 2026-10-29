@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { focusDestination } from './focus-destination'
 import { EffectiveHourlyComparison } from './EffectiveHourlyComparison'
 import type { EffectiveHourlyInputs } from '../domain/comparison/effective-hourly'
 import type { OfferComparisonDraft } from '../domain/comparison/offer-model'
@@ -125,6 +126,20 @@ export function OfferNetCompensation({
   readonly inputValidity: readonly [boolean, boolean]
   readonly hourlyInputs?: Omit<EffectiveHourlyInputs, 'netResult'>
 }) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const [focusRequest, setFocusRequest] = useState<{
+    readonly target: 'result' | 'reset'
+  } | null>(null)
+  useLayoutEffect(() => {
+    if (focusRequest === null) return
+    focusDestination(
+      sectionRef.current?.querySelector<HTMLElement>(
+        focusRequest.target === 'reset'
+          ? '#comparison-tax-class'
+          : '#comparison-net-results',
+      ) ?? null,
+    )
+  }, [focusRequest])
   const [context, setContext] = useState<ComparisonPayrollContext>(
     emptyComparisonPayrollContext,
   )
@@ -144,6 +159,7 @@ export function OfferNetCompensation({
   }
   return (
     <section
+      ref={sectionRef}
       className="offer-net-compensation"
       aria-labelledby="offer-net-heading"
     >
@@ -264,6 +280,7 @@ export function OfferNetCompensation({
           className="np-button-primary"
           onClick={() => {
             setRequested(true)
+            setFocusRequest({ target: 'result' })
           }}
         >
           Calculate net compensation
@@ -274,13 +291,19 @@ export function OfferNetCompensation({
           onClick={() => {
             setContext(emptyComparisonPayrollContext())
             setRequested(false)
+            setFocusRequest({ target: 'reset' })
           }}
         >
           Reset payroll assumptions
         </button>
       </div>
       {requested && (
-        <section aria-label="Offer net compensation results" aria-live="polite">
+        <section
+          id="comparison-net-results"
+          aria-label="Offer net compensation results"
+          aria-live="polite"
+          tabIndex={-1}
+        >
           <h4>Current payroll results</h4>
           {result !== null && (
             <>

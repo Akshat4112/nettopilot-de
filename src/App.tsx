@@ -12,6 +12,9 @@ const principles = [
 export function App() {
   return (
     <div className="app-shell">
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
       <header className="site-header">
         <a
           className="brand"
@@ -23,7 +26,7 @@ export function App() {
         <span className="status">2026 calculator preview</span>
       </header>
 
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <section className="hero" aria-labelledby="hero-title">
           <p className="eyebrow">German salary clarity</p>
           <h1 id="hero-title">Understand the money behind a job offer.</h1>

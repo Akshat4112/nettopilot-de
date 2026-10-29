@@ -72,20 +72,25 @@ export const evaluateRemoteWork = (
 
   let officeDays: Known<number> = unknown()
   let remoteDays: Known<number> = unknown()
-  if (entry.workingDaysPerWeek !== '' || entry.officeDaysPerWeek !== '') {
-    if (
-      !/^[1-7]$/.test(entry.workingDaysPerWeek) ||
-      !/^[0-7]$/.test(entry.officeDaysPerWeek) ||
-      Number(entry.officeDaysPerWeek) > Number(entry.workingDaysPerWeek)
-    )
-      return {
-        state: 'invalid',
-        reason: 'Enter workdays (1–7) and office days (0–workdays) together.',
-      }
-    const working = Number(entry.workingDaysPerWeek)
+  const hasWorkingDays = entry.workingDaysPerWeek !== ''
+  const hasOfficeDays = entry.officeDaysPerWeek !== ''
+  if (
+    (hasWorkingDays && !/^[1-7]$/.test(entry.workingDaysPerWeek)) ||
+    (hasOfficeDays && !/^[0-7]$/.test(entry.officeDaysPerWeek)) ||
+    (hasWorkingDays &&
+      hasOfficeDays &&
+      Number(entry.officeDaysPerWeek) > Number(entry.workingDaysPerWeek))
+  )
+    return {
+      state: 'invalid',
+      reason: 'Workdays must be 1–7 and office days 0–workdays when supplied.',
+    }
+  if (hasOfficeDays) {
     const office = Number(entry.officeDaysPerWeek)
     if (
-      (entry.arrangement === 'onsite' && office !== working) ||
+      (entry.arrangement === 'onsite' &&
+        (office === 0 ||
+          (hasWorkingDays && office !== Number(entry.workingDaysPerWeek)))) ||
       (entry.arrangement === 'remote' && office !== 0)
     )
       return {
@@ -94,7 +99,8 @@ export const evaluateRemoteWork = (
           'Office-day inputs conflict with the selected work arrangement.',
       }
     officeDays = provided(office)
-    remoteDays = provided(working - office)
+    if (hasWorkingDays)
+      remoteDays = provided(Number(entry.workingDaysPerWeek) - office)
   }
 
   return {

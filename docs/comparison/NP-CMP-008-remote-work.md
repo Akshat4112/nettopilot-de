@@ -7,6 +7,12 @@ from working days minus office days. An onsite contract conflicts with
 fewer office days than scheduled workdays; a fully remote arrangement
 conflicts with nonzero office days.
 
+Either calendar count may remain unknown. Each supplied count is validated
+independently, and remote days stay unknown until both are provided. Entering
+office frequency for remote-work or travel-time context does not require
+transport expenses. Daily cost validation starts only when a cost is entered;
+unknown expenses are never silently replaced with zero.
+
 Employer home-office allowance and actual home-office monthly costs
 are **separate user-entered euro amounts**. Both support unknown (blank)
 versus explicitly confirmed zero and never infer a default subsidy, utility

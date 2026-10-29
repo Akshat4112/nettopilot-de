@@ -6,6 +6,13 @@ import { OfferCommuteCostInputs } from './OfferCommuteCostInputs'
 import { CommuteCostComparison } from './CommuteCostComparison'
 import { CommuteTimeComparison } from './CommuteTimeComparison'
 import { RemoteWorkComparison } from './RemoteWorkComparison'
+import { OfferBenefitsInputs } from './OfferBenefitsInputs'
+import {
+  attachBenefits,
+  blankBenefits,
+  evaluateBenefits,
+  type BenefitsEntry,
+} from '../domain/comparison/benefits'
 import {
   attachRemoteWork,
   blankRemoteWork,
@@ -46,6 +53,15 @@ export function OfferComparisonInputs() {
     readonly [OfferSalaryEntry, OfferSalaryEntry]
   >([blank(), blank()])
   const [checked, setChecked] = useState(false)
+  const [benefits, setBenefits] = useState<
+    readonly [BenefitsEntry, BenefitsEntry]
+  >([blankBenefits(), blankBenefits()])
+  const setBenefitsEntry = (side: 0 | 1, next: BenefitsEntry): void => {
+    setBenefits((current) =>
+      side === 0 ? [next, current[1]] : [current[0], next],
+    )
+    setChecked(false)
+  }
   const [working, setWorking] = useState<
     readonly [WorkingTimeEntry, WorkingTimeEntry]
   >([blankWorkingTime(), blankWorkingTime()])
@@ -98,6 +114,13 @@ export function OfferComparisonInputs() {
   }
   const copy = (source: 0 | 1) => {
     const target: 0 | 1 = source === 0 ? 1 : 0
+    setBenefits((previous) => {
+      const entry = {
+        ...previous[source],
+        benefits: previous[source].benefits.map((benefit) => ({ ...benefit })),
+      }
+      return target === 0 ? [entry, previous[1]] : [previous[0], entry]
+    })
     setOffers((previous) =>
       target === 0
         ? [{ ...previous[1] }, previous[1]]
@@ -149,6 +172,7 @@ export function OfferComparisonInputs() {
     officeDaysPerWeek: commute[side].officeDaysPerWeek,
   })
   const remoteStarted = (side: 0 | 1) =>
+    commute[side].officeDaysPerWeek !== '' ||
     remote[side].arrangement !== 'unknown' ||
     remote[side].employerAllowanceMonthlyEur !== '' ||
     remote[side].homeOfficeCostMonthlyEur !== ''
@@ -168,7 +192,6 @@ export function OfferComparisonInputs() {
   const commuteValid = ([0, 1] as const).every((side) => {
     const entry = commute[side]
     const empty = [
-      entry.officeDaysPerWeek,
       entry.publicTransportPerOfficeDayEur,
       entry.fuelPerOfficeDayEur,
       entry.parkingPerOfficeDayEur,
@@ -184,21 +207,25 @@ export function OfferComparisonInputs() {
       evaluateRemoteWork(remoteFor(side)).state === 'valid',
   )
   const accepted =
+    benefits.every((entry) => evaluateBenefits(entry).state === 'valid') &&
     remoteValid &&
     commuteTimeValid &&
     commuteValid &&
     extrasValid &&
     workingValid &&
     validation.every((result) => result.state === 'valid')
-  const model = attachRemoteWork(
-    attachWorkingTime(
-      applyAdditionalPay(
-        buildOfferPairFromEntries(offers[0], offers[1]),
-        additional,
+  const model = attachBenefits(
+    attachRemoteWork(
+      attachWorkingTime(
+        applyAdditionalPay(
+          buildOfferPairFromEntries(offers[0], offers[1]),
+          additional,
+        ),
+        working,
       ),
-      working,
+      [remoteFor(0), remoteFor(1)],
     ),
-    [remoteFor(0), remoteFor(1)],
+    benefits,
   )
   const dataIsAdmitted = model.offers.every(
     (offer) => offer.compensation.baseSalary.state === 'provided',
@@ -225,7 +252,6 @@ export function OfferComparisonInputs() {
           const extraProblems = validateAdditionalPay(extra)
           const commuteEntry = commuteFor(side)
           const commuteEntered = [
-            commute[side].officeDaysPerWeek,
             commute[side].publicTransportPerOfficeDayEur,
             commute[side].fuelPerOfficeDayEur,
             commute[side].parkingPerOfficeDayEur,
@@ -424,6 +450,15 @@ export function OfferComparisonInputs() {
                     </p>
                   )}
               </div>
+              <OfferBenefitsInputs
+                id={id}
+                label={label}
+                value={benefits[side]}
+                checked={checked}
+                onChange={(next) => {
+                  setBenefitsEntry(side, next)
+                }}
+              />
               <div className="offer-actions">
                 <button
                   type="button"
@@ -446,6 +481,7 @@ export function OfferComparisonInputs() {
                       side === 0 ? ['', current[1]] : [current[0], ''],
                     )
                     setRemoteEntry(side, blankRemoteWork())
+                    setBenefitsEntry(side, blankBenefits())
                   }}
                 >
                   Clear {label}

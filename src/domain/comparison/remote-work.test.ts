@@ -76,7 +76,7 @@ describe('NP-CMP-008 remote work contract', () => {
       { ...entry(), arrangement: 'remote' as const },
       { ...entry(), arrangement: 'onsite' as const },
       { ...entry(), officeDaysPerWeek: '6' },
-      { ...entry(), workingDaysPerWeek: '' },
+      { ...entry(), workingDaysPerWeek: '0' },
       { ...entry(), homeOfficeCostMonthlyEur: '-5' },
       { ...entry(), employerAllowanceMonthlyEur: '10001' },
     ]) {
@@ -95,5 +95,51 @@ describe('NP-CMP-008 remote work contract', () => {
       state: 'valid',
       remoteDaysPerWeek: { state: 'provided', value: 5 },
     })
+  })
+
+  it('retains independent terms when only working days are known', () => {
+    for (const arrangement of [
+      'unknown',
+      'onsite',
+      'hybrid',
+      'remote',
+    ] as const) {
+      expect(
+        evaluateRemoteWork({ ...entry(), arrangement, officeDaysPerWeek: '' }),
+      ).toMatchObject({
+        state: 'valid',
+        arrangement,
+        officeDaysPerWeek: { state: 'unknown' },
+        remoteDaysPerWeek: { state: 'unknown' },
+        employerAllowanceMonthlyCents: { state: 'provided', value: 5000 },
+        homeOfficeCostMonthlyCents: { state: 'provided', value: 1525 },
+      })
+    }
+  })
+
+  it('retains supplied office frequency without inferring a work calendar', () => {
+    expect(
+      evaluateRemoteWork({ ...entry(), workingDaysPerWeek: '' }),
+    ).toMatchObject({
+      state: 'valid',
+      officeDaysPerWeek: { state: 'provided', value: 3 },
+      remoteDaysPerWeek: { state: 'unknown' },
+    })
+  })
+
+  it('validates supplied days and arrangement conflicts without a full calendar', () => {
+    for (const invalid of [
+      { ...entry(), workingDaysPerWeek: '8', officeDaysPerWeek: '' },
+      { ...entry(), workingDaysPerWeek: '', officeDaysPerWeek: '8' },
+      { ...entry(), workingDaysPerWeek: '', arrangement: 'remote' as const },
+      {
+        ...entry(),
+        workingDaysPerWeek: '',
+        officeDaysPerWeek: '0',
+        arrangement: 'onsite' as const,
+      },
+    ]) {
+      expect(evaluateRemoteWork(invalid).state).toBe('invalid')
+    }
   })
 })

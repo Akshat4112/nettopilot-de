@@ -677,6 +677,22 @@ main {
   width: 100%;
 }
 
+.offer-benefits {
+  display: grid;
+  gap: var(--np-space-4);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.offer-benefits fieldset {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  margin: 0;
+  padding: var(--np-space-3);
+  border: 1px solid var(--np-color-line);
+}
+
 .offer-actions {
   display: flex;
   flex-wrap: wrap;

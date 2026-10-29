@@ -5,16 +5,25 @@ export function OfferWorkingTimeInputs({
   label,
   value,
   onChange,
+  errorId,
 }: {
+  readonly errorId?: string | undefined
   readonly id: string
   readonly label: string
   readonly value: WorkingTimeEntry
   readonly onChange: (next: WorkingTimeEntry) => void
 }) {
+  const description = [id + '-working-help', errorId].filter(Boolean).join(' ')
   return (
-    <div className="offer-working-time">
+    <div
+      className="offer-working-time"
+      role="group"
+      aria-label={label + ' working time and vacation'}
+      aria-invalid={Boolean(errorId)}
+      aria-describedby={description}
+    >
       <h3>Working time and vacation</h3>
-      <p>
+      <p id={id + '-working-help'}>
         Optional, contractual terms. No public holidays or overtime are deducted
         from the standardized 52-week estimate.
       </p>
@@ -24,6 +33,7 @@ export function OfferWorkingTimeInputs({
         </label>
         <input
           id={id + '-weekly-hours'}
+          aria-describedby={description}
           type="text"
           inputMode="decimal"
           value={value.weeklyHours}
@@ -38,6 +48,7 @@ export function OfferWorkingTimeInputs({
         </label>
         <select
           id={id + '-working-days'}
+          aria-describedby={description}
           value={value.workingDaysPerWeek}
           onChange={(event) => {
             onChange({ ...value, workingDaysPerWeek: event.target.value })
@@ -57,6 +68,7 @@ export function OfferWorkingTimeInputs({
         </label>
         <input
           id={id + '-vacation-days'}
+          aria-describedby={description}
           type="text"
           inputMode="numeric"
           value={value.paidVacationDaysAnnual}

@@ -5,19 +5,27 @@ export function OfferAdditionalPayInputs({
   label,
   value,
   onChange,
+  errorId,
 }: {
+  readonly errorId?: string | undefined
   readonly id: string
   readonly label: string
   readonly value: AdditionalPayEntry
   readonly onChange: (next: AdditionalPayEntry) => void
 }) {
+  const description = [id + '-additional-help', errorId]
+    .filter(Boolean)
+    .join(' ')
   return (
     <div
       className="offer-extra"
+      role="group"
+      aria-invalid={Boolean(errorId)}
+      aria-describedby={description}
       aria-label={label + ' additional compensation'}
     >
       <h3>Additional compensation</h3>
-      <p>
+      <p id={id + '-additional-help'}>
         Optional amounts are not guaranteed take-home pay. Expected variable
         compensation is annual; one-time payments retain their payout month.
       </p>
@@ -27,6 +35,7 @@ export function OfferAdditionalPayInputs({
         </label>
         <input
           id={id + '-variable'}
+          aria-describedby={description}
           type="text"
           inputMode="decimal"
           value={value.expectedVariableEur}
@@ -39,6 +48,7 @@ export function OfferAdditionalPayInputs({
         <label htmlFor={id + '-oneoff'}>{label} one-time payment (EUR)</label>
         <input
           id={id + '-oneoff'}
+          aria-describedby={description}
           type="text"
           inputMode="decimal"
           value={value.oneOffEur}
@@ -51,6 +61,7 @@ export function OfferAdditionalPayInputs({
         <label htmlFor={id + '-month'}>{label} one-time payment month</label>
         <select
           id={id + '-month'}
+          aria-describedby={description}
           value={value.oneOffMonth}
           onChange={(event) => {
             onChange({ ...value, oneOffMonth: event.target.value })
@@ -70,6 +81,7 @@ export function OfferAdditionalPayInputs({
         </label>
         <select
           id={id + '-oneoff-guarantee'}
+          aria-describedby={description}
           value={value.oneOffGuarantee}
           onChange={(event) => {
             onChange({
@@ -89,6 +101,7 @@ export function OfferAdditionalPayInputs({
         </label>
         <select
           id={id + '-oneoff-classification'}
+          aria-describedby={description}
           value={value.oneOffClassification}
           onChange={(event) => {
             onChange({

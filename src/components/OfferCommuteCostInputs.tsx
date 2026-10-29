@@ -18,16 +18,25 @@ export function OfferCommuteCostInputs({
   label,
   value,
   onChange,
+  errorId,
 }: {
+  readonly errorId?: string | undefined
   readonly id: string
   readonly label: string
   readonly value: CommuteCostEntry
   readonly onChange: (next: CommuteCostEntry) => void
 }) {
+  const description = [id + '-commute-help', errorId].filter(Boolean).join(' ')
   return (
-    <div className="offer-commute-inputs">
+    <div
+      className="offer-commute-inputs"
+      role="group"
+      aria-label={label + ' commute costs'}
+      aria-invalid={Boolean(errorId)}
+      aria-describedby={description}
+    >
       <h3>Commute costs</h3>
-      <p>
+      <p id={id + '-commute-help'}>
         Enter costs per office day. Use 0 for a confirmed free category; leave
         unknown amounts blank. Paid vacation and workdays are shared with this
         offer’s working-time inputs.
@@ -38,6 +47,7 @@ export function OfferCommuteCostInputs({
         </label>
         <select
           id={id + '-office-days'}
+          aria-describedby={description}
           value={value.officeDaysPerWeek}
           onChange={(event) => {
             onChange({ ...value, officeDaysPerWeek: event.target.value })
@@ -58,6 +68,7 @@ export function OfferCommuteCostInputs({
           </label>
           <input
             id={id + '-' + key}
+            aria-describedby={description}
             type="text"
             inputMode="decimal"
             value={value[key]}

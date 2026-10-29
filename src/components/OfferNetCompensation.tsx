@@ -153,7 +153,7 @@ export function OfferNetCompensation({
         assumptions for both offers. These settings are separate from the salary
         calculator above.
       </p>
-      <p>
+      <p id="comparison-payroll-scope">
         Supported scope: 2026, twelve equal payroll months, monthly gross above
         €2,000 and below €5,800, compulsory statutory insurance, no children or
         church tax, and birth dates from 1963 through 2002. Annual inputs must
@@ -162,7 +162,7 @@ export function OfferNetCompensation({
       </p>
       <fieldset className="offer-payroll-context">
         <legend>Shared payroll assumptions</legend>
-        <p>
+        <p id="comparison-payroll-help">
           Tax year: 2026. No pension or benefit value is converted into payroll
           cash. Commute and remote-work costs remain separate.
         </p>
@@ -170,6 +170,7 @@ export function OfferNetCompensation({
           <label htmlFor="comparison-tax-class">Comparison tax class</label>
           <select
             id="comparison-tax-class"
+            aria-describedby="comparison-payroll-scope comparison-payroll-help"
             value={context.essential.taxClass}
             onChange={(event) => {
               changeEssential('taxClass', event.target.value)
@@ -187,6 +188,7 @@ export function OfferNetCompensation({
           <label htmlFor="comparison-state">Comparison federal state</label>
           <select
             id="comparison-state"
+            aria-describedby="comparison-payroll-scope comparison-payroll-help"
             value={context.essential.federalState}
             onChange={(event) => {
               changeEssential('federalState', event.target.value)
@@ -204,6 +206,8 @@ export function OfferNetCompensation({
           <label htmlFor="comparison-birth">Comparison date of birth</label>
           <input
             id="comparison-birth"
+            autoComplete="bday"
+            aria-describedby="comparison-payroll-scope comparison-payroll-help"
             type="date"
             value={context.essential.dateOfBirth}
             onChange={(event) => {
@@ -217,6 +221,7 @@ export function OfferNetCompensation({
           </label>
           <input
             id="comparison-health-rate"
+            aria-describedby="comparison-payroll-scope comparison-health-rate-help"
             type="text"
             inputMode="decimal"
             value={context.additionalHealthRatePercent}
@@ -227,7 +232,7 @@ export function OfferNetCompensation({
               }))
             }}
           />
-          <small>
+          <small id="comparison-health-rate-help">
             Leave blank to use the published 2026 average in the salary engine
             for both offers, or enter the same insurer-specific additional rate
             (0–10%).
@@ -236,6 +241,7 @@ export function OfferNetCompensation({
         <label htmlFor="comparison-confirmed">
           <input
             id="comparison-confirmed"
+            aria-describedby="comparison-payroll-scope comparison-payroll-help"
             type="checkbox"
             checked={context.standardEmploymentConfirmed}
             onChange={(event) => {

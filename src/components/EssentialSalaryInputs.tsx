@@ -3,6 +3,7 @@ import { focusDestination } from './focus-destination'
 import { AdvancedSalaryInputs } from './AdvancedSalaryInputs'
 import { validateEssentialSalaryDraft } from './essential-salary-validation'
 import { SalarySummary } from './SalarySummary'
+import { PayrollScopeGuidance } from './PayrollScopeGuidance'
 import { calculateSimpleSalary2026 } from './calculate-simple-salary'
 import type { AdvancedSalaryDraft } from './advanced-salary-validation'
 import {
@@ -214,7 +215,7 @@ export function EssentialSalaryInputs() {
         is available after confirming the payroll assumptions.
       </p>
       {restoration.status === 'valid' && (
-        <p role="status">
+        <p role="status" aria-label="Shared settings restoration">
           Safe URL settings restored. Salary and other personal inputs are not
           included; enter and confirm them before calculating.
         </p>
@@ -225,6 +226,13 @@ export function EssentialSalaryInputs() {
           restored; enter your own values.
         </p>
       )}
+      <PayrollScopeGuidance
+        data={{
+          essential: draft,
+          advanced: advancedDraft,
+          standardEmploymentConfirmed,
+        }}
+      />
       <form
         onSubmit={(event) => {
           event.preventDefault()
@@ -515,7 +523,7 @@ export function EssentialSalaryInputs() {
           </button>
         </div>
         {submitted && (
-          <div role="status" aria-live="polite">
+          <div role="status" aria-label="Salary input check" aria-live="polite">
             {ready
               ? 'Essential inputs complete. Confirm standard employment details to view the limited calculation.'
               : errors.join(' ')}

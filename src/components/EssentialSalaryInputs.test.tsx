@@ -19,9 +19,9 @@ describe('EssentialSalaryInputs', () => {
   it('shows missing-input guidance instead of fabricated net pay', async () => {
     const { user } = renderWithUser(<EssentialSalaryInputs />)
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Choose a valid tax class.',
-    )
+    expect(
+      screen.getByRole('status', { name: 'Salary input check' }),
+    ).toHaveTextContent('Choose a valid tax class.')
     expect(screen.queryByText(/estimated net/i)).not.toBeInTheDocument()
   })
 
@@ -57,16 +57,16 @@ describe('EssentialSalaryInputs', () => {
       target: { value: 'statutory' },
     })
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Essential inputs complete',
-    )
+    expect(
+      screen.getByRole('status', { name: 'Salary input check' }),
+    ).toHaveTextContent('Essential inputs complete')
     fireEvent.change(screen.getByLabelText('Health insurance'), {
       target: { value: 'unknown' },
     })
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Confirm your health-insurance type',
-    )
+    expect(
+      screen.getByRole('status', { name: 'Salary input check' }),
+    ).toHaveTextContent('Confirm your health-insurance type')
   })
 
   it('rejects invalid gross, impossible children and future birthdates', async () => {
@@ -81,7 +81,7 @@ describe('EssentialSalaryInputs', () => {
       target: { value: '21' },
     })
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
-    const message = screen.getByRole('status')
+    const message = screen.getByRole('status', { name: 'Salary input check' })
     expect(message).toHaveTextContent('supported range')
     expect(message).toHaveTextContent('valid date of birth')
     expect(message).toHaveTextContent('number of children from 0 to 20')
@@ -136,9 +136,9 @@ describe('EssentialSalaryInputs', () => {
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
     expect(screen.getByLabelText('Tax class')).toHaveValue('')
     expect(screen.getByRole('checkbox')).not.toBeChecked()
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Safe URL settings restored',
-    )
+    expect(
+      screen.getByRole('status', { name: 'Shared settings restoration' }),
+    ).toHaveTextContent('Safe URL settings restored')
   })
 
   it('rejects manipulated share URLs rather than importing private values', () => {

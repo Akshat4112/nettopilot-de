@@ -399,6 +399,7 @@ export function EssentialSalaryInputs() {
           <label htmlFor="np-birth">Date of birth</label>
           <input
             id="np-birth"
+            autoComplete="bday"
             aria-invalid={submitted && Boolean(fieldErrors.dateOfBirth)}
             aria-describedby={errorId('dateOfBirth')}
             type="date"
@@ -460,6 +461,7 @@ export function EssentialSalaryInputs() {
           <label htmlFor="np-standard-employment">
             <input
               id="np-standard-employment"
+              aria-describedby="np-standard-employment-help"
               type="checkbox"
               checked={standardEmploymentConfirmed}
               onChange={(event) => {
@@ -471,7 +473,7 @@ export function EssentialSalaryInputs() {
             compulsory GKV health insurance, standard statutory pension and
             unemployment insurance, and no special payroll treatment.
           </label>
-          <small>
+          <small id="np-standard-employment-help">
             This confirmation does not cover bonuses, children, private health
             insurance, church tax, allowance adjustments or special employment.
             Unsupported cases will not show a fabricated net salary.

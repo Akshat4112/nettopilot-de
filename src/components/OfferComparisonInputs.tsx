@@ -410,7 +410,9 @@ export function OfferComparisonInputs() {
                       })
                     }}
                     aria-invalid={
-                      checked && remoteStarted(side) && remoteResult.state === 'invalid'
+                      checked &&
+                      remoteStarted(side) &&
+                      remoteResult.state === 'invalid'
                     }
                   />
                 </div>

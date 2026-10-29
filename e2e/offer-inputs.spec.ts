@@ -196,3 +196,42 @@ test('annual round-trip commute hours are independent from expense inputs', asyn
   await page.getByRole('button', { name: 'Clear Offer B' }).click()
   await expect(page.getByText(/Annual commute time unavailable/)).toBeVisible()
 })
+
+test('remote-work comparison stays independent and mobile-safe', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 900 })
+  await page.goto('./')
+  await page
+    .getByRole('combobox', { name: 'Offer A working days per week' })
+    .selectOption('5')
+  await page
+    .getByRole('combobox', { name: 'Offer A office days per week' })
+    .selectOption('3')
+  await page
+    .getByRole('combobox', { name: 'Offer A work arrangement' })
+    .selectOption('hybrid')
+  await page
+    .getByRole('textbox', {
+      name: 'Offer A employer home-office allowance monthly (EUR)',
+    })
+    .fill('0')
+  await page
+    .getByRole('textbox', {
+      name: 'Offer A home-office expenses monthly (EUR)',
+    })
+    .fill('15.25')
+  await expect(page.getByText('2 days per week')).toBeVisible()
+  await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
+  await expect(
+    page.getByRole('textbox', {
+      name: 'Offer B employer home-office allowance monthly (EUR)',
+    }),
+  ).toHaveValue('0')
+  const width = await page.evaluate(() => document.documentElement.scrollWidth)
+  expect(width).toBeLessThanOrEqual(375)
+  await page.getByRole('button', { name: 'Clear Offer B' }).click()
+  await expect(
+    page.getByRole('textbox', {
+      name: 'Offer B employer home-office allowance monthly (EUR)',
+    }),
+  ).toHaveValue('')
+})

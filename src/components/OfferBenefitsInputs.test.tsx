@@ -3,42 +3,40 @@ import { describe, expect, it } from 'vitest'
 import { renderWithUser } from '../test/render'
 import { OfferComparisonInputs } from './OfferComparisonInputs'
 
+// Query labeled fields directly: repeated role scans of the full comparison form
+// spend time recalculating visibility instead of exercising the benefits flow.
 describe('NP-CMP-009 pension and benefits', () => {
   it('preserves independent valuations, certainty and unknown values through copy and clear', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
     await user.type(
-      screen.getByRole('textbox', {
-        name: 'Offer A employer pension annual (EUR)',
-      }),
+      screen.getByLabelText('Offer A employer pension annual (EUR)'),
       '1200.05',
     )
     await user.selectOptions(
-      screen.getByRole('combobox', { name: 'Offer A pension certainty' }),
+      screen.getByLabelText('Offer A pension certainty'),
       'conditional',
     )
     await user.type(
-      screen.getByRole('textbox', {
-        name: 'Offer A pension eligibility or vesting note',
-      }),
+      screen.getByLabelText('Offer A pension eligibility or vesting note'),
       'After probation',
     )
     await user.click(
       screen.getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
-      screen.getByRole('textbox', { name: 'Offer A benefit 1 label' }),
+      screen.getByLabelText('Offer A benefit 1 label'),
       'Training',
     )
     await user.type(
-      screen.getByRole('textbox', {
-        name: 'Offer A benefit 1 employer-stated annual value (EUR)',
-      }),
+      screen.getByLabelText(
+        'Offer A benefit 1 employer-stated annual value (EUR)',
+      ),
       '500',
     )
     await user.type(
-      screen.getByRole('textbox', {
-        name: 'Offer A benefit 1 user-assigned annual value (EUR)',
-      }),
+      screen.getByLabelText(
+        'Offer A benefit 1 user-assigned annual value (EUR)',
+      ),
       '0',
     )
     const summary = within(
@@ -55,35 +53,29 @@ describe('NP-CMP-009 pension and benefits', () => {
     await user.click(
       screen.getByRole('button', { name: 'Copy Offer A to Offer B' }),
     )
-    expect(
-      screen.getByRole('textbox', { name: 'Offer B benefit 1 label' }),
-    ).toHaveValue('Training')
-    expect(
-      screen.getByRole('textbox', {
-        name: 'Offer B pension eligibility or vesting note',
-      }),
-    ).toHaveValue('After probation')
-    expect(
-      screen.getByRole('combobox', { name: 'Offer B pension certainty' }),
-    ).toHaveValue('conditional')
-    await user.clear(
-      screen.getByRole('textbox', { name: 'Offer B benefit 1 label' }),
+    expect(screen.getByLabelText('Offer B benefit 1 label')).toHaveValue(
+      'Training',
     )
+    expect(
+      screen.getByLabelText('Offer B pension eligibility or vesting note'),
+    ).toHaveValue('After probation')
+    expect(screen.getByLabelText('Offer B pension certainty')).toHaveValue(
+      'conditional',
+    )
+    await user.clear(screen.getByLabelText('Offer B benefit 1 label'))
     await user.type(
-      screen.getByRole('textbox', { name: 'Offer B benefit 1 label' }),
+      screen.getByLabelText('Offer B benefit 1 label'),
       'Mobility',
     )
-    expect(
-      screen.getByRole('textbox', { name: 'Offer A benefit 1 label' }),
-    ).toHaveValue('Training')
+    expect(screen.getByLabelText('Offer A benefit 1 label')).toHaveValue(
+      'Training',
+    )
     await user.click(screen.getByRole('button', { name: 'Clear Offer B' }))
     expect(
-      screen.queryByRole('textbox', { name: 'Offer B benefit 1 label' }),
+      screen.queryByLabelText('Offer B benefit 1 label'),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByRole('textbox', {
-        name: 'Offer B employer pension annual (EUR)',
-      }),
+      screen.getByLabelText('Offer B employer pension annual (EUR)'),
     ).toHaveValue('')
     expect(
       within(
@@ -96,7 +88,7 @@ describe('NP-CMP-009 pension and benefits', () => {
       screen.getByRole('button', { name: 'Remove Offer A benefit 1' }),
     )
     expect(
-      screen.queryByRole('textbox', { name: 'Offer A benefit 1 label' }),
+      screen.queryByLabelText('Offer A benefit 1 label'),
     ).not.toBeInTheDocument()
   })
 
@@ -104,31 +96,29 @@ describe('NP-CMP-009 pension and benefits', () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
     for (const side of ['A', 'B'])
       await user.type(
-        screen.getByRole('textbox', {
-          name: `Offer ${side} gross salary (EUR)`,
-        }),
+        screen.getByLabelText(`Offer ${side} gross salary (EUR)`),
         '60000',
       )
     await user.click(
       screen.getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
-      screen.getByRole('textbox', {
-        name: 'Offer A benefit 1 user-assigned annual value (EUR)',
-      }),
+      screen.getByLabelText(
+        'Offer A benefit 1 user-assigned annual value (EUR)',
+      ),
       '-5',
     )
     await user.click(screen.getByRole('button', { name: 'Check both offers' }))
     expect(screen.getByRole('status')).toHaveTextContent('Complete or correct')
     expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
     await user.type(
-      screen.getByRole('textbox', { name: 'Offer A benefit 1 label' }),
+      screen.getByLabelText('Offer A benefit 1 label'),
       'Learning',
     )
     await user.clear(
-      screen.getByRole('textbox', {
-        name: 'Offer A benefit 1 user-assigned annual value (EUR)',
-      }),
+      screen.getByLabelText(
+        'Offer A benefit 1 user-assigned annual value (EUR)',
+      ),
     )
     await user.click(screen.getByRole('button', { name: 'Check both offers' }))
     expect(screen.getByRole('status')).toHaveTextContent(

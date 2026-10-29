@@ -6,13 +6,15 @@ test.describe('product-flow smoke contracts', () => {
   }) => {
     await page.goto('./')
     await page.locator('#np-gross').fill('5000')
-    await page.getByLabel('Tax class').selectOption('4')
-    await page.getByLabel('Federal state').selectOption('DE-BW')
+    await page.getByLabel('Tax class', { exact: true }).selectOption('4')
+    await page
+      .getByLabel('Federal state', { exact: true })
+      .selectOption('DE-BW')
     await page.getByLabel('Church-tax liability').selectOption('not_liable')
-    await page.getByLabel('Date of birth').fill('1990-01-01')
+    await page.getByLabel('Date of birth', { exact: true }).fill('1990-01-01')
     await page.getByLabel('Number of children').fill('0')
     await page.locator('#np-insurance').selectOption('statutory')
-    await page.getByRole('checkbox').check()
+    await page.locator('#np-standard-employment').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
     await expect(
       page.getByRole('heading', { name: 'Salary summary' }),
@@ -45,13 +47,15 @@ test.describe('product-flow smoke contracts', () => {
   test('does not fabricate private-insurance results', async ({ page }) => {
     await page.goto('./')
     await page.locator('#np-gross').fill('5000')
-    await page.getByLabel('Tax class').selectOption('4')
-    await page.getByLabel('Federal state').selectOption('DE-BW')
+    await page.getByLabel('Tax class', { exact: true }).selectOption('4')
+    await page
+      .getByLabel('Federal state', { exact: true })
+      .selectOption('DE-BW')
     await page.getByLabel('Church-tax liability').selectOption('not_liable')
-    await page.getByLabel('Date of birth').fill('1990-01-01')
+    await page.getByLabel('Date of birth', { exact: true }).fill('1990-01-01')
     await page.getByLabel('Number of children').fill('0')
     await page.locator('#np-insurance').selectOption('private')
-    await page.getByRole('checkbox').check()
+    await page.locator('#np-standard-employment').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
     await expect(
       page.getByText(
@@ -66,14 +70,18 @@ test.describe('product-flow smoke contracts', () => {
   }) => {
     await page.goto('./?np=1&year=2026&period=annual&state=DE-BE')
     await expect(page.getByLabel('Salary frequency')).toHaveValue('annual')
-    await expect(page.getByLabel('Federal state')).toHaveValue('DE-BE')
+    await expect(page.getByLabel('Federal state', { exact: true })).toHaveValue(
+      'DE-BE',
+    )
     await expect(page.locator('#np-gross')).toHaveValue('')
     await expect(page.getByText('Safe URL settings restored')).toBeVisible()
     await page
       .getByRole('button', { name: 'Clear shared settings and reset' })
       .click()
     await expect(page).not.toHaveURL(/np=1/)
-    await expect(page.getByLabel('Federal state')).toHaveValue('')
+    await expect(page.getByLabel('Federal state', { exact: true })).toHaveValue(
+      '',
+    )
   })
 
   test('compares two job offers', () => {

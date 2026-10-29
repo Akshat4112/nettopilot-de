@@ -841,3 +841,45 @@ main {
 .commute-time-comparison dd {
   overflow-wrap: anywhere;
 }
+
+.offer-net-compensation,
+.offer-payroll-context {
+  display: grid;
+  gap: var(--np-space-4);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.offer-payroll-context {
+  margin: 0;
+  padding: var(--np-space-4);
+  border: 1px solid var(--np-color-line);
+}
+
+.offer-net-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--np-space-4);
+}
+
+.offer-net-results section {
+  min-width: 0;
+}
+
+.offer-net-results table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.offer-net-results :is(th, td) {
+  text-align: left;
+  padding: var(--np-space-2);
+  border-bottom: 1px solid var(--np-color-line);
+  vertical-align: top;
+}
+
+@media (max-width: 700px) {
+  .offer-net-results {
+    grid-template-columns: 1fr;
+  }
+}

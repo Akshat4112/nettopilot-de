@@ -16,7 +16,7 @@ for (const width of [320, 375, 768, 1024, 1440]) {
     expect(rootWidth).toBeLessThanOrEqual(width)
 
     await page.getByRole('button', { name: /Load example:.*Class I ·/ }).click()
-    await page.getByRole('checkbox').check()
+    await page.locator('#np-standard-employment').check()
     await page.getByRole('button', { name: 'Check inputs' }).click()
 
     await expect(

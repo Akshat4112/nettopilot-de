@@ -6,6 +6,15 @@ import { APP_BASE_PATH } from './config/app'
 import { renderWithUser } from './test/render'
 
 describe('App', () => {
+  it('makes the public calculation methodology reachable from navigation', () => {
+    renderWithUser(<App />)
+    expect(
+      screen.getByRole('link', { name: 'Calculation methodology' }),
+    ).toHaveAttribute('href', '#methodology')
+    expect(
+      screen.getByRole('region', { name: 'Calculation methodology' }),
+    ).toHaveAttribute('id', 'methodology')
+  })
   it('renders the application foundation and its public links', () => {
     renderWithUser(<App />)
 

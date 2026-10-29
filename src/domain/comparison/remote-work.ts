@@ -129,7 +129,10 @@ export const attachRemoteWork = (
   inputs: readonly [RemoteWorkEntry, RemoteWorkEntry],
 ): OfferComparisonDraft => {
   const [a, b] = inputs.map(evaluateRemoteWork)
-  const apply = (original: OfferRemoteWork, value: RemoteWorkEvaluation | undefined) => {
+  const apply = (
+    original: OfferRemoteWork,
+    value: RemoteWorkEvaluation | undefined,
+  ) => {
     if (value === undefined || value.state === 'invalid') return original
     return {
       ...original,

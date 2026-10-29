@@ -7,6 +7,7 @@ import { CommuteCostComparison } from './CommuteCostComparison'
 import { CommuteTimeComparison } from './CommuteTimeComparison'
 import { RemoteWorkComparison } from './RemoteWorkComparison'
 import { OfferBenefitsInputs } from './OfferBenefitsInputs'
+import { OfferNetCompensation } from './OfferNetCompensation'
 import {
   attachBenefits,
   blankBenefits,
@@ -239,8 +240,8 @@ export function OfferComparisonInputs() {
       <h2 id="offer-input-title">Compare two job offers</h2>
       <p>
         Enter base salary for Offer A and Offer B. Each offer stays independent
-        in this browser. Net-pay comparisons will become available after the
-        separately validated comparison engine is connected.
+        in this browser. Use the shared payroll assumptions below to calculate
+        supported recurring net compensation for both offers.
       </p>
       <div className="offer-grid">
         {offers.map((entry, index) => {
@@ -498,6 +499,13 @@ export function OfferComparisonInputs() {
         offerB={commuteTimeFor(1)}
       />
       <RemoteWorkComparison offerA={remoteFor(0)} offerB={remoteFor(1)} />
+      <OfferNetCompensation
+        draft={model}
+        inputValidity={[
+          validateAdditionalPay(additional[0]).length === 0,
+          validateAdditionalPay(additional[1]).length === 0,
+        ]}
+      />
       <div className="offer-review">
         <button
           className="np-button-primary"
@@ -510,9 +518,9 @@ export function OfferComparisonInputs() {
         </button>
         {checked && accepted && dataIsAdmitted && (
           <p role="status">
-            Both base salaries are valid. No net-pay difference is calculated
-            yet; working time, tax and insurance assumptions must be checked
-            separately.
+            Both base salaries are valid. No net-pay difference is calculated by
+            this input check. Use Calculate net compensation after confirming
+            the shared payroll assumptions.
           </p>
         )}
         {checked && !accepted && (

@@ -26,7 +26,7 @@ function RemoteTerms({
           <p>
             Expected remote work:{' '}
             {result.remoteDaysPerWeek.state === 'provided'
-              ? `${result.remoteDaysPerWeek.value} days per week`
+              ? String(result.remoteDaysPerWeek.value) + ' days per week'
               : 'Not specified'}
           </p>
           <p>

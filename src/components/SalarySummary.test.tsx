@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { SalarySummary } from './SalarySummary'
 import {
@@ -6,7 +6,13 @@ import {
   type SalaryMonthAdmission2026,
 } from '../domain/salary/salary-aggregation'
 
-const complete = (): ReturnType<typeof aggregateSalaryResults2026> => {
+const complete = (
+  options: {
+    readonly varyingRecurringTax?: boolean
+    readonly privateInsuranceOutflowCents?: number
+    readonly bonus?: boolean
+  } = {},
+): ReturnType<typeof aggregateSalaryResults2026> => {
   const months: SalaryMonthAdmission2026[] = Array.from(
     { length: 12 },
     (_, index) => ({
@@ -14,7 +20,8 @@ const complete = (): ReturnType<typeof aggregateSalaryResults2026> => {
       value: {
         month: index + 1,
         recurringGrossCents: 500000,
-        recurringWageTaxCents: 50000,
+        recurringWageTaxCents:
+          options.varyingRecurringTax === true && index === 5 ? 50001 : 50000,
         recurringSolidarityCents: 0,
         recurringChurchTaxCents: 0,
         employeePensionCents: 10000,
@@ -25,9 +32,27 @@ const complete = (): ReturnType<typeof aggregateSalaryResults2026> => {
         employerUnemploymentCents: 3000,
         employerHealthCents: 5000,
         employerCareCents: 2000,
-        privateInsuranceOutflowCents: 0,
+        privateInsuranceOutflowCents: options.privateInsuranceOutflowCents ?? 0,
         guaranteedRecurringGrossCents: 500000,
-        oneOffPayments: [],
+        oneOffPayments:
+          options.bonus === true && index === 11
+            ? [
+                {
+                  guarantee: 'variable',
+                  settlement: {
+                    state: 'calculated',
+                    grossCents: 100000,
+                    wageTaxCents: 20000,
+                    solidarityCents: 0,
+                    churchTaxCents: 0,
+                    employeeInsuranceCents: 0,
+                    employerInsuranceCents: 0,
+                    netBonusCents: 80000,
+                    incrementalEmployerCostCents: 100000,
+                  },
+                },
+              ]
+            : [],
       },
     }),
   )
@@ -35,6 +60,86 @@ const complete = (): ReturnType<typeof aggregateSalaryResults2026> => {
 }
 
 describe('SalarySummary', () => {
+  it('leads with recurring take-home pay, tax year and estimate status before details', () => {
+    render(<SalarySummary result={complete()} />)
+    const summary = screen.getByRole('region', { name: 'Salary summary' })
+    const primary = within(summary).getByRole('region', {
+      name: 'Recurring monthly take-home pay',
+    })
+    expect(summary.children[1]).toBe(primary)
+    expect(primary).toHaveTextContent(
+      'Estimated take-home pay for tax year 2026',
+    )
+    expect(primary).toHaveTextContent('€4,300.00')
+    for (const detail of [
+      screen.getByRole('group', { name: 'Salary display period' }),
+      screen.getByText('Employer cost'),
+    ]) {
+      expect(primary.compareDocumentPosition(detail)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      )
+    }
+  })
+
+  it('keeps the recurring figure independent of annual totals, bonuses and the detail toggle', () => {
+    render(
+      <SalarySummary
+        result={complete({ bonus: true, privateInsuranceOutflowCents: 30000 })}
+      />,
+    )
+    const primary = screen.getByRole('region', {
+      name: 'Recurring monthly take-home pay',
+    })
+    expect(primary).toHaveTextContent('€4,000.00')
+    expect(primary).toHaveTextContent('After private insurance cash outflow')
+    fireEvent.click(screen.getByRole('button', { name: 'Monthly' }))
+    expect(primary).toHaveTextContent('€4,000.00')
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'no monthly average is inferred',
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Annual' }))
+    expect(primary).toHaveTextContent('€4,000.00')
+    expect(screen.getByText('Net payroll pay')).toBeInTheDocument()
+  })
+
+  it('names varying recurring take-home pay without presenting an averaged lead amount', () => {
+    render(<SalarySummary result={complete({ varyingRecurringTax: true })} />)
+    const primary = screen.getByRole('region', {
+      name: 'Recurring monthly take-home pay',
+    })
+    expect(primary).toHaveTextContent('Recurring monthly take-home pay varies')
+    expect(primary).toHaveTextContent('No monthly average is inferred')
+    expect(primary.textContent).not.toContain('€')
+    expect(screen.getByText('Net payroll pay')).toBeInTheDocument()
+  })
+
+  it('replaces the leading figure with the current result and removes it when unsupported', () => {
+    const { rerender } = render(<SalarySummary result={complete()} />)
+    rerender(
+      <SalarySummary
+        result={complete({ privateInsuranceOutflowCents: 30000 })}
+      />,
+    )
+    expect(
+      screen.getByRole('region', { name: 'Recurring monthly take-home pay' }),
+    ).toHaveTextContent('€4,000.00')
+    rerender(
+      <SalarySummary
+        result={{
+          state: 'unsupported',
+          reason: 'missing_tax_evidence',
+          month: 3,
+        }}
+      />,
+    )
+    expect(
+      screen.queryByRole('region', { name: 'Recurring monthly take-home pay' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('region', { name: 'Salary summary' }).textContent,
+    ).not.toContain('€')
+  })
+
   it('presents domain-calculated annual amounts and employer costs', () => {
     render(<SalarySummary result={complete()} />)
     expect(screen.getByText('Gross pay')).toBeInTheDocument()
@@ -145,6 +250,13 @@ describe('SalarySummary', () => {
     expect(
       screen.getByText(/Printing includes your personal salary/),
     ).toBeInTheDocument()
+    expect(
+      screen
+        .getByRole('region', { name: 'Recurring monthly take-home pay' })
+        .compareDocumentPosition(
+          screen.getByRole('button', { name: 'Print or save as PDF' }),
+        ),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
     fireEvent.click(
       screen.getByRole('button', { name: 'Print or save as PDF' }),
     )
@@ -164,6 +276,9 @@ describe('SalarySummary', () => {
     )
     expect(screen.getByRole('status')).toHaveTextContent('more validated')
     expect(screen.queryByText('Net payroll pay')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('region', { name: 'Recurring monthly take-home pay' }),
+    ).not.toBeInTheDocument()
   })
 
   it('labels unsupported payroll and affected month', () => {

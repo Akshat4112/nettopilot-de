@@ -6,6 +6,15 @@ import { APP_BASE_PATH } from './config/app'
 import { renderWithUser } from './test/render'
 
 describe('App', () => {
+  it('makes the public calculation methodology reachable from navigation', () => {
+    renderWithUser(<App />)
+    expect(
+      screen.getByRole('link', { name: 'Calculation methodology' }),
+    ).toHaveAttribute('href', '#methodology')
+    expect(
+      screen.getByRole('region', { name: 'Calculation methodology' }),
+    ).toHaveAttribute('id', 'methodology')
+  })
   it('renders the application foundation and its public links', () => {
     renderWithUser(<App />)
 
@@ -28,11 +37,11 @@ describe('App', () => {
     ).toHaveAttribute('href', 'https://github.com/Akshat4112/nettopilot-de')
   })
 
-  it('labels the unavailable calculation state clearly', () => {
+  it('labels the calculation scope clearly', () => {
     renderWithUser(<App />)
 
     expect(
       screen.getByRole('complementary', { name: 'Application status' }),
-    ).toHaveTextContent('The calculation engine is not available yet.')
+    ).toHaveTextContent('A limited 2026 gross-to-net estimate is available.')
   })
 })

@@ -7,7 +7,7 @@ export default defineConfig({
     modulePreload: {
       polyfill: false,
     },
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         app: new URL('index.html', import.meta.url).pathname,
         notFound: new URL('404.html', import.meta.url).pathname,

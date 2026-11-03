@@ -1,4 +1,136 @@
 :root {
+  --np-color-ink: #17221d;
+  --np-color-muted: #46554d;
+  --np-color-canvas: #f4f3ed;
+  --np-color-surface: #faf9f5;
+  --np-color-line: #c8cec9;
+  --np-color-accent: #9c3f28;
+  --np-color-focus: #135e8a;
+  --np-color-error: #a32632;
+  --np-color-success: #176a48;
+  --np-radius-sm: 0.5rem;
+  --np-radius-md: 0.875rem;
+  --np-radius-lg: 1.25rem;
+  --np-space-1: 0.25rem;
+  --np-space-2: 0.5rem;
+  --np-space-3: 0.75rem;
+  --np-space-4: 1rem;
+  --np-space-6: 1.5rem;
+  --np-space-8: 2rem;
+  --np-space-12: 3rem;
+  --np-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+  --np-shadow-raised: 0 12px 35px rgb(23 34 29 / 8%);
+}
+
+:where(
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  summary,
+  [tabindex='-1']
+):focus-visible {
+  outline: 3px solid var(--np-color-focus);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  z-index: 10;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--np-radius-sm);
+  background: var(--np-color-surface);
+  color: var(--np-color-ink);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+:where(input, select, textarea) {
+  max-width: 100%;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-sm);
+  padding: 0.75rem;
+  background: var(--np-color-surface);
+  color: var(--np-color-ink);
+  font: inherit;
+}
+
+:where(button) {
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: var(--np-radius-sm);
+  padding: 0.65rem 1rem;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+:where(button):disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.np-panel {
+  min-width: 0;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-lg);
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--np-color-surface);
+}
+
+.np-field {
+  display: grid;
+  gap: var(--np-space-2);
+  min-width: 0;
+}
+
+.np-field-error {
+  color: var(--np-color-error);
+  font-size: 0.875rem;
+}
+
+.np-input-error {
+  border-color: var(--np-color-error);
+}
+
+.np-button-primary {
+  background: var(--np-color-ink);
+  color: white;
+}
+
+.np-button-secondary {
+  border-color: var(--np-color-line);
+  background: var(--np-color-surface);
+  color: var(--np-color-ink);
+}
+
+.np-status-error {
+  border-left: 4px solid var(--np-color-error);
+}
+
+.np-status-success {
+  border-left: 4px solid var(--np-color-success);
+}
+
+.np-results-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(16rem, 3fr);
+  gap: var(--np-space-6);
+}
+
+@media (max-width: 760px) {
+  .np-results-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+:root {
   font-family:
     Inter,
     ui-sans-serif,
@@ -160,5 +292,621 @@ footer a {
   *::before,
   *::after {
     scroll-behavior: auto !important;
+  }
+}
+
+.salary-inputs {
+  width: min(100%, 800px);
+  margin-bottom: 4rem;
+}
+.salary-inputs form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+.salary-inputs h2 {
+  margin-top: 0;
+}
+.salary-inputs :is(input, select) {
+  width: 100%;
+}
+.salary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+}
+.salary-inputs [role='status'] {
+  grid-column: 1 / -1;
+}
+@media (max-width: 620px) {
+  .salary-inputs form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.salary-inputs input[type='checkbox'] {
+  width: auto;
+  min-width: 1.15rem;
+  min-height: 1.15rem;
+  margin-right: 0.55rem;
+  vertical-align: middle;
+}
+
+.salary-inputs details.np-panel {
+  grid-column: 1 / -1;
+}
+
+.salary-summary-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--np-space-4);
+  margin: var(--np-space-6) 0 0;
+}
+
+.salary-summary-figures > div {
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+  background: var(--np-color-canvas);
+}
+
+.salary-summary-figures dt {
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+}
+
+.salary-summary-figures dd {
+  margin: var(--np-space-2) 0 0;
+  font-size: clamp(1.15rem, 2.8vw, 1.6rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.salary-deduction-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: var(--np-space-4);
+}
+
+.salary-deduction-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.salary-deduction-table :is(th, td) {
+  padding: var(--np-space-3);
+  border-bottom: 1px solid var(--np-color-line);
+  vertical-align: top;
+}
+
+.salary-deduction-table td {
+  white-space: nowrap;
+}
+
+.salary-deduction-table tbody tr:last-child {
+  font-weight: 700;
+}
+
+.salary-deduction-table details {
+  margin-top: var(--np-space-2);
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.salary-deduction-table summary {
+  color: var(--np-color-focus);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.salary-deduction-table caption {
+  padding: var(--np-space-2) 0;
+  color: var(--np-color-muted);
+  text-align: left;
+}
+
+.np-gross-net-figure {
+  min-width: 0;
+  margin: var(--np-space-6) 0;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.np-gross-net-figure figcaption {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.np-gross-net-figure p {
+  color: var(--np-color-muted);
+  line-height: 1.5;
+}
+
+.np-gross-net-bar {
+  display: flex;
+  height: 2rem;
+  overflow: hidden;
+  border-radius: var(--np-radius-sm);
+  background: var(--np-color-canvas);
+}
+
+.np-gross-net-available {
+  background: var(--np-color-success);
+}
+
+.np-gross-net-deductions {
+  background: var(--np-color-accent);
+}
+
+.np-gross-net-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: var(--np-space-4);
+}
+
+.np-gross-net-legend dt {
+  color: var(--np-color-muted);
+}
+
+.np-gross-net-legend dd {
+  margin: var(--np-space-2) 0 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.np-gross-net-swatch {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: var(--np-space-2);
+  border-radius: 2px;
+}
+
+.np-gross-net-swatch-available {
+  background: var(--np-color-success);
+}
+
+.np-gross-net-swatch-deductions {
+  background: var(--np-color-accent);
+}
+
+.np-period-toggle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--np-space-1);
+  margin-bottom: var(--np-space-3);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-sm);
+  padding: var(--np-space-1);
+  background: var(--np-color-canvas);
+}
+
+.np-period-toggle button {
+  min-width: 7rem;
+  background: transparent;
+  color: var(--np-color-ink);
+}
+
+.np-period-toggle button[aria-pressed='true'] {
+  background: var(--np-color-ink);
+  color: #fff;
+}
+
+.np-print-report {
+  display: none;
+}
+
+.np-print-action {
+  margin: var(--np-space-4) 0;
+}
+
+.np-print-action p {
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  :root,
+  body,
+  .app-shell,
+  main,
+  .salary-inputs,
+  .salary-inputs.np-panel,
+  .salary-inputs .np-panel {
+    display: block !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  .site-header,
+  .hero,
+  .skip-link,
+  #methodology,
+  footer,
+  .salary-inputs > p,
+  .salary-inputs > [role='status'],
+  .salary-inputs > [role='alert'],
+  .salary-inputs form,
+  #salary-input-heading,
+  #salary-summary-heading,
+  .np-period-toggle,
+  .np-print-action,
+  .salary-recurring-net,
+  .salary-summary-figures,
+  .np-gross-net-figure,
+  .salary-deduction-scroll {
+    display: none !important;
+  }
+
+  .np-print-report {
+    display: block !important;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+
+  .np-print-report h3 {
+    margin: 0 0 0.75rem;
+    font-size: 19pt;
+  }
+
+  .np-print-report h4 {
+    margin: 1.2rem 0 0.5rem;
+    font-size: 12pt;
+  }
+
+  .np-print-report dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem 1.2rem;
+  }
+
+  .np-print-report dl > div {
+    break-inside: avoid;
+    border-bottom: 1px solid #bbb;
+    padding: 0.4rem 0;
+  }
+
+  .np-print-report dt {
+    font-size: 9pt;
+    color: #555;
+  }
+
+  .np-print-report dd {
+    margin: 0.2rem 0 0;
+    overflow-wrap: anywhere;
+    font-weight: 650;
+  }
+}
+
+/* NP-UI-013: Prevent intrinsic grid and form content from widening the page. */
+.app-shell,
+main,
+.hero,
+.salary-inputs,
+.salary-inputs form,
+.salary-actions,
+.np-field,
+.np-panel,
+.np-gross-net-figure,
+.np-gross-net-legend,
+.salary-summary-figures {
+  min-width: 0;
+}
+
+main {
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.salary-inputs form > *,
+.salary-actions > *,
+.salary-inputs .np-panel {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.salary-actions p,
+.salary-actions button,
+.salary-inputs small,
+.salary-inputs label,
+.np-gross-net-legend dd,
+.salary-summary-figures dd {
+  overflow-wrap: anywhere;
+}
+
+.salary-deduction-table {
+  min-width: 33rem;
+}
+
+@media screen and (max-width: 620px) {
+  .app-shell {
+    padding-inline: clamp(0.75rem, 4vw, 1.25rem);
+  }
+
+  .hero {
+    padding-block: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .salary-inputs {
+    padding: 1rem;
+  }
+
+  .salary-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .salary-actions button,
+  .salary-actions .np-field {
+    width: 100%;
+  }
+
+  .np-period-toggle {
+    display: flex;
+    width: 100%;
+  }
+
+  .np-period-toggle button {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.offer-comparison {
+  width: min(100%, 980px);
+  margin-bottom: var(--np-space-12);
+}
+
+.offer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--np-space-6);
+}
+
+.offer-card {
+  display: grid;
+  gap: var(--np-space-4);
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.offer-card legend {
+  padding: 0 var(--np-space-2);
+  font-weight: 700;
+}
+
+.offer-card :is(input, select) {
+  width: 100%;
+}
+
+.offer-benefits {
+  display: grid;
+  gap: var(--np-space-4);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.offer-benefits fieldset {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  margin: 0;
+  padding: var(--np-space-3);
+  border: 1px solid var(--np-color-line);
+}
+
+.offer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--np-space-2);
+}
+
+.offer-review {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--np-space-3);
+  margin-top: var(--np-space-4);
+}
+
+.offer-review p {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
+@media screen and (max-width: 760px) {
+  .offer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .offer-actions button {
+    flex: 1 1 11rem;
+  }
+}
+
+@media print {
+  /* Offer drafts must never leak into a separate salary calculation printout. */
+  .offer-comparison {
+    display: none !important;
+  }
+}
+
+.offer-extra {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-4);
+}
+
+.offer-extra h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.offer-extra p {
+  margin: 0;
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.offer-working-time {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-4);
+}
+
+.offer-working-time h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.offer-working-time p {
+  margin: 0;
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.vacation-comparison {
+  margin-top: var(--np-space-6);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.vacation-comparison h3 {
+  margin-top: 0;
+}
+
+.vacation-comparison-values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: var(--np-space-3);
+}
+
+.vacation-comparison-values > div {
+  min-width: 0;
+}
+
+.vacation-comparison-values dt,
+.vacation-method {
+  color: var(--np-color-muted);
+}
+
+.vacation-comparison-values dd {
+  margin: var(--np-space-1) 0 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.offer-commute-inputs {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-4);
+}
+
+.offer-commute-inputs h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.offer-commute-inputs p {
+  margin: 0;
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.commute-cost-comparison,
+.commute-time-comparison {
+  min-width: 0;
+  margin-top: var(--np-space-6);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+}
+
+.commute-cost-comparison h3,
+.commute-time-comparison h3 {
+  margin-top: 0;
+}
+
+.commute-cost-comparison p,
+.commute-cost-comparison dd,
+.commute-time-comparison p,
+.commute-time-comparison dd {
+  overflow-wrap: anywhere;
+}
+
+.offer-net-compensation,
+.offer-payroll-context {
+  display: grid;
+  gap: var(--np-space-4);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.offer-payroll-context {
+  margin: 0;
+  padding: var(--np-space-4);
+  border: 1px solid var(--np-color-line);
+}
+
+.offer-net-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--np-space-4);
+}
+
+.offer-net-results section {
+  min-width: 0;
+}
+
+.offer-net-results table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.offer-net-results :is(th, td) {
+  text-align: left;
+  padding: var(--np-space-2);
+  border-bottom: 1px solid var(--np-color-line);
+  vertical-align: top;
+}
+
+@media (max-width: 700px) {
+  .offer-net-results {
+    grid-template-columns: 1fr;
   }
 }

@@ -543,9 +543,9 @@
         "stateRateVerification": "incomplete"
       },
       "expected": {
-        "churchTaxResultState": "incomplete",
+        "churchTaxResultState": "unsupported",
         "normalChurchTaxAmount": false,
-        "reasonCode": "state_rate_or_rounding_source_unverified"
+        "reasonCode": "state_evidence_not_approved"
       },
       "sources": [
         "NP-RS-009"

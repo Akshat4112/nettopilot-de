@@ -368,6 +368,22 @@ export const calculateCareContribution2026 = (
   )
 }
 
+/** Reuse 2026 exact care rates for a verified proportional one-time contribution base. */
+export const calculateAllocatedOneOffCareContribution2026 = (
+  input: CareContributionInput,
+): CareResult => {
+  const validation = validateSupportedInput({
+    ...input,
+    includesOneOffPay: false,
+  })
+  if ('state' in validation) return validation
+  const base = assertSafeNonNegativeInteger(
+    input.liablePayCents,
+    'liablePayCents',
+  )
+  return calculateFromExactBase(input, base, 1n, base, false, validation)
+}
+
 const aggregateAnnualResult = (
   months: readonly CareContributionResult[],
 ): AnnualCareContributionResult => ({

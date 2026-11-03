@@ -15,6 +15,8 @@
  * - Return a structured, validated `PapInput` object for the PAP core.
  */
 
+import type { PrivateInsuranceResult2026 } from './private-insurance'
+
 import type {
   EuroAmount,
   OneOffPayment,
@@ -190,6 +192,7 @@ export function prepareTaxablePay(
   tax: WageTaxInput,
   social: SocialInsuranceInput,
   calculationYear: number,
+  privateInsurance?: PrivateInsuranceResult2026,
 ): { input: PapInput; prepared: PapPrepared } {
   if (calculationYear !== 2026) {
     throw new Error(
@@ -301,21 +304,35 @@ export function prepareTaxablePay(
   // 15. KRV — pension status for Vorsorgepauschale
   const KRV: krvValue = social.pensionStatus === 'compulsory' ? 0 : 1
 
-  // 16. PKV / PKPV / PKPVAGZ — private health path
+  // 16. PKV / PKPV / PKPVAGZ — use the validated separate PKV module.
+  // An incomplete private path may never silently default employer subsidy to zero.
   const healthType = social.health.healthInsuranceType
   const PKV: PkvValue = healthType === 'private' ? 1 : 0
-  const PKPV =
-    healthType === 'private'
-      ? precisionEuroAmountToCents(
-          social.health.totalHealthPremiumMonthly,
-          'half_up',
-        ) +
-        precisionEuroAmountToCents(
-          social.health.totalCarePremiumMonthly,
-          'half_up',
-        )
-      : 0
-  const PKPVAGZ = 0 // employer subsidy handled separately in NP-CALC-010
+  let PKPV = 0
+  let PKPVAGZ = 0
+  if (healthType === 'private') {
+    if (privateInsurance?.state !== 'calculated')
+      throw new RangeError(
+        'Private insurance requires a completed 2026 subsidy calculation',
+      )
+    const selectedHealth = precisionEuroAmountToCents(
+      social.health.totalHealthPremiumMonthly,
+      'half_up',
+    )
+    const selectedCare = precisionEuroAmountToCents(
+      social.health.totalCarePremiumMonthly,
+      'half_up',
+    )
+    if (
+      selectedHealth !== BigInt(privateInsurance.totalHealthPremiumCents) ||
+      selectedCare !== BigInt(privateInsurance.totalCarePremiumCents)
+    )
+      throw new RangeError(
+        'Private insurance premiums differ from the scenario',
+      )
+    PKPV = privateInsurance.pap.PKPV
+    PKPVAGZ = privateInsurance.pap.PKPVAGZ
+  }
 
   // 17. Care insurance flags
   const PVZ: PvzValue = social.careInsuranceChildStatus === 'childless' ? 1 : 0
@@ -362,7 +379,7 @@ export function prepareTaxablePay(
     LZZFREIB,
     LZZHINZU,
     MBV: 0,
-    PKPV: Number(PKPV),
+    PKPV,
     PKPVAGZ,
     PKV,
     PVA,

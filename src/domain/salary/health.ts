@@ -352,6 +352,27 @@ export const calculateStatutoryHealthContribution2026 = (
   )
 }
 
+/** Calculate an already-allocated one-time contribution base without applying a second monthly ceiling. */
+export const calculateAllocatedOneOffHealthContribution2026 = (
+  input: HealthContributionInput,
+): HealthResult => {
+  const admission = calculateStatutoryHealthContribution2026({
+    ...input,
+    liablePayCents: 0,
+    includesOneOffPay: false,
+  })
+  if (admission.state !== 'calculated') return admission
+  if (!Number.isSafeInteger(input.liablePayCents) || input.liablePayCents < 0)
+    throw new RangeError('Allocated bonus base must be safe non-negative cents')
+  return contributionResult(
+    input,
+    BigInt(input.liablePayCents),
+    1n,
+    BigInt(input.liablePayCents),
+    false,
+  )
+}
+
 const aggregateAnnualResult = (
   months: readonly HealthContributionResult[],
 ): AnnualHealthContributionResult => ({

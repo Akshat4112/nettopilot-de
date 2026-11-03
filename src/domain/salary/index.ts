@@ -103,6 +103,23 @@ export {
   calculateOtherRemunerationSolidaritySurcharge2026,
   calculateSolidaritySurcharge2026,
 } from './solidarity-surcharge'
+export {
+  CHURCH_TAX_STATE_REGISTRY_2026,
+  calculateChurchTax2026,
+  calculateChurchTaxFromPayrollTax2026,
+} from './church-tax'
+export type {
+  ApprovedChurchTaxRule2026,
+  ChurchTaxCalculatedResult,
+  ChurchTaxCalculationScope,
+  ChurchTaxEvidenceStatus,
+  ChurchTaxExceptionStatus,
+  ChurchTaxInput2026,
+  ChurchTaxResult,
+  ChurchTaxStateRecord2026,
+  ChurchTaxUnavailableReason,
+  ChurchTaxUnavailableResult,
+} from './church-tax'
 export type {
   OtherRemunerationSolidaritySurchargeInput,
   OtherRemunerationSolidaritySurchargeResult,
@@ -178,3 +195,53 @@ export type {
   CareUnavailableReason,
   CareUnavailableResult,
 } from './care'
+
+export { calculatePrivateInsurance2026 } from './private-insurance'
+export type {
+  PrivateInsuranceInput2026,
+  PrivateInsuranceResult2026,
+  PrivateInsuranceValueSource,
+} from './private-insurance'
+
+export { calculateAnnualPrivateInsurance2026 } from './private-insurance-annual'
+export type { PrivateInsuranceAnnualResult2026 } from './private-insurance-annual'
+
+export { prepareBonus2026, BONUS_CLASS_REGISTRY_2026 } from './bonus'
+export type {
+  BonusClass2026,
+  BonusPreparationInput2026,
+  BonusPreparationResult2026,
+} from './bonus'
+
+export { prepareBonusSequence2026 } from './bonus-sequence'
+export type { BonusSequence2026 } from './bonus-sequence'
+
+export { calculateBonusSettlement2026 } from './bonus-settlement'
+export type {
+  BonusSettlementInput2026,
+  BonusSettlement2026,
+} from './bonus-settlement'
+
+export { calculateBonusSettlementSequence2026 } from './bonus-settlement-sequence'
+export type { BonusSettlementSequence2026 } from './bonus-settlement-sequence'
+
+export { aggregateSalaryResults2026 } from './salary-aggregation'
+export type {
+  SalaryMonthAdmission2026,
+  SalaryMonthComponents2026,
+  SalaryPeriodTotals2026,
+  SalaryAggregationResult2026,
+  AggregatedBonus2026,
+} from './salary-aggregation'
+
+export {
+  explainSalaryResults2026,
+  SALARY_EXPLANATION_FIELDS_2026,
+} from './salary-explanations'
+export type {
+  SalaryExplanation2026,
+  SalaryExplanationField2026,
+  SalaryExplanationInput2026,
+  SalaryExplanationLineItem2026,
+  SalaryLineItemProvenance2026,
+} from './salary-explanations'

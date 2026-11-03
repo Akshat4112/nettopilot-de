@@ -1,3 +1,4 @@
+import { openOfferCategories } from '../test/offer-categories'
 import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { App } from '../App'
@@ -91,6 +92,13 @@ describe('NP-A11Y-001 form semantics', () => {
 
   it('connects optional offer guidance and existing validation reasons', async () => {
     const { user, container } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(
+      user,
+      'Cash compensation',
+      'Working time and vacation',
+      'Commute costs and time',
+      'Pension and benefits',
+    )
     expect(
       screen.getByLabelText('Offer A expected annual variable pay (EUR)'),
     ).toHaveAccessibleDescription(/Expected variable compensation is annual/)
@@ -142,6 +150,12 @@ describe('NP-A11Y-001 form semantics', () => {
 
   it('connects remote and payroll assumptions without inferring payroll field errors', async () => {
     const { user, container } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(
+      user,
+      'Commute costs and time',
+      'Remote and home-office terms',
+      'Pension and benefits',
+    )
     expect(screen.getByLabelText('Comparison date of birth')).toHaveAttribute(
       'autocomplete',
       'bday',
@@ -204,6 +218,7 @@ describe('NP-A11Y-001 form semantics', () => {
 
   it('describes benefit amount errors without declaring valid notes and certainty invalid', async () => {
     const { user, container } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Pension and benefits')
     await user.type(
       screen.getByLabelText('Offer A employer pension annual (EUR)'),
       '-1',
@@ -257,6 +272,7 @@ describe('NP-A11Y-001 form semantics', () => {
 
   it('keeps labels and ID references unique across the whole app and copied benefits', async () => {
     const { user, container } = renderWithUser(<App />)
+    await openOfferCategories(user, 'Pension and benefits')
     await user.click(
       screen.getByRole('button', { name: 'Add benefit to Offer A' }),
     )

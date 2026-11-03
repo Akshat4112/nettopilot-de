@@ -1,3 +1,4 @@
+import { openOfferCategories } from '../test/offer-categories'
 import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderWithUser } from '../test/render'
@@ -15,6 +16,11 @@ describe('independent remote-work admission', () => {
     'accepts a complete schedule with %s %s and no commute inputs',
     async (kind, value) => {
       const { user } = renderWithUser(<OfferComparisonInputs />)
+      await openOfferCategories(
+        user,
+        'Working time and vacation',
+        'Remote and home-office terms',
+      )
       await user.type(
         screen.getByRole('textbox', { name: 'Offer A gross salary (EUR)' }),
         '50000',
@@ -70,6 +76,12 @@ describe('independent remote-work admission', () => {
 
   it('accepts office frequency and travel time without requiring daily costs', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(
+      user,
+      'Working time and vacation',
+      'Commute costs and time',
+      'Remote and home-office terms',
+    )
     await user.type(
       screen.getByRole('textbox', { name: 'Offer A gross salary (EUR)' }),
       '50000',

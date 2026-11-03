@@ -1,3 +1,4 @@
+import { openOfferCategories } from './offer-categories'
 import { expect, test } from '@playwright/test'
 
 test('same-profile net compensation reconciles across pay frequencies and invalidates unsupported edits', async ({
@@ -5,6 +6,7 @@ test('same-profile net compensation reconciles across pay frequencies and invali
 }) => {
   await page.setViewportSize({ width: 375, height: 900 })
   await page.goto('./')
+  await openOfferCategories(page, 'Cash compensation', 'Pension and benefits')
   await page
     .getByRole('textbox', { name: 'Offer A gross salary (EUR)' })
     .fill('48000')

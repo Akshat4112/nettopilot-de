@@ -1,3 +1,4 @@
+import { openOfferCategories } from '../test/offer-categories'
 import { screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderWithUser } from '../test/render'
@@ -6,6 +7,7 @@ import { OfferComparisonInputs } from './OfferComparisonInputs'
 describe('NP-CMP-010 comparison payroll', () => {
   it('calculates equivalent monthly and annual offers and updates current inputs without stale differences', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Cash compensation')
     await user.type(
       screen.getByRole('textbox', { name: 'Offer A gross salary (EUR)' }),
       '48000',
@@ -119,6 +121,7 @@ describe('NP-CMP-010 comparison payroll', () => {
 describe('per-offer raw validation', () => {
   it('keeps the other supported result when a one-time payment is missing its month', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Cash compensation')
     for (const side of ['A', 'B'])
       await user.type(
         screen.getByRole('textbox', {

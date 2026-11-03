@@ -1,3 +1,4 @@
+import { openOfferCategories } from '../test/offer-categories'
 import { screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderWithUser } from '../test/render'
@@ -8,6 +9,7 @@ import { OfferComparisonInputs } from './OfferComparisonInputs'
 describe('NP-CMP-009 pension and benefits', () => {
   it('shows independent employer and user valuations without calculating tax', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Pension and benefits')
     await user.type(
       screen.getByLabelText('Offer A employer pension annual (EUR)'),
       '1200.05',
@@ -58,6 +60,7 @@ describe('NP-CMP-009 pension and benefits', () => {
 
   it('copies certainty and notes while keeping benefit labels independent', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Pension and benefits')
     await user.selectOptions(
       screen.getByLabelText('Offer A pension certainty'),
       'conditional',
@@ -102,6 +105,7 @@ describe('NP-CMP-009 pension and benefits', () => {
 
   it('clears copied pension and benefits without removing the original benefit', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Pension and benefits')
     await user.type(
       screen.getByLabelText('Offer A employer pension annual (EUR)'),
       '1200.05',
@@ -154,6 +158,7 @@ describe('NP-CMP-009 pension and benefits', () => {
 
   it('blocks invalid amounts and unlabeled benefits without inventing net values', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Pension and benefits')
     for (const side of ['A', 'B'])
       await user.type(
         screen.getByLabelText(`Offer ${side} gross salary (EUR)`),

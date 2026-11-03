@@ -1,3 +1,5 @@
+import { openOfferCategories } from '../test/offer-categories'
+import { renderWithUser } from '../test/render'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { EssentialSalaryInputs } from './EssentialSalaryInputs'
@@ -79,8 +81,9 @@ describe('payroll scope before form completion', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('flags special payments immediately even with a missing amount allocation or base salary', () => {
-    render(<OfferComparisonInputs />)
+  it('flags special payments immediately even with a missing amount allocation or base salary', async () => {
+    const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Cash compensation')
     const payment = screen.getByLabelText('Offer A one-time payment (EUR)')
     fireEvent.change(payment, { target: { value: '500' } })
     const card = within(screen.getByRole('group', { name: 'Offer A' }))

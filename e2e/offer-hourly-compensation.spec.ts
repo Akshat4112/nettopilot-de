@@ -1,9 +1,15 @@
+import { openOfferCategories } from './offer-categories'
 import { expect, test } from '@playwright/test'
 
 test('effective hourly results use current independent payroll and entered travel values', async ({
   page,
 }) => {
   await page.goto('./')
+  await openOfferCategories(
+    page,
+    'Working time and vacation',
+    'Commute costs and time',
+  )
   for (const side of ['A', 'B']) {
     await page
       .getByLabel(`Offer ${side} gross salary (EUR)`, { exact: true })

@@ -501,6 +501,11 @@ export function OfferComparisonInputs() {
       <RemoteWorkComparison offerA={remoteFor(0)} offerB={remoteFor(1)} />
       <OfferNetCompensation
         draft={model}
+        hourlyInputs={{
+          working,
+          commuteCosts: [commuteFor(0), commuteFor(1)],
+          commuteTime: [commuteTimeFor(0), commuteTimeFor(1)],
+        }}
         inputValidity={[
           validateAdditionalPay(additional[0]).length === 0,
           validateAdditionalPay(additional[1]).length === 0,

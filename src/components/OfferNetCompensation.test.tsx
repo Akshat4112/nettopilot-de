@@ -53,7 +53,9 @@ describe('NP-CMP-010 comparison payroll', () => {
     )
     expect(results.queryByText(/Annual net difference/)).not.toBeInTheDocument()
     expect(
-      results.getByText(/Offer A:.*Additional.*not supported/),
+      within(
+        results.getByRole('region', { name: 'Offer A net result' }),
+      ).getByText(/Offer A:.*Additional.*not supported/),
     ).toBeInTheDocument()
     expect(
       results.getByRole('region', { name: 'Offer B net result' }),
@@ -72,9 +74,13 @@ describe('NP-CMP-010 comparison payroll', () => {
       }),
     )
     expect(results.queryByText(/Annual net difference/)).not.toBeInTheDocument()
-    expect(
-      results.getAllByText(/Confirm the shared.*assumptions/),
-    ).toHaveLength(2)
+    for (const label of ['Offer A', 'Offer B']) {
+      expect(
+        within(
+          results.getByRole('region', { name: label + ' net result' }),
+        ).getByText(/Confirm the shared.*assumptions/),
+      ).toBeInTheDocument()
+    }
   })
 
   it('explains missing inputs and clears sensitive shared context on reset', async () => {

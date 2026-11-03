@@ -69,7 +69,9 @@ test('same-profile net compensation reconciles across pay frequencies and invali
     .fill('1000')
   await expect(results.getByText(/Annual net difference/)).toHaveCount(0)
   await expect(
-    results.getByText(/Offer A:.*Additional.*not supported/),
+    results
+      .getByRole('region', { name: 'Offer A net result' })
+      .getByText(/Offer A:.*Additional.*not supported/),
   ).toBeVisible()
   await page
     .getByRole('textbox', {

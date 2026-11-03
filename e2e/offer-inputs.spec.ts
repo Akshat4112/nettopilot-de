@@ -1,3 +1,4 @@
+import { openOfferCategories } from './offer-categories'
 import { expect, test } from '@playwright/test'
 
 test('compare-offer inputs copy, clear and validate without storing salary', async ({
@@ -50,6 +51,7 @@ test('variable and one-time pay stay separate and require an explicit month', as
   page,
 }) => {
   await page.goto('./')
+  await openOfferCategories(page, 'Cash compensation')
   await page
     .getByRole('textbox', {
       name: 'Offer A expected annual variable pay (EUR)',
@@ -88,6 +90,7 @@ test('vacation comparison updates for two independently editable schedules', asy
 }) => {
   await page.setViewportSize({ width: 375, height: 900 })
   await page.goto('./')
+  await openOfferCategories(page, 'Working time and vacation')
   await expect(page.getByText(/Vacation comparison unavailable/)).toBeVisible()
   for (const side of ['Offer A', 'Offer B']) {
     await page
@@ -124,6 +127,11 @@ test('commute costs require user-entered categories and respect paid leave', asy
 }) => {
   await page.setViewportSize({ width: 375, height: 900 })
   await page.goto('./')
+  await openOfferCategories(
+    page,
+    'Working time and vacation',
+    'Commute costs and time',
+  )
   await expect(
     page.getByText(/Annual commute cost comparison unavailable/),
   ).toBeVisible()
@@ -167,6 +175,11 @@ test('annual round-trip commute hours are independent from expense inputs', asyn
 }) => {
   await page.setViewportSize({ width: 375, height: 900 })
   await page.goto('./')
+  await openOfferCategories(
+    page,
+    'Working time and vacation',
+    'Commute costs and time',
+  )
   for (const side of ['Offer A', 'Offer B']) {
     await page
       .getByRole('combobox', { name: side + ' working days per week' })
@@ -202,6 +215,12 @@ test('remote-work comparison stays independent and mobile-safe', async ({
 }) => {
   await page.setViewportSize({ width: 375, height: 900 })
   await page.goto('./')
+  await openOfferCategories(
+    page,
+    'Working time and vacation',
+    'Commute costs and time',
+    'Remote and home-office terms',
+  )
   await page
     .getByRole('combobox', { name: 'Offer A working days per week' })
     .selectOption('5')

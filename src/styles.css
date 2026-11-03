@@ -994,3 +994,34 @@ main {
     font-weight: 650;
   }
 }
+
+.offer-category {
+  margin-block: var(--np-space-4);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  min-width: 0;
+}
+
+.offer-category > summary {
+  padding: var(--np-space-4);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.offer-category > summary h3 {
+  display: inline;
+  font-size: 1rem;
+}
+
+.offer-category-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--np-space-2) var(--np-space-6);
+  margin-top: var(--np-space-2);
+  font-size: 0.875rem;
+}
+
+.offer-category > .offer-grid,
+.offer-category > p {
+  margin: var(--np-space-4);
+}

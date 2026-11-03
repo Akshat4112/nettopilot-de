@@ -1,3 +1,4 @@
+import { openOfferCategories } from './offer-categories'
 import { expect, test } from '@playwright/test'
 
 test.describe('product-flow smoke contracts', () => {
@@ -89,6 +90,12 @@ test.describe('product-flow smoke contracts', () => {
   }, testInfo) => {
     await page.setViewportSize({ width: 375, height: 900 })
     await page.goto('./')
+    await openOfferCategories(
+      page,
+      'Working time and vacation',
+      'Commute costs and time',
+      'Pension and benefits',
+    )
     const summary = page.getByRole('region', {
       name: 'Offer comparison summary',
       exact: true,

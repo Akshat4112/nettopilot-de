@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import {
+  optionalCategoryStatuses,
+  type OptionalCategory,
+} from './offer-category-status'
 import { OfferAdditionalPayInputs } from './OfferAdditionalPayInputs'
 import { OfferWorkingTimeInputs } from './OfferWorkingTimeInputs'
 import { VacationComparison } from './VacationComparison'
@@ -48,6 +52,21 @@ import {
   validateOfferSalary,
   type OfferSalaryEntry,
 } from './offer-input-validation'
+
+const categoryTitles: Readonly<Record<OptionalCategory, string>> = {
+  cash: 'Cash compensation',
+  working: 'Working time and vacation',
+  commute: 'Commute costs and time',
+  remote: 'Remote and home-office terms',
+  benefits: 'Pension and benefits',
+}
+const optionalCategories = [
+  'cash',
+  'working',
+  'commute',
+  'remote',
+  'benefits',
+] as const
 
 const blank = (): OfferSalaryEntry => ({ grossEur: '', period: 'annual' })
 
@@ -234,6 +253,316 @@ export function OfferComparisonInputs() {
     (offer) => offer.compensation.baseSalary.state === 'provided',
   )
 
+  const renderOffer = (side: 0 | 1, category: 'base' | OptionalCategory) => {
+    const entry = offers[side]
+    const id = side === 0 ? 'offer-a' : 'offer-b'
+    const label = side === 0 ? 'Offer A' : 'Offer B'
+    const issue = validateOfferSalary(entry)
+    const extra = additional[side]
+    const payrollScope = evaluateOfferEntryScope(entry, extra)
+    const extraProblems = validateAdditionalPay(extra)
+    const commuteEntry = commuteFor(side)
+    const commuteEntered = [
+      commute[side].publicTransportPerOfficeDayEur,
+      commute[side].fuelPerOfficeDayEur,
+      commute[side].parkingPerOfficeDayEur,
+      commute[side].otherPerOfficeDayEur,
+    ].some((value) => value !== '')
+    const commuteResult = calculateCommuteCosts(commuteEntry)
+    const commuteTimeResult = calculateAnnualCommuteTime(commuteTimeFor(side))
+    const timeEntry = working[side]
+    const timeResult = calculateAnnualContractualHours(timeEntry)
+    const timeStarted = Object.values(timeEntry).some((value) => value !== '')
+    const remoteEntry = remote[side]
+    const remoteResult = evaluateRemoteWork(remoteFor(side))
+    const showIssue = checked && issue.state !== 'valid'
+    const showExtraIssue = checked && extraProblems.length > 0
+    const showTimeIssue =
+      checked && timeStarted && timeResult.state !== 'calculated'
+    const showCommuteIssue =
+      checked && commuteEntered && commuteResult.state !== 'calculated'
+    const showCommuteTimeIssue =
+      checked &&
+      oneWayMinutes[side] !== '' &&
+      commuteTimeResult.state !== 'calculated'
+    const showRemoteIssue =
+      checked && remoteStarted(side) && remoteResult.state === 'invalid'
+    const remoteDescription = [
+      id + '-remote-help',
+      showRemoteIssue ? id + '-remote-error' : undefined,
+    ]
+      .filter(Boolean)
+      .join(' ')
+
+    return (
+      <fieldset
+        className="offer-card"
+        key={id}
+        aria-label={
+          category === 'base'
+            ? undefined
+            : label + ' — ' + categoryTitles[category]
+        }
+      >
+        <legend>{label}</legend>
+        {category === 'base' && (
+          <>
+            <div aria-live="polite">
+              {payrollScope.issues.map((scopeIssue) => (
+                <p key={scopeIssue.reason}>
+                  {label}: {scopeIssue.message}
+                </p>
+              ))}
+            </div>
+            <div className="np-field">
+              <label htmlFor={id + '-gross'}>{label} gross salary (EUR)</label>
+              <input
+                id={id + '-gross'}
+                type="text"
+                inputMode="decimal"
+                value={entry.grossEur}
+                onChange={(event) => {
+                  setEntry(side, { ...entry, grossEur: event.target.value })
+                }}
+                aria-invalid={showIssue}
+                aria-describedby={showIssue ? id + '-error' : undefined}
+              />
+              {showIssue && (
+                <small id={id + '-error'} role="alert">
+                  {issue.reason}
+                </small>
+              )}
+            </div>
+            <div className="np-field">
+              <label htmlFor={id + '-period'}>{label} pay frequency</label>
+              <select
+                id={id + '-period'}
+                value={entry.period}
+                onChange={(event) => {
+                  setEntry(side, {
+                    ...entry,
+                    period:
+                      event.target.value === 'monthly' ? 'monthly' : 'annual',
+                  })
+                }}
+              >
+                <option value="annual">Annual</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </>
+        )}
+        {category === 'cash' && (
+          <>
+            <OfferAdditionalPayInputs
+              errorId={showExtraIssue ? id + '-additional-error' : undefined}
+              id={id}
+              label={label}
+              value={extra}
+              onChange={(next) => {
+                setExtra(side, next)
+              }}
+            />
+            {showExtraIssue && (
+              <div id={id + '-additional-error'} role="alert">
+                {extraProblems.map((problem) => (
+                  <p key={problem}>{problem}</p>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+        {category === 'working' && (
+          <>
+            <OfferWorkingTimeInputs
+              errorId={showTimeIssue ? id + '-working-error' : undefined}
+              id={id}
+              label={label}
+              value={timeEntry}
+              onChange={(next) => {
+                setWorkingEntry(side, next)
+              }}
+            />
+            {showTimeIssue && (
+              <p id={id + '-working-error'} role="alert">
+                {timeResult.reason}
+              </p>
+            )}
+          </>
+        )}
+        {category === 'commute' && (
+          <>
+            <OfferCommuteCostInputs
+              errorId={showCommuteIssue ? id + '-commute-error' : undefined}
+              id={id}
+              label={label}
+              value={commuteEntry}
+              onChange={(next) => {
+                setCommuteEntry(side, next)
+              }}
+            />
+            {showCommuteIssue && (
+              <p id={id + '-commute-error'} role="alert">
+                {commuteResult.reason}
+              </p>
+            )}
+            <div className="np-field">
+              <label htmlFor={id + '-one-way-minutes'}>
+                {label} one-way commute (minutes)
+              </label>
+              <input
+                id={id + '-one-way-minutes'}
+                aria-invalid={showCommuteTimeIssue}
+                aria-describedby={
+                  showCommuteTimeIssue ? id + '-commute-time-error' : undefined
+                }
+                type="text"
+                inputMode="numeric"
+                value={oneWayMinutes[side]}
+                onChange={(event) => {
+                  const value = event.target.value
+                  setOneWayMinutes((current) =>
+                    side === 0 ? [value, current[1]] : [current[0], value],
+                  )
+                  setChecked(false)
+                }}
+              />
+            </div>
+            {showCommuteTimeIssue && (
+              <p id={id + '-commute-time-error'} role="alert">
+                {commuteTimeResult.reason}
+              </p>
+            )}
+          </>
+        )}
+        {category === 'remote' && (
+          <>
+            <div
+              className="offer-remote-work"
+              role="group"
+              aria-label={label + ' remote and home-office terms'}
+              aria-invalid={showRemoteIssue}
+              aria-describedby={remoteDescription}
+            >
+              <h3>Remote and home-office terms</h3>
+              <p id={id + '-remote-help'}>
+                Working days and office days are shared with the working-time
+                and commute sections. Home-office amounts are monthly and
+                entered separately; no tax or net-pay adjustment is assumed.
+              </p>
+              <div className="np-field">
+                <label htmlFor={id + '-arrangement'}>
+                  {label} work arrangement
+                </label>
+                <select
+                  id={id + '-arrangement'}
+                  aria-describedby={remoteDescription}
+                  value={remoteEntry.arrangement}
+                  onChange={(event) => {
+                    const arrangement = event.target
+                      .value as RemoteWorkEntry['arrangement']
+                    setRemoteEntry(side, { ...remoteEntry, arrangement })
+                  }}
+                >
+                  <option value="unknown">Not specified</option>
+                  <option value="onsite">On-site</option>
+                  <option value="hybrid">Hybrid</option>
+                  <option value="remote">Fully remote</option>
+                </select>
+              </div>
+              <div className="np-field">
+                <label htmlFor={id + '-home-allowance'}>
+                  {label} employer home-office allowance monthly (EUR)
+                </label>
+                <input
+                  id={id + '-home-allowance'}
+                  aria-describedby={remoteDescription}
+                  type="text"
+                  inputMode="decimal"
+                  value={remoteEntry.employerAllowanceMonthlyEur}
+                  onChange={(event) => {
+                    setRemoteEntry(side, {
+                      ...remoteEntry,
+                      employerAllowanceMonthlyEur: event.target.value,
+                    })
+                  }}
+                />
+              </div>
+              <div className="np-field">
+                <label htmlFor={id + '-home-costs'}>
+                  {label} home-office expenses monthly (EUR)
+                </label>
+                <input
+                  id={id + '-home-costs'}
+                  aria-describedby={remoteDescription}
+                  type="text"
+                  inputMode="decimal"
+                  value={remoteEntry.homeOfficeCostMonthlyEur}
+                  onChange={(event) => {
+                    setRemoteEntry(side, {
+                      ...remoteEntry,
+                      homeOfficeCostMonthlyEur: event.target.value,
+                    })
+                  }}
+                />
+              </div>
+              {showRemoteIssue && (
+                <p id={id + '-remote-error'} role="alert">
+                  {label}: {remoteResult.reason}
+                </p>
+              )}
+            </div>
+          </>
+        )}
+        {category === 'benefits' && (
+          <>
+            <OfferBenefitsInputs
+              id={id}
+              label={label}
+              value={benefits[side]}
+              checked={checked}
+              onChange={(next) => {
+                setBenefitsEntry(side, next)
+              }}
+            />
+          </>
+        )}
+        {category === 'base' && (
+          <>
+            <div className="offer-actions">
+              <button
+                type="button"
+                className="np-button-secondary"
+                onClick={() => {
+                  copy(side)
+                }}
+              >
+                Copy {label} to {side === 0 ? 'Offer B' : 'Offer A'}
+              </button>
+              <button
+                type="button"
+                className="np-button-secondary"
+                onClick={() => {
+                  setEntry(side, blank())
+                  setExtra(side, emptyAdditionalPay())
+                  setWorkingEntry(side, blankWorkingTime())
+                  setCommuteEntry(side, blankCommuteCostEntry())
+                  setOneWayMinutes((current) =>
+                    side === 0 ? ['', current[1]] : [current[0], ''],
+                  )
+                  setRemoteEntry(side, blankRemoteWork())
+                  setBenefitsEntry(side, blankBenefits())
+                }}
+              >
+                Clear {label}
+              </button>
+            </div>
+          </>
+        )}
+      </fieldset>
+    )
+  }
+
   return (
     <section
       className="np-panel offer-comparison"
@@ -247,287 +576,51 @@ export function OfferComparisonInputs() {
       </p>
       <PayrollScopeSummary />
       <div className="offer-grid">
-        {offers.map((entry, index) => {
-          const side = index as 0 | 1
-          const id = side === 0 ? 'offer-a' : 'offer-b'
-          const label = side === 0 ? 'Offer A' : 'Offer B'
-          const issue = validateOfferSalary(entry)
-          const extra = additional[side]
-          const payrollScope = evaluateOfferEntryScope(entry, extra)
-          const extraProblems = validateAdditionalPay(extra)
-          const commuteEntry = commuteFor(side)
-          const commuteEntered = [
-            commute[side].publicTransportPerOfficeDayEur,
-            commute[side].fuelPerOfficeDayEur,
-            commute[side].parkingPerOfficeDayEur,
-            commute[side].otherPerOfficeDayEur,
-          ].some((value) => value !== '')
-          const commuteResult = calculateCommuteCosts(commuteEntry)
-          const commuteTimeResult = calculateAnnualCommuteTime(
-            commuteTimeFor(side),
-          )
-          const timeEntry = working[side]
-          const timeResult = calculateAnnualContractualHours(timeEntry)
-          const timeStarted = Object.values(timeEntry).some(
-            (value) => value !== '',
-          )
-          const remoteEntry = remote[side]
-          const remoteResult = evaluateRemoteWork(remoteFor(side))
-          const showIssue = checked && issue.state !== 'valid'
-          const showExtraIssue = checked && extraProblems.length > 0
-          const showTimeIssue =
-            checked && timeStarted && timeResult.state !== 'calculated'
-          const showCommuteIssue =
-            checked && commuteEntered && commuteResult.state !== 'calculated'
-          const showCommuteTimeIssue =
-            checked &&
-            oneWayMinutes[side] !== '' &&
-            commuteTimeResult.state !== 'calculated'
-          const showRemoteIssue =
-            checked && remoteStarted(side) && remoteResult.state === 'invalid'
-          const remoteDescription = [
-            id + '-remote-help',
-            showRemoteIssue ? id + '-remote-error' : undefined,
-          ]
-            .filter(Boolean)
-            .join(' ')
-
-          return (
-            <fieldset className="offer-card" key={id}>
-              <legend>{label}</legend>
-              <div aria-live="polite">
-                {payrollScope.issues.map((scopeIssue) => (
-                  <p key={scopeIssue.reason}>
-                    {label}: {scopeIssue.message}
-                  </p>
+        {renderOffer(0, 'base')}
+        {renderOffer(1, 'base')}
+      </div>
+      <p>
+        Optional offer terms stay separate from base-pay payroll. Open a
+        category to compare the same terms for both offers. Supplied means the
+        entered terms are valid; unentered values remain unknown.
+      </p>
+      <div className="offer-optional-categories">
+        {optionalCategories.map((category) => (
+          <details className="offer-category" key={category}>
+            <summary>
+              <h3>{categoryTitles[category]}</h3>
+              <span className="offer-category-statuses">
+                {([0, 1] as const).map((side) => (
+                  <span key={side}>
+                    Offer {side === 0 ? 'A' : 'B'}:{' '}
+                    {
+                      optionalCategoryStatuses({
+                        additional: additional[side],
+                        working: working[side],
+                        commute: commute[side],
+                        oneWayMinutes: oneWayMinutes[side],
+                        remote: remote[side],
+                        benefits: benefits[side],
+                      })[category]
+                    }
+                  </span>
                 ))}
-              </div>
-              <div className="np-field">
-                <label htmlFor={id + '-gross'}>
-                  {label} gross salary (EUR)
-                </label>
-                <input
-                  id={id + '-gross'}
-                  type="text"
-                  inputMode="decimal"
-                  value={entry.grossEur}
-                  onChange={(event) => {
-                    setEntry(side, { ...entry, grossEur: event.target.value })
-                  }}
-                  aria-invalid={showIssue}
-                  aria-describedby={showIssue ? id + '-error' : undefined}
-                />
-                {showIssue && (
-                  <small id={id + '-error'} role="alert">
-                    {issue.reason}
-                  </small>
-                )}
-              </div>
-              <div className="np-field">
-                <label htmlFor={id + '-period'}>{label} pay frequency</label>
-                <select
-                  id={id + '-period'}
-                  value={entry.period}
-                  onChange={(event) => {
-                    setEntry(side, {
-                      ...entry,
-                      period:
-                        event.target.value === 'monthly' ? 'monthly' : 'annual',
-                    })
-                  }}
-                >
-                  <option value="annual">Annual</option>
-                  <option value="monthly">Monthly</option>
-                </select>
-              </div>
-              <OfferAdditionalPayInputs
-                errorId={showExtraIssue ? id + '-additional-error' : undefined}
-                id={id}
-                label={label}
-                value={extra}
-                onChange={(next) => {
-                  setExtra(side, next)
-                }}
-              />
-              {showExtraIssue && (
-                <div id={id + '-additional-error'} role="alert">
-                  {extraProblems.map((problem) => (
-                    <p key={problem}>{problem}</p>
-                  ))}
-                </div>
-              )}
-              <OfferWorkingTimeInputs
-                errorId={showTimeIssue ? id + '-working-error' : undefined}
-                id={id}
-                label={label}
-                value={timeEntry}
-                onChange={(next) => {
-                  setWorkingEntry(side, next)
-                }}
-              />
-              {showTimeIssue && (
-                <p id={id + '-working-error'} role="alert">
-                  {timeResult.reason}
-                </p>
-              )}
-              <OfferCommuteCostInputs
-                errorId={showCommuteIssue ? id + '-commute-error' : undefined}
-                id={id}
-                label={label}
-                value={commuteEntry}
-                onChange={(next) => {
-                  setCommuteEntry(side, next)
-                }}
-              />
-              {showCommuteIssue && (
-                <p id={id + '-commute-error'} role="alert">
-                  {commuteResult.reason}
-                </p>
-              )}
-              <div className="np-field">
-                <label htmlFor={id + '-one-way-minutes'}>
-                  {label} one-way commute (minutes)
-                </label>
-                <input
-                  id={id + '-one-way-minutes'}
-                  aria-invalid={showCommuteTimeIssue}
-                  aria-describedby={
-                    showCommuteTimeIssue
-                      ? id + '-commute-time-error'
-                      : undefined
-                  }
-                  type="text"
-                  inputMode="numeric"
-                  value={oneWayMinutes[side]}
-                  onChange={(event) => {
-                    const value = event.target.value
-                    setOneWayMinutes((current) =>
-                      side === 0 ? [value, current[1]] : [current[0], value],
-                    )
-                    setChecked(false)
-                  }}
-                />
-              </div>
-              {showCommuteTimeIssue && (
-                <p id={id + '-commute-time-error'} role="alert">
-                  {commuteTimeResult.reason}
-                </p>
-              )}
-              <div
-                className="offer-remote-work"
-                role="group"
-                aria-label={label + ' remote and home-office terms'}
-                aria-invalid={showRemoteIssue}
-                aria-describedby={remoteDescription}
-              >
-                <h3>Remote and home-office terms</h3>
-                <p id={id + '-remote-help'}>
-                  Working days and office days are shared with the working-time
-                  and commute sections. Home-office amounts are monthly and
-                  entered separately; no tax or net-pay adjustment is assumed.
-                </p>
-                <div className="np-field">
-                  <label htmlFor={id + '-arrangement'}>
-                    {label} work arrangement
-                  </label>
-                  <select
-                    id={id + '-arrangement'}
-                    aria-describedby={remoteDescription}
-                    value={remoteEntry.arrangement}
-                    onChange={(event) => {
-                      const arrangement = event.target
-                        .value as RemoteWorkEntry['arrangement']
-                      setRemoteEntry(side, { ...remoteEntry, arrangement })
-                    }}
-                  >
-                    <option value="unknown">Not specified</option>
-                    <option value="onsite">On-site</option>
-                    <option value="hybrid">Hybrid</option>
-                    <option value="remote">Fully remote</option>
-                  </select>
-                </div>
-                <div className="np-field">
-                  <label htmlFor={id + '-home-allowance'}>
-                    {label} employer home-office allowance monthly (EUR)
-                  </label>
-                  <input
-                    id={id + '-home-allowance'}
-                    aria-describedby={remoteDescription}
-                    type="text"
-                    inputMode="decimal"
-                    value={remoteEntry.employerAllowanceMonthlyEur}
-                    onChange={(event) => {
-                      setRemoteEntry(side, {
-                        ...remoteEntry,
-                        employerAllowanceMonthlyEur: event.target.value,
-                      })
-                    }}
-                  />
-                </div>
-                <div className="np-field">
-                  <label htmlFor={id + '-home-costs'}>
-                    {label} home-office expenses monthly (EUR)
-                  </label>
-                  <input
-                    id={id + '-home-costs'}
-                    aria-describedby={remoteDescription}
-                    type="text"
-                    inputMode="decimal"
-                    value={remoteEntry.homeOfficeCostMonthlyEur}
-                    onChange={(event) => {
-                      setRemoteEntry(side, {
-                        ...remoteEntry,
-                        homeOfficeCostMonthlyEur: event.target.value,
-                      })
-                    }}
-                  />
-                </div>
-                {showRemoteIssue && (
-                  <p id={id + '-remote-error'} role="alert">
-                    {label}: {remoteResult.reason}
-                  </p>
-                )}
-              </div>
-              <OfferBenefitsInputs
-                id={id}
-                label={label}
-                value={benefits[side]}
-                checked={checked}
-                onChange={(next) => {
-                  setBenefitsEntry(side, next)
-                }}
-              />
-              <div className="offer-actions">
-                <button
-                  type="button"
-                  className="np-button-secondary"
-                  onClick={() => {
-                    copy(side)
-                  }}
-                >
-                  Copy {label} to {side === 0 ? 'Offer B' : 'Offer A'}
-                </button>
-                <button
-                  type="button"
-                  className="np-button-secondary"
-                  onClick={() => {
-                    setEntry(side, blank())
-                    setExtra(side, emptyAdditionalPay())
-                    setWorkingEntry(side, blankWorkingTime())
-                    setCommuteEntry(side, blankCommuteCostEntry())
-                    setOneWayMinutes((current) =>
-                      side === 0 ? ['', current[1]] : [current[0], ''],
-                    )
-                    setRemoteEntry(side, blankRemoteWork())
-                    setBenefitsEntry(side, blankBenefits())
-                  }}
-                >
-                  Clear {label}
-                </button>
-              </div>
-            </fieldset>
-          )
-        })}
+              </span>
+            </summary>
+            {category === 'commute' && (
+              <p>
+                Enter working days and paid vacation in Working time and
+                vacation. Office days are shared with Remote and home-office
+                terms. Supply costs, time, or both; blank amounts remain
+                unknown.
+              </p>
+            )}
+            <div className="offer-grid">
+              {renderOffer(0, category)}
+              {renderOffer(1, category)}
+            </div>
+          </details>
+        ))}
       </div>
       <VacationComparison offerA={working[0]} offerB={working[1]} />
       <CommuteCostComparison offerA={commuteFor(0)} offerB={commuteFor(1)} />

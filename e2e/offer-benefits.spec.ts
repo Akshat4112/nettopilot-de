@@ -1,3 +1,4 @@
+import { openOfferCategories } from './offer-categories'
 import { expect, test } from '@playwright/test'
 
 test('annual pension and benefit valuations stay independent on mobile and out of print', async ({
@@ -5,6 +6,7 @@ test('annual pension and benefit valuations stay independent on mobile and out o
 }) => {
   await page.setViewportSize({ width: 375, height: 900 })
   await page.goto('./')
+  await openOfferCategories(page, 'Pension and benefits')
   await page
     .getByRole('textbox', { name: 'Offer A employer pension annual (EUR)' })
     .fill('1200.05')

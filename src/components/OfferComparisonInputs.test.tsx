@@ -1,3 +1,4 @@
+import { openOfferCategories } from '../test/offer-categories'
 import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderWithUser } from '../test/render'
@@ -60,6 +61,7 @@ describe('NP-CMP-002 offer salary inputs', () => {
 
   it('copies and clears optional variable and one-time compensation independently', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Cash compensation')
     await user.type(
       screen.getByRole('textbox', {
         name: 'Offer A expected annual variable pay (EUR)',
@@ -96,6 +98,7 @@ describe('NP-CMP-002 offer salary inputs', () => {
 
   it('requires a payment month when a one-time payment is entered', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Cash compensation')
     await user.type(
       screen.getByRole('textbox', { name: 'Offer A one-time payment (EUR)' }),
       '500',
@@ -108,6 +111,7 @@ describe('NP-CMP-002 offer salary inputs', () => {
 
   it('keeps commute cost entries independent and copies confirmed zero categories', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(user, 'Commute costs and time')
     const transportA = screen.getByRole('textbox', {
       name: 'Offer A public transport per office day (EUR)',
     })
@@ -136,6 +140,12 @@ describe('NP-CMP-002 offer salary inputs', () => {
   })
   it('keeps remote-work allowance and costs separate, including exact zero and copy/clear', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(
+      user,
+      'Working time and vacation',
+      'Commute costs and time',
+      'Remote and home-office terms',
+    )
     await user.selectOptions(
       screen.getByRole('combobox', { name: 'Offer A working days per week' }),
       '5',
@@ -191,6 +201,12 @@ describe('NP-CMP-002 offer salary inputs', () => {
 
   it('rejects contradictory remote-work arrangements on review', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
+    await openOfferCategories(
+      user,
+      'Working time and vacation',
+      'Commute costs and time',
+      'Remote and home-office terms',
+    )
     await user.selectOptions(
       screen.getByRole('combobox', { name: 'Offer A working days per week' }),
       '5',

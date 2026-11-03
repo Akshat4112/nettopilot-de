@@ -1,6 +1,10 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { focusDestination } from './focus-destination'
 import { EffectiveHourlyComparison } from './EffectiveHourlyComparison'
+import {
+  OfferComparisonSummary,
+  type OfferComparisonSummaryInputs,
+} from './OfferComparisonSummary'
 import { PayrollScopeSummary } from './PayrollScopeGuidance'
 import { getPayrollScopeIssues } from './payroll-scope'
 import type { EffectiveHourlyInputs } from '../domain/comparison/effective-hourly'
@@ -123,10 +127,15 @@ export function OfferNetCompensation({
   draft,
   inputValidity,
   hourlyInputs,
+  summaryInputs,
 }: {
   readonly draft: OfferComparisonDraft
   readonly inputValidity: readonly [boolean, boolean]
   readonly hourlyInputs?: Omit<EffectiveHourlyInputs, 'netResult'>
+  readonly summaryInputs?: Pick<
+    OfferComparisonSummaryInputs,
+    'benefits' | 'remote'
+  >
 }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [focusRequest, setFocusRequest] = useState<{
@@ -320,6 +329,13 @@ export function OfferNetCompensation({
           <h4>Current payroll results</h4>
           {result !== null && (
             <>
+              {hourlyInputs !== undefined && summaryInputs !== undefined && (
+                <OfferComparisonSummary
+                  {...hourlyInputs}
+                  {...summaryInputs}
+                  netResult={result}
+                />
+              )}
               <div className="offer-net-results">
                 <NetResult label="Offer A" result={result.offers[0]} />
                 <NetResult label="Offer B" result={result.offers[1]} />

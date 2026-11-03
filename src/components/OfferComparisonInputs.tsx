@@ -543,6 +543,10 @@ export function OfferComparisonInputs() {
           commuteCosts: [commuteFor(0), commuteFor(1)],
           commuteTime: [commuteTimeFor(0), commuteTimeFor(1)],
         }}
+        summaryInputs={{
+          benefits,
+          remote: [remoteFor(0), remoteFor(1)],
+        }}
         inputValidity={[
           validateAdditionalPay(additional[0]).length === 0,
           validateAdditionalPay(additional[1]).length === 0,

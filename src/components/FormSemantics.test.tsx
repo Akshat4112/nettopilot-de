@@ -148,7 +148,7 @@ describe('NP-A11Y-001 form semantics', () => {
     )
     expect(
       screen.getByLabelText('Comparison tax class'),
-    ).toHaveAccessibleDescription(/Supported scope: 2026/)
+    ).toHaveAccessibleDescription(/Supported estimate: 2026/)
     expect(
       screen.getByLabelText('Comparison additional health rate (%)'),
     ).toHaveAccessibleDescription(
@@ -156,7 +156,7 @@ describe('NP-A11Y-001 form semantics', () => {
     )
     expect(
       screen.getByLabelText(/Confirm shared standard payroll assumptions/),
-    ).toHaveAccessibleDescription(/Supported scope: 2026/)
+    ).toHaveAccessibleDescription(/Supported estimate: 2026/)
     const allowance = screen.getByLabelText(
       'Offer A employer home-office allowance monthly (EUR)',
     )

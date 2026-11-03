@@ -8,6 +8,8 @@ import { CommuteTimeComparison } from './CommuteTimeComparison'
 import { RemoteWorkComparison } from './RemoteWorkComparison'
 import { OfferBenefitsInputs } from './OfferBenefitsInputs'
 import { OfferNetCompensation } from './OfferNetCompensation'
+import { PayrollScopeSummary } from './PayrollScopeGuidance'
+import { evaluateOfferEntryScope } from './offer-entry-scope'
 import {
   attachBenefits,
   blankBenefits,
@@ -243,6 +245,7 @@ export function OfferComparisonInputs() {
         in this browser. Use the shared payroll assumptions below to calculate
         supported recurring net compensation for both offers.
       </p>
+      <PayrollScopeSummary />
       <div className="offer-grid">
         {offers.map((entry, index) => {
           const side = index as 0 | 1
@@ -250,6 +253,7 @@ export function OfferComparisonInputs() {
           const label = side === 0 ? 'Offer A' : 'Offer B'
           const issue = validateOfferSalary(entry)
           const extra = additional[side]
+          const payrollScope = evaluateOfferEntryScope(entry, extra)
           const extraProblems = validateAdditionalPay(extra)
           const commuteEntry = commuteFor(side)
           const commuteEntered = [
@@ -291,6 +295,13 @@ export function OfferComparisonInputs() {
           return (
             <fieldset className="offer-card" key={id}>
               <legend>{label}</legend>
+              <div aria-live="polite">
+                {payrollScope.issues.map((scopeIssue) => (
+                  <p key={scopeIssue.reason}>
+                    {label}: {scopeIssue.message}
+                  </p>
+                ))}
+              </div>
               <div className="np-field">
                 <label htmlFor={id + '-gross'}>
                   {label} gross salary (EUR)

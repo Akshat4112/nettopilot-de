@@ -31,10 +31,36 @@ export function AdvancedSalaryInputs({
     onDraftChange?.(next)
     onErrorsChange(validateAdvancedSalaryDraft(next, insurance))
   }
+  const errors = validateAdvancedSalaryDraft(draft, insurance)
+  const fieldInvalid = (field: keyof AdvancedSalaryDraft): boolean =>
+    validateAdvancedSalaryDraft(
+      {
+        ...empty,
+        [field]: draft[field],
+        ...(field === 'oneOffBonusEur' || field === 'oneOffBonusMonth'
+          ? {
+              oneOffBonusEur: draft.oneOffBonusEur,
+              oneOffBonusMonth: draft.oneOffBonusMonth,
+            }
+          : {}),
+      },
+      insurance,
+    ).length > 0
+  const description = (
+    field: keyof AdvancedSalaryDraft,
+    helpId?: string,
+  ): string =>
+    [
+      'np-advanced-help',
+      helpId,
+      fieldInvalid(field) ? 'np-advanced-errors' : undefined,
+    ]
+      .filter(Boolean)
+      .join(' ')
   return (
     <details className="np-panel">
       <summary>Advanced settings (optional)</summary>
-      <p>
+      <p id="np-advanced-help">
         Only fill in items on your payroll record. Amounts are not stored or
         sent to a server.
       </p>
@@ -42,13 +68,18 @@ export function AdvancedSalaryInputs({
         <label htmlFor="np-allowance">Annual tax allowance (EUR)</label>
         <input
           id="np-allowance"
+          aria-invalid={fieldInvalid('annualTaxAllowanceEur')}
+          aria-describedby={
+            description('annualTaxAllowanceEur', 'np-allowance-help') ||
+            undefined
+          }
           inputMode="decimal"
           value={draft.annualTaxAllowanceEur}
           onChange={(event) => {
             change('annualTaxAllowanceEur', event.target.value)
           }}
         />
-        <small>
+        <small id="np-allowance-help">
           Use an officially confirmed annual allowance, not a guess.
         </small>
       </div>
@@ -56,6 +87,8 @@ export function AdvancedSalaryInputs({
         <label htmlFor="np-addition">Annual taxable addition (EUR)</label>
         <input
           id="np-addition"
+          aria-invalid={fieldInvalid('annualTaxAdditionEur')}
+          aria-describedby={description('annualTaxAdditionEur') || undefined}
           inputMode="decimal"
           value={draft.annualTaxAdditionEur}
           onChange={(event) => {
@@ -70,13 +103,20 @@ export function AdvancedSalaryInputs({
           </label>
           <input
             id="np-health-rate"
+            aria-invalid={fieldInvalid('additionalHealthRatePercent')}
+            aria-describedby={
+              description(
+                'additionalHealthRatePercent',
+                'np-health-rate-help',
+              ) || undefined
+            }
             inputMode="decimal"
             value={draft.additionalHealthRatePercent}
             onChange={(event) => {
               change('additionalHealthRatePercent', event.target.value)
             }}
           />
-          <small>
+          <small id="np-health-rate-help">
             Leave blank to use the published average rate assumption.
           </small>
         </div>
@@ -89,6 +129,10 @@ export function AdvancedSalaryInputs({
             </label>
             <input
               id="np-private-health"
+              aria-invalid={fieldInvalid('privateHealthPremiumEur')}
+              aria-describedby={
+                description('privateHealthPremiumEur') || undefined
+              }
               inputMode="decimal"
               value={draft.privateHealthPremiumEur}
               onChange={(event) => {
@@ -102,6 +146,10 @@ export function AdvancedSalaryInputs({
             </label>
             <input
               id="np-private-care"
+              aria-invalid={fieldInvalid('privateCarePremiumEur')}
+              aria-describedby={
+                description('privateCarePremiumEur') || undefined
+              }
               inputMode="decimal"
               value={draft.privateCarePremiumEur}
               onChange={(event) => {
@@ -115,6 +163,10 @@ export function AdvancedSalaryInputs({
         <label htmlFor="np-bonus">One-off bonus (EUR)</label>
         <input
           id="np-bonus"
+          aria-invalid={fieldInvalid('oneOffBonusEur')}
+          aria-describedby={
+            description('oneOffBonusEur', 'np-bonus-help') || undefined
+          }
           inputMode="decimal"
           value={draft.oneOffBonusEur}
           onChange={(event) => {
@@ -126,6 +178,10 @@ export function AdvancedSalaryInputs({
         <label htmlFor="np-bonus-month">Bonus payment month</label>
         <select
           id="np-bonus-month"
+          aria-invalid={fieldInvalid('oneOffBonusMonth')}
+          aria-describedby={
+            description('oneOffBonusMonth', 'np-bonus-help') || undefined
+          }
           value={draft.oneOffBonusMonth}
           onChange={(event) => {
             change('oneOffBonusMonth', event.target.value)
@@ -138,8 +194,15 @@ export function AdvancedSalaryInputs({
             </option>
           ))}
         </select>
-        <small>Bonuses are not treated as recurring monthly salary.</small>
+        <small id="np-bonus-help">
+          Bonuses are not treated as recurring monthly salary.
+        </small>
       </div>
+      {errors.length > 0 && (
+        <p id="np-advanced-errors" role="alert">
+          {errors.join(' ')}
+        </p>
+      )}
     </details>
   )
 }

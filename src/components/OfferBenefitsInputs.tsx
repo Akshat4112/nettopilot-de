@@ -26,7 +26,9 @@ function CertaintyInput({
   label,
   value,
   onChange,
+  describedBy,
 }: {
+  readonly describedBy: string
   readonly id: string
   readonly label: string
   readonly value: BenefitEntry['certainty']
@@ -37,6 +39,7 @@ function CertaintyInput({
       <label htmlFor={id}>{label}</label>
       <select
         id={id}
+        aria-describedby={describedBy}
         value={value}
         onChange={(event) => {
           const next = event.target.value
@@ -70,6 +73,13 @@ export function OfferBenefitsInputs({
   const result = evaluateBenefits(value)
   const errorId = id + '-benefits-error'
   const invalid = checked && result.state === 'invalid'
+  const description = [
+    id + '-benefits-help',
+    id + '-benefits-limits',
+    invalid ? errorId : undefined,
+  ]
+    .filter(Boolean)
+    .join(' ')
   const setBenefit = (index: number, next: BenefitEntry): void => {
     onChange({
       ...value,
@@ -77,9 +87,15 @@ export function OfferBenefitsInputs({
     })
   }
   return (
-    <div className="offer-benefits">
+    <div
+      className="offer-benefits"
+      role="group"
+      aria-label={label + ' pension and benefits inputs'}
+      aria-invalid={invalid}
+      aria-describedby={description}
+    >
       <h3>Employer pension and benefits</h3>
-      <p>
+      <p id={id + '-benefits-help'}>
         Optional annual EUR values. Leave unknown amounts blank; enter zero only
         when confirmed. Pension and benefits remain separate from salary.
       </p>
@@ -98,12 +114,12 @@ export function OfferBenefitsInputs({
               employerContributionAnnualEur: event.target.value,
             })
           }}
-          aria-invalid={invalid}
-          aria-describedby={invalid ? errorId : undefined}
+          aria-describedby={description}
         />
       </div>
       <CertaintyInput
         id={id + '-pension-certainty'}
+        describedBy={description}
         label={label + ' pension certainty'}
         value={value.pensionCertainty}
         onChange={(pensionCertainty) => {
@@ -116,6 +132,7 @@ export function OfferBenefitsInputs({
         </label>
         <input
           id={id + '-pension-note'}
+          aria-describedby={description}
           type="text"
           maxLength={2000}
           value={value.eligibilityOrVestingNote}
@@ -140,8 +157,7 @@ export function OfferBenefitsInputs({
                 onChange={(event) => {
                   setBenefit(index, { ...benefit, label: event.target.value })
                 }}
-                aria-invalid={invalid}
-                aria-describedby={invalid ? errorId : undefined}
+                aria-describedby={description}
               />
             </div>
             {(
@@ -166,13 +182,13 @@ export function OfferBenefitsInputs({
                   onChange={(event) => {
                     setBenefit(index, { ...benefit, [key]: event.target.value })
                   }}
-                  aria-invalid={invalid}
-                  aria-describedby={invalid ? errorId : undefined}
+                  aria-describedby={description}
                 />
               </div>
             ))}
             <CertaintyInput
               id={fieldId + '-certainty'}
+              describedBy={description}
               label={fieldLabel + ' certainty'}
               value={benefit.certainty}
               onChange={(certainty) => {
@@ -185,6 +201,7 @@ export function OfferBenefitsInputs({
               </label>
               <input
                 id={fieldId + '-description'}
+                aria-describedby={description}
                 type="text"
                 maxLength={2000}
                 value={benefit.description}
@@ -229,7 +246,7 @@ export function OfferBenefitsInputs({
       >
         Add benefit to {label}
       </button>
-      <p>
+      <p id={id + '-benefits-limits'}>
         Up to 20 benefits per offer. Each annual benefit value may be
         0–1,000,000 EUR.
       </p>

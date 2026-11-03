@@ -270,6 +270,24 @@ export function OfferComparisonInputs() {
           const remoteEntry = remote[side]
           const remoteResult = evaluateRemoteWork(remoteFor(side))
           const showIssue = checked && issue.state !== 'valid'
+          const showExtraIssue = checked && extraProblems.length > 0
+          const showTimeIssue =
+            checked && timeStarted && timeResult.state !== 'calculated'
+          const showCommuteIssue =
+            checked && commuteEntered && commuteResult.state !== 'calculated'
+          const showCommuteTimeIssue =
+            checked &&
+            oneWayMinutes[side] !== '' &&
+            commuteTimeResult.state !== 'calculated'
+          const showRemoteIssue =
+            checked && remoteStarted(side) && remoteResult.state === 'invalid'
+          const remoteDescription = [
+            id + '-remote-help',
+            showRemoteIssue ? id + '-remote-error' : undefined,
+          ]
+            .filter(Boolean)
+            .join(' ')
+
           return (
             <fieldset className="offer-card" key={id}>
               <legend>{label}</legend>
@@ -312,6 +330,7 @@ export function OfferComparisonInputs() {
                 </select>
               </div>
               <OfferAdditionalPayInputs
+                errorId={showExtraIssue ? id + '-additional-error' : undefined}
                 id={id}
                 label={label}
                 value={extra}
@@ -319,14 +338,15 @@ export function OfferComparisonInputs() {
                   setExtra(side, next)
                 }}
               />
-              {checked && extraProblems.length > 0 && (
-                <div role="alert">
+              {showExtraIssue && (
+                <div id={id + '-additional-error'} role="alert">
                   {extraProblems.map((problem) => (
                     <p key={problem}>{problem}</p>
                   ))}
                 </div>
               )}
               <OfferWorkingTimeInputs
+                errorId={showTimeIssue ? id + '-working-error' : undefined}
                 id={id}
                 label={label}
                 value={timeEntry}
@@ -334,10 +354,13 @@ export function OfferComparisonInputs() {
                   setWorkingEntry(side, next)
                 }}
               />
-              {checked && timeStarted && timeResult.state !== 'calculated' && (
-                <p role="alert">{timeResult.reason}</p>
+              {showTimeIssue && (
+                <p id={id + '-working-error'} role="alert">
+                  {timeResult.reason}
+                </p>
               )}
               <OfferCommuteCostInputs
+                errorId={showCommuteIssue ? id + '-commute-error' : undefined}
                 id={id}
                 label={label}
                 value={commuteEntry}
@@ -345,17 +368,23 @@ export function OfferComparisonInputs() {
                   setCommuteEntry(side, next)
                 }}
               />
-              {checked &&
-                commuteEntered &&
-                commuteResult.state !== 'calculated' && (
-                  <p role="alert">{commuteResult.reason}</p>
-                )}
+              {showCommuteIssue && (
+                <p id={id + '-commute-error'} role="alert">
+                  {commuteResult.reason}
+                </p>
+              )}
               <div className="np-field">
                 <label htmlFor={id + '-one-way-minutes'}>
                   {label} one-way commute (minutes)
                 </label>
                 <input
                   id={id + '-one-way-minutes'}
+                  aria-invalid={showCommuteTimeIssue}
+                  aria-describedby={
+                    showCommuteTimeIssue
+                      ? id + '-commute-time-error'
+                      : undefined
+                  }
                   type="text"
                   inputMode="numeric"
                   value={oneWayMinutes[side]}
@@ -368,14 +397,20 @@ export function OfferComparisonInputs() {
                   }}
                 />
               </div>
-              {checked &&
-                oneWayMinutes[side] !== '' &&
-                commuteTimeResult.state !== 'calculated' && (
-                  <p role="alert">{commuteTimeResult.reason}</p>
-                )}
-              <div className="offer-remote-work">
+              {showCommuteTimeIssue && (
+                <p id={id + '-commute-time-error'} role="alert">
+                  {commuteTimeResult.reason}
+                </p>
+              )}
+              <div
+                className="offer-remote-work"
+                role="group"
+                aria-label={label + ' remote and home-office terms'}
+                aria-invalid={showRemoteIssue}
+                aria-describedby={remoteDescription}
+              >
                 <h3>Remote and home-office terms</h3>
-                <p>
+                <p id={id + '-remote-help'}>
                   Working days and office days are shared with the working-time
                   and commute sections. Home-office amounts are monthly and
                   entered separately; no tax or net-pay adjustment is assumed.
@@ -386,6 +421,7 @@ export function OfferComparisonInputs() {
                   </label>
                   <select
                     id={id + '-arrangement'}
+                    aria-describedby={remoteDescription}
                     value={remoteEntry.arrangement}
                     onChange={(event) => {
                       const arrangement = event.target
@@ -405,6 +441,7 @@ export function OfferComparisonInputs() {
                   </label>
                   <input
                     id={id + '-home-allowance'}
+                    aria-describedby={remoteDescription}
                     type="text"
                     inputMode="decimal"
                     value={remoteEntry.employerAllowanceMonthlyEur}
@@ -414,11 +451,6 @@ export function OfferComparisonInputs() {
                         employerAllowanceMonthlyEur: event.target.value,
                       })
                     }}
-                    aria-invalid={
-                      checked &&
-                      remoteStarted(side) &&
-                      remoteResult.state === 'invalid'
-                    }
                   />
                 </div>
                 <div className="np-field">
@@ -427,6 +459,7 @@ export function OfferComparisonInputs() {
                   </label>
                   <input
                     id={id + '-home-costs'}
+                    aria-describedby={remoteDescription}
                     type="text"
                     inputMode="decimal"
                     value={remoteEntry.homeOfficeCostMonthlyEur}
@@ -436,20 +469,13 @@ export function OfferComparisonInputs() {
                         homeOfficeCostMonthlyEur: event.target.value,
                       })
                     }}
-                    aria-invalid={
-                      checked &&
-                      remoteStarted(side) &&
-                      remoteResult.state === 'invalid'
-                    }
                   />
                 </div>
-                {checked &&
-                  remoteStarted(side) &&
-                  remoteResult.state === 'invalid' && (
-                    <p role="alert">
-                      {label}: {remoteResult.reason}
-                    </p>
-                  )}
+                {showRemoteIssue && (
+                  <p id={id + '-remote-error'} role="alert">
+                    {label}: {remoteResult.reason}
+                  </p>
+                )}
               </div>
               <OfferBenefitsInputs
                 id={id}

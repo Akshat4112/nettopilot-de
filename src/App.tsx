@@ -1,5 +1,6 @@
 import { EssentialSalaryInputs } from './components/EssentialSalaryInputs'
 import { OfferComparisonInputs } from './components/OfferComparisonInputs'
+import { CalculationMethodology } from './components/CalculationMethodology'
 import { APP_BASE_PATH } from './config/app'
 
 const principles = [
@@ -49,10 +50,12 @@ export function App() {
         </section>
         <EssentialSalaryInputs />
         <OfferComparisonInputs />
+        <CalculationMethodology />
       </main>
 
       <footer>
         <span>Educational estimates, not tax or legal advice.</span>
+        <a href="#methodology">Calculation methodology</a>
         <a href="https://github.com/Akshat4112/nettopilot-de">
           View the open-source project
         </a>

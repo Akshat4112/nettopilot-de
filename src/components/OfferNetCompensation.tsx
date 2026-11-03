@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { focusDestination } from './focus-destination'
 import { EffectiveHourlyComparison } from './EffectiveHourlyComparison'
+import { OfferComparisonTradeoffs } from './OfferComparisonTradeoffs'
 import {
   OfferComparisonSummary,
   type OfferComparisonSummaryInputs,
@@ -346,11 +347,18 @@ export function OfferNetCompensation({
           {result !== null && (
             <>
               {hourlyInputs !== undefined && summaryInputs !== undefined && (
-                <OfferComparisonSummary
-                  {...hourlyInputs}
-                  {...summaryInputs}
-                  netResult={result}
-                />
+                <>
+                  <OfferComparisonSummary
+                    {...hourlyInputs}
+                    {...summaryInputs}
+                    netResult={result}
+                  />
+                  <OfferComparisonTradeoffs
+                    {...hourlyInputs}
+                    {...summaryInputs}
+                    netResult={result}
+                  />
+                </>
               )}
               <div className="offer-net-results">
                 <NetResult

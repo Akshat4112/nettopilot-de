@@ -1,91 +1,16 @@
 import {
-  calculateEffectiveHourlyComparison,
-  type EffectiveHourlyInputs,
-} from '../domain/comparison/effective-hourly'
-import { calculateAnnualContractualHours } from '../domain/comparison/working-time'
-import { calculateCommuteCosts } from '../domain/comparison/commute-costs'
-import { calculateAnnualCommuteTime } from '../domain/comparison/commute-time'
-import {
-  evaluateBenefits,
-  type BenefitsEntry,
-} from '../domain/comparison/benefits'
-import {
-  evaluateRemoteWork,
-  type RemoteWorkEntry,
-} from '../domain/comparison/remote-work'
-import type { OfferBenefit } from '../domain/comparison/offer-model'
-import type { EuroAmount } from '../domain/salary/types'
-import { offerNetReasonText } from './offer-net-calculation'
+  calculateOfferComparisonMetrics,
+  formatComparisonEuro as euro,
+  formatComparisonHours as hours,
+  formatComparisonDays as days,
+  formatComparisonWeeklyDays as weeklyDays,
+  type ComparisonValue as SummaryValue,
+  type ComparisonFormatter as Formatter,
+  type ComparisonMetric,
+  type OfferComparisonMetricsInputs,
+} from './offer-comparison-metrics'
 
-export interface OfferComparisonSummaryInputs extends EffectiveHourlyInputs {
-  readonly benefits: readonly [BenefitsEntry, BenefitsEntry]
-  readonly remote: readonly [RemoteWorkEntry, RemoteWorkEntry]
-}
-
-interface SummaryValue {
-  readonly amount: number | null
-  readonly missing: string
-  readonly reason?: string
-}
-
-type Formatter = (value: number) => string
-
-const known = (amount: number): SummaryValue => ({ amount, missing: '' })
-const unavailable = (reason: string): SummaryValue => ({
-  amount: null,
-  missing: 'Unavailable',
-  reason,
-})
-const notSupplied: SummaryValue = { amount: null, missing: 'Not supplied' }
-const euro: Formatter = (cents) => {
-  // Preserve every admitted integer cent, including the safe-integer limit.
-  const value = BigInt(cents)
-  const magnitude = value < 0n ? -value : value
-  const whole = (magnitude / 100n).toLocaleString('en-GB')
-  const fraction = (magnitude % 100n).toString().padStart(2, '0')
-  return `${value < 0n ? '-' : ''}€${whole}.${fraction}`
-}
-const number = (value: number): string =>
-  value.toLocaleString('en-GB', { maximumFractionDigits: 2 })
-const hours: Formatter = (hundredths) => number(hundredths / 100) + ' hours'
-const days: Formatter = (value) => number(value) + ' days'
-const weeklyDays: Formatter = (value) => number(value) + ' days / week'
-
-/** Only validated EUR decimals enter this exact conversion; no floating sum. */
-const cents = (value: EuroAmount): number => {
-  const [whole = '0', fraction = ''] = value.amount.split('.')
-  return Number(BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0')))
-}
-
-const benefitTotal = (
-  entry: BenefitsEntry,
-  kind: 'employerStatedAnnualValue' | 'userAssignedAnnualValue',
-): SummaryValue => {
-  // Pension terms are independent from benefit valuations.
-  const result = evaluateBenefits({
-    ...entry,
-    employerContributionAnnualEur: '',
-    benefits: entry.benefits.map((benefit) => ({
-      ...benefit,
-      // A supplied valuation remains usable when the other source is invalid.
-      ...(kind === 'employerStatedAnnualValue'
-        ? { userAssignedAnnualValueEur: '' }
-        : { employerStatedAnnualValueEur: '' }),
-    })),
-  })
-  if (result.state === 'invalid') return unavailable(result.reason)
-  if (result.benefits.length === 0) return notSupplied
-  const values = result.benefits.map((benefit: OfferBenefit) => benefit[kind])
-  if (values.some((value) => value.state !== 'provided'))
-    return { amount: null, missing: 'Unknown — values missing' }
-  return known(
-    values.reduce(
-      (total, value) =>
-        total + (value.state === 'provided' ? cents(value.value) : 0),
-      0,
-    ),
-  )
-}
+export type OfferComparisonSummaryInputs = OfferComparisonMetricsInputs
 
 function SummaryRow({
   label,
@@ -150,84 +75,13 @@ function SummaryRow({
 
 /** A current-props projection of admitted results; no cached amounts or ranking. */
 export function OfferComparisonSummary(props: OfferComparisonSummaryInputs) {
-  const effective = calculateEffectiveHourlyComparison(props)
-  const summarize = (index: 0 | 1) => {
-    const payroll = props.netResult.offers[index]
-    const work = calculateAnnualContractualHours(props.working[index])
-    const cost = calculateCommuteCosts(props.commuteCosts[index])
-    const time = calculateAnnualCommuteTime(props.commuteTime[index])
-    const remote = evaluateRemoteWork({
-      ...props.remote[index],
-      // These monetary terms do not participate in the location schedule.
-      employerAllowanceMonthlyEur: '',
-      homeOfficeCostMonthlyEur: '',
-    })
-    const benefits = props.benefits[index]
-    const pension = evaluateBenefits({ ...benefits, benefits: [] })
-    const hourly = effective.offers[index]
-    const net =
-      payroll.state === 'calculated'
-        ? known(payroll.annual.netPayrollCents)
-        : unavailable(offerNetReasonText(payroll.reason))
-    return {
-      gross:
-        payroll.state === 'calculated'
-          ? known(payroll.annual.recurringGrossCents)
-          : unavailable(offerNetReasonText(payroll.reason)),
-      net,
-      afterCommute:
-        payroll.state === 'calculated' && cost.state === 'calculated'
-          ? known(payroll.annual.netPayrollCents - cost.annualTotalCents)
-          : unavailable(
-              'Supported annual net and all entered commute costs are required.',
-            ),
-      hourly:
-        hourly.state === 'calculated'
-          ? known(hourly.hourlyCents)
-          : unavailable(
-              hourly.source === 'payroll'
-                ? offerNetReasonText(hourly.reason)
-                : hourly.reason,
-            ),
-      work:
-        work.state === 'calculated'
-          ? known(work.annualContractualHoursHundredths)
-          : unavailable(work.reason),
-      vacation:
-        work.state === 'calculated'
-          ? known(work.paidVacationDaysAnnual)
-          : unavailable(work.reason),
-      commuteCost:
-        cost.state === 'calculated'
-          ? known(cost.annualTotalCents)
-          : unavailable(cost.reason),
-      commuteTime:
-        time.state === 'calculated'
-          ? known(time.annualCommuteHoursHundredths)
-          : unavailable(time.reason),
-      remote:
-        remote.state === 'invalid'
-          ? unavailable(remote.reason)
-          : remote.remoteDaysPerWeek.state === 'provided'
-            ? known(remote.remoteDaysPerWeek.value)
-            : notSupplied,
-      pension:
-        pension.state === 'invalid'
-          ? unavailable(pension.reason)
-          : pension.employerPension.employerContributionAnnual.state ===
-              'provided'
-            ? known(
-                cents(pension.employerPension.employerContributionAnnual.value),
-              )
-            : notSupplied,
-      employerBenefits: benefitTotal(benefits, 'employerStatedAnnualValue'),
-      personalBenefits: benefitTotal(benefits, 'userAssignedAnnualValue'),
-    }
-  }
-  const offers = [summarize(0), summarize(1)] as const
+  const metrics = calculateOfferComparisonMetrics(props)
   const values = (
-    key: keyof (typeof offers)[number],
-  ): readonly [SummaryValue, SummaryValue] => [offers[0][key], offers[1][key]]
+    key: ComparisonMetric,
+  ): readonly [SummaryValue, SummaryValue] => [
+    metrics.offers[0][key],
+    metrics.offers[1][key],
+  ]
 
   return (
     <section aria-label="Offer comparison summary">
@@ -275,11 +129,7 @@ export function OfferComparisonSummary(props: OfferComparisonSummaryInputs) {
             label="Effective net after commute cost per hour"
             values={values('hourly')}
             format={(value) => euro(value) + ' / hour'}
-            difference={
-              effective.comparison.state === 'comparable'
-                ? effective.comparison.bMinusAHourlyCents
-                : undefined
-            }
+            difference={metrics.hourlyDifference ?? undefined}
           />
           <SummaryRow
             label="Annual contractual work hours"

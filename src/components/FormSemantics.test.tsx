@@ -125,7 +125,9 @@ describe('NP-A11Y-001 form semantics', () => {
       screen.getByLabelText('Offer A fuel per office day (EUR)'),
       '-1',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     for (const name of [
       'Offer A additional compensation',
       'Offer A working time and vacation',
@@ -185,7 +187,9 @@ describe('NP-A11Y-001 form semantics', () => {
     await user.click(
       screen.getByRole('button', { name: 'Add benefit to Offer A' }),
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(
       screen.getByRole('group', {
         name: 'Offer A remote and home-office terms',
@@ -244,7 +248,9 @@ describe('NP-A11Y-001 form semantics', () => {
       ),
       'Annual budget',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     const group = screen.getByRole('group', {
       name: 'Offer A pension and benefits inputs',
     })
@@ -287,7 +293,9 @@ describe('NP-A11Y-001 form semantics', () => {
       screen.getByRole('button', { name: 'Add benefit to Offer B' }),
     )
     await user.click(screen.getByRole('button', { name: 'Check inputs' }))
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expectResolvedFormReferences(container)
   })
 })

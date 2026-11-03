@@ -12,12 +12,12 @@ import { CommuteTimeComparison } from './CommuteTimeComparison'
 import { RemoteWorkComparison } from './RemoteWorkComparison'
 import { OfferBenefitsInputs } from './OfferBenefitsInputs'
 import { OfferNetCompensation } from './OfferNetCompensation'
+import { offerPayrollBlockers } from './offer-payroll-blockers'
 import { PayrollScopeSummary } from './PayrollScopeGuidance'
 import { evaluateOfferEntryScope } from './offer-entry-scope'
 import {
   attachBenefits,
   blankBenefits,
-  evaluateBenefits,
   type BenefitsEntry,
 } from '../domain/comparison/benefits'
 import {
@@ -173,16 +173,6 @@ export function OfferComparisonInputs() {
     )
     setChecked(false)
   }
-  const validation = offers.map(validateOfferSalary)
-  const extrasValid = additional.every(
-    (entry) => validateAdditionalPay(entry).length === 0,
-  )
-  const workingValid = working.every((entry) => {
-    const empty = Object.values(entry).every((value) => value === '')
-    return (
-      empty || calculateAnnualContractualHours(entry).state === 'calculated'
-    )
-  })
   const commuteFor = (side: 0 | 1): CommuteCostEntry => ({
     ...commute[side],
     workingDaysPerWeek: working[side].workingDaysPerWeek,
@@ -204,38 +194,21 @@ export function OfferComparisonInputs() {
     paidVacationDaysAnnual: working[side].paidVacationDaysAnnual,
     oneWayMinutes: oneWayMinutes[side],
   })
-  const commuteTimeValid = ([0, 1] as const).every((side) => {
-    const oneWay = oneWayMinutes[side]
-    return (
-      oneWay === '' ||
-      calculateAnnualCommuteTime(commuteTimeFor(side)).state === 'calculated'
-    )
-  })
-  const commuteValid = ([0, 1] as const).every((side) => {
-    const entry = commute[side]
-    const empty = [
-      entry.publicTransportPerOfficeDayEur,
-      entry.fuelPerOfficeDayEur,
-      entry.parkingPerOfficeDayEur,
-      entry.otherPerOfficeDayEur,
-    ].every((value) => value === '')
-    return (
-      empty || calculateCommuteCosts(commuteFor(side)).state === 'calculated'
-    )
-  })
-  const remoteValid = ([0, 1] as const).every(
-    (side) =>
-      !remoteStarted(side) ||
-      evaluateRemoteWork(remoteFor(side)).state === 'valid',
+  const categoryStatusFor = (
+    side: 0 | 1,
+  ): ReturnType<typeof optionalCategoryStatuses> =>
+    optionalCategoryStatuses({
+      additional: additional[side],
+      working: working[side],
+      commute: commute[side],
+      oneWayMinutes: oneWayMinutes[side],
+      remote: remote[side],
+      benefits: benefits[side],
+    })
+  const categoryStatuses = [categoryStatusFor(0), categoryStatusFor(1)] as const
+  const optionalInputsIncomplete = categoryStatuses.some((statuses) =>
+    Object.values(statuses).includes('Incomplete'),
   )
-  const accepted =
-    benefits.every((entry) => evaluateBenefits(entry).state === 'valid') &&
-    remoteValid &&
-    commuteTimeValid &&
-    commuteValid &&
-    extrasValid &&
-    workingValid &&
-    validation.every((result) => result.state === 'valid')
   const model = attachBenefits(
     attachRemoteWork(
       attachWorkingTime(
@@ -249,10 +222,6 @@ export function OfferComparisonInputs() {
     ),
     benefits,
   )
-  const dataIsAdmitted = model.offers.every(
-    (offer) => offer.compensation.baseSalary.state === 'provided',
-  )
-
   const renderOffer = (side: 0 | 1, category: 'base' | OptionalCategory) => {
     const entry = offers[side]
     const id = side === 0 ? 'offer-a' : 'offer-b'
@@ -593,16 +562,7 @@ export function OfferComparisonInputs() {
                 {([0, 1] as const).map((side) => (
                   <span key={side}>
                     Offer {side === 0 ? 'A' : 'B'}:{' '}
-                    {
-                      optionalCategoryStatuses({
-                        additional: additional[side],
-                        working: working[side],
-                        commute: commute[side],
-                        oneWayMinutes: oneWayMinutes[side],
-                        remote: remote[side],
-                        benefits: benefits[side],
-                      })[category]
-                    }
+                    {categoryStatuses[side][category]}
                   </span>
                 ))}
               </span>
@@ -631,6 +591,13 @@ export function OfferComparisonInputs() {
       <RemoteWorkComparison offerA={remoteFor(0)} offerB={remoteFor(1)} />
       <OfferNetCompensation
         draft={model}
+        onCalculate={() => {
+          setChecked(true)
+        }}
+        inputIssues={[
+          offerPayrollBlockers(offers[0], additional[0]),
+          offerPayrollBlockers(offers[1], additional[1]),
+        ]}
         hourlyInputs={{
           working,
           commuteCosts: [commuteFor(0), commuteFor(1)],
@@ -645,30 +612,17 @@ export function OfferComparisonInputs() {
           validateAdditionalPay(additional[1]).length === 0,
         ]}
       />
-      <div className="offer-review">
-        <button
-          className="np-button-primary"
-          type="button"
-          onClick={() => {
-            setChecked(true)
-          }}
-        >
-          Check both offers
-        </button>
-        {checked && accepted && dataIsAdmitted && (
-          <p role="status">
-            Both base salaries are valid. No net-pay difference is calculated by
-            this input check. Use Calculate net compensation after confirming
-            the shared payroll assumptions.
+      {checked && (
+        <div className="offer-review">
+          <p role="status" aria-label="Optional comparison input review">
+            {optionalInputsIncomplete
+              ? 'Complete or correct the optional categories marked Incomplete.'
+              : 'Entered optional categories are valid; unentered values remain unknown.'}{' '}
+            Payroll readiness is shown separately for each offer. Unknown inputs
+            are not treated as zero.
           </p>
-        )}
-        {checked && !accepted && (
-          <p role="status">
-            Complete or correct the offer inputs to continue. Unknown inputs are
-            not treated as zero.
-          </p>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   )
 }

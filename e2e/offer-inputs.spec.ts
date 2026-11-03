@@ -8,13 +8,18 @@ test('compare-offer inputs copy, clear and validate without storing salary', asy
   const a = page.getByRole('textbox', { name: 'Offer A gross salary (EUR)' })
   const b = page.getByRole('textbox', { name: 'Offer B gross salary (EUR)' })
 
-  await page.getByRole('button', { name: 'Check both offers' }).click()
+  await page.getByRole('button', { name: 'Calculate net compensation' }).click()
   await expect(page.getByRole('alert')).toHaveCount(2)
 
   await a.fill('85000.00')
   await b.fill('92000.25')
-  await page.getByRole('button', { name: 'Check both offers' }).click()
-  await expect(page.getByText(/Both base salaries are valid/)).toBeVisible()
+  await page.getByRole('button', { name: 'Calculate net compensation' }).click()
+  for (const side of ['A', 'B']) {
+    await expect(
+      page.getByRole('region', { name: `Offer ${side} net result` }),
+    ).toContainText('unavailable')
+  }
+  await expect(page.getByText(/Annual net difference/)).toHaveCount(0)
 
   await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
   await expect(b).toHaveValue('85000.00')
@@ -60,9 +65,11 @@ test('variable and one-time pay stay separate and require an explicit month', as
   await page
     .getByRole('textbox', { name: 'Offer A one-time payment (EUR)' })
     .fill('1200')
-  await page.getByRole('button', { name: 'Check both offers' }).click()
+  await page.getByRole('button', { name: 'Calculate net compensation' }).click()
   await expect(
-    page.getByText('Choose the payment month for the one-time payment.'),
+    page.getByRole('alert').filter({
+      hasText: 'Choose the payment month for the one-time payment.',
+    }),
   ).toBeVisible()
   await page
     .getByRole('combobox', { name: 'Offer A one-time payment month' })

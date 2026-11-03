@@ -175,7 +175,9 @@ describe('NP-CMP-009 pension and benefits', () => {
       ),
       '-5',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(screen.getByRole('status')).toHaveTextContent('Complete or correct')
     expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
     await user.type(
@@ -187,9 +189,11 @@ describe('NP-CMP-009 pension and benefits', () => {
         'Offer A benefit 1 user-assigned annual value (EUR)',
       ),
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(screen.getByRole('status')).toHaveTextContent(
-      'No net-pay difference',
+      'Entered optional categories are valid',
     )
     const summary = within(
       within(

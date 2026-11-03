@@ -62,10 +62,10 @@ describe('independent remote-work admission', () => {
         )
       }
       await user.click(
-        screen.getByRole('button', { name: 'Check both offers' }),
+        screen.getByRole('button', { name: 'Calculate net compensation' }),
       )
       expect(screen.getByRole('status')).toHaveTextContent(
-        'Both base salaries are valid',
+        'Payroll readiness is shown separately for each offer.',
       )
       expect(screen.queryAllByRole('alert')).toHaveLength(0)
       expect(
@@ -112,9 +112,11 @@ describe('independent remote-work admission', () => {
       screen.getByRole('combobox', { name: 'Offer A work arrangement' }),
       'hybrid',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Both base salaries are valid',
+      'Payroll readiness is shown separately for each offer.',
     )
     expect(screen.queryAllByRole('alert')).toHaveLength(0)
     expect(
@@ -126,9 +128,11 @@ describe('independent remote-work admission', () => {
       }),
       '30',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Both base salaries are valid',
+      'Payroll readiness is shown separately for each offer.',
     )
     expect(screen.queryAllByRole('alert')).toHaveLength(0)
     await user.type(
@@ -137,7 +141,9 @@ describe('independent remote-work admission', () => {
       }),
       '1',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(screen.getByRole('status')).toHaveTextContent('Complete or correct')
     expect(
       screen

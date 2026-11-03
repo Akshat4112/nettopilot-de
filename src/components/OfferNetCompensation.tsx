@@ -45,9 +45,11 @@ const euro = (cents: number): string =>
 function NetResult({
   label,
   result,
+  inputIssues = [],
 }: {
   readonly label: string
   readonly result: SalaryAggregationResult2026
+  readonly inputIssues?: readonly string[] | undefined
 }) {
   return (
     <section aria-label={label + ' net result'}>
@@ -114,10 +116,19 @@ function NetResult({
           </details>
         </>
       ) : (
-        <p>
-          {label}: Net compensation unavailable.{' '}
-          {offerNetReasonText(result.reason)}
-        </p>
+        <>
+          <p>
+            {label}: Net compensation unavailable.{' '}
+            {offerNetReasonText(result.reason)}
+          </p>
+          {inputIssues.length > 0 && (
+            <ul aria-label={label + ' payroll blockers'}>
+              {inputIssues.map((issue) => (
+                <li key={issue}>{issue}</li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </section>
   )
@@ -128,8 +139,12 @@ export function OfferNetCompensation({
   inputValidity,
   hourlyInputs,
   summaryInputs,
+  onCalculate,
+  inputIssues,
 }: {
   readonly draft: OfferComparisonDraft
+  readonly onCalculate?: () => void
+  readonly inputIssues?: readonly [readonly string[], readonly string[]]
   readonly inputValidity: readonly [boolean, boolean]
   readonly hourlyInputs?: Omit<EffectiveHourlyInputs, 'netResult'>
   readonly summaryInputs?: Pick<
@@ -301,6 +316,7 @@ export function OfferNetCompensation({
           type="button"
           className="np-button-primary"
           onClick={() => {
+            onCalculate?.()
             setRequested(true)
             setFocusRequest({ target: 'result' })
           }}
@@ -337,8 +353,16 @@ export function OfferNetCompensation({
                 />
               )}
               <div className="offer-net-results">
-                <NetResult label="Offer A" result={result.offers[0]} />
-                <NetResult label="Offer B" result={result.offers[1]} />
+                <NetResult
+                  label="Offer A"
+                  result={result.offers[0]}
+                  inputIssues={inputIssues?.[0]}
+                />
+                <NetResult
+                  label="Offer B"
+                  result={result.offers[1]}
+                  inputIssues={inputIssues?.[1]}
+                />
               </div>
               {result.comparison.state === 'calculated' ? (
                 <div>

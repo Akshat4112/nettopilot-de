@@ -28,7 +28,9 @@ describe('NP-CMP-002 offer salary inputs', () => {
 
   it('shows two field-specific missing-input messages', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(screen.getAllByRole('alert')).toHaveLength(2)
     expect(
       screen.getByRole('textbox', {
@@ -52,11 +54,14 @@ describe('NP-CMP-002 offer salary inputs', () => {
       }),
       '60000.25',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(screen.getByRole('status')).toHaveTextContent(
-      'No net-pay difference',
+      'Payroll readiness is shown separately for each offer.',
     )
     expect(screen.queryAllByRole('alert')).toHaveLength(0)
+    expect(screen.queryByText(/Annual net difference/)).not.toBeInTheDocument()
   })
 
   it('copies and clears optional variable and one-time compensation independently', async () => {
@@ -103,10 +108,14 @@ describe('NP-CMP-002 offer salary inputs', () => {
       screen.getByRole('textbox', { name: 'Offer A one-time payment (EUR)' }),
       '500',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(
-      screen.getByText('Choose the payment month for the one-time payment.'),
-    ).toBeInTheDocument()
+      screen.getByLabelText('Offer A additional compensation'),
+    ).toHaveAccessibleDescription(
+      /Choose the payment month for the one-time payment/,
+    )
   })
 
   it('keeps commute cost entries independent and copies confirmed zero categories', async () => {
@@ -219,7 +228,9 @@ describe('NP-CMP-002 offer salary inputs', () => {
       screen.getByRole('combobox', { name: 'Offer A work arrangement' }),
       'remote',
     )
-    await user.click(screen.getByRole('button', { name: 'Check both offers' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Calculate net compensation' }),
+    )
     expect(
       screen.getByText(/Offer A: Office-day inputs conflict/),
     ).toBeInTheDocument()

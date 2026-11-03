@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest'
 import { renderWithUser } from '../test/render'
 import { OfferComparisonInputs } from './OfferComparisonInputs'
 
-// Query labeled fields directly: repeated role scans of the full comparison form
-// spend time recalculating visibility instead of exercising the benefits flow.
+// Scope role queries to benefits and query labeled fields directly so unrelated
+// comparison sections do not add visibility work to these interaction tests.
 describe('NP-CMP-009 pension and benefits', () => {
-  it('preserves independent valuations, certainty and unknown values through copy and clear', async () => {
+  it('shows independent employer and user valuations without calculating tax', async () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
     await user.type(
       screen.getByLabelText('Offer A employer pension annual (EUR)'),
@@ -21,7 +21,9 @@ describe('NP-CMP-009 pension and benefits', () => {
       'After probation',
     )
     await user.click(
-      screen.getByRole('button', { name: 'Add benefit to Offer A' }),
+      within(
+        screen.getByLabelText('Offer A pension and benefits inputs'),
+      ).getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
       screen.getByLabelText('Offer A benefit 1 label'),
@@ -40,7 +42,9 @@ describe('NP-CMP-009 pension and benefits', () => {
       '0',
     )
     const summary = within(
-      screen.getByRole('region', {
+      within(
+        screen.getByLabelText('Offer A pension and benefits inputs'),
+      ).getByRole('region', {
         name: 'Offer A pension and benefits summary',
       }),
     )
@@ -50,8 +54,32 @@ describe('NP-CMP-009 pension and benefits', () => {
     expect(
       summary.getByText(/Tax treatment is not calculated/),
     ).toBeInTheDocument()
+  })
+
+  it('copies certainty and notes while keeping benefit labels independent', async () => {
+    const { user } = renderWithUser(<OfferComparisonInputs />)
+    await user.selectOptions(
+      screen.getByLabelText('Offer A pension certainty'),
+      'conditional',
+    )
+    await user.type(
+      screen.getByLabelText('Offer A pension eligibility or vesting note'),
+      'After probation',
+    )
     await user.click(
-      screen.getByRole('button', { name: 'Copy Offer A to Offer B' }),
+      within(
+        screen.getByLabelText('Offer A pension and benefits inputs'),
+      ).getByRole('button', { name: 'Add benefit to Offer A' }),
+    )
+    await user.type(
+      screen.getByLabelText('Offer A benefit 1 label'),
+      'Training',
+    )
+    await user.click(
+      within(screen.getByRole('group', { name: 'Offer A' })).getByRole(
+        'button',
+        { name: 'Copy Offer A to Offer B' },
+      ),
     )
     expect(screen.getByLabelText('Offer B benefit 1 label')).toHaveValue(
       'Training',
@@ -70,7 +98,35 @@ describe('NP-CMP-009 pension and benefits', () => {
     expect(screen.getByLabelText('Offer A benefit 1 label')).toHaveValue(
       'Training',
     )
-    await user.click(screen.getByRole('button', { name: 'Clear Offer B' }))
+  })
+
+  it('clears copied pension and benefits without removing the original benefit', async () => {
+    const { user } = renderWithUser(<OfferComparisonInputs />)
+    await user.type(
+      screen.getByLabelText('Offer A employer pension annual (EUR)'),
+      '1200.05',
+    )
+    await user.click(
+      within(
+        screen.getByLabelText('Offer A pension and benefits inputs'),
+      ).getByRole('button', { name: 'Add benefit to Offer A' }),
+    )
+    await user.type(
+      screen.getByLabelText('Offer A benefit 1 label'),
+      'Training',
+    )
+    await user.click(
+      within(screen.getByRole('group', { name: 'Offer A' })).getByRole(
+        'button',
+        { name: 'Copy Offer A to Offer B' },
+      ),
+    )
+    await user.click(
+      within(screen.getByRole('group', { name: 'Offer B' })).getByRole(
+        'button',
+        { name: 'Clear Offer B' },
+      ),
+    )
     expect(
       screen.queryByLabelText('Offer B benefit 1 label'),
     ).not.toBeInTheDocument()
@@ -79,13 +135,17 @@ describe('NP-CMP-009 pension and benefits', () => {
     ).toHaveValue('')
     expect(
       within(
-        screen.getByRole('region', {
+        within(
+          screen.getByLabelText('Offer B pension and benefits inputs'),
+        ).getByRole('region', {
           name: 'Offer B pension and benefits summary',
         }),
       ).getByText(/Employer pension: Not specified/),
     ).toBeInTheDocument()
     await user.click(
-      screen.getByRole('button', { name: 'Remove Offer A benefit 1' }),
+      within(
+        screen.getByLabelText('Offer A pension and benefits inputs'),
+      ).getByRole('button', { name: 'Remove Offer A benefit 1' }),
     )
     expect(
       screen.queryByLabelText('Offer A benefit 1 label'),
@@ -100,7 +160,9 @@ describe('NP-CMP-009 pension and benefits', () => {
         '60000',
       )
     await user.click(
-      screen.getByRole('button', { name: 'Add benefit to Offer A' }),
+      within(
+        screen.getByLabelText('Offer A pension and benefits inputs'),
+      ).getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
       screen.getByLabelText(
@@ -125,7 +187,9 @@ describe('NP-CMP-009 pension and benefits', () => {
       'No net-pay difference',
     )
     const summary = within(
-      screen.getByRole('region', {
+      within(
+        screen.getByLabelText('Offer A pension and benefits inputs'),
+      ).getByRole('region', {
         name: 'Offer A pension and benefits summary',
       }),
     )

@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { focusDestination } from './focus-destination'
 import { EffectiveHourlyComparison } from './EffectiveHourlyComparison'
+import { PayrollScopeSummary } from './PayrollScopeGuidance'
+import { getPayrollScopeIssues } from './payroll-scope'
 import type { EffectiveHourlyInputs } from '../domain/comparison/effective-hourly'
 import type { OfferComparisonDraft } from '../domain/comparison/offer-model'
 import type { SalaryAggregationResult2026 } from '../domain/salary/salary-aggregation'
@@ -144,6 +146,18 @@ export function OfferNetCompensation({
     emptyComparisonPayrollContext,
   )
   const [requested, setRequested] = useState(false)
+  const sharedScopeIssues = getPayrollScopeIssues({
+    essential: { ...context.essential, gross: '', period: 'monthly' },
+    advanced: {
+      annualTaxAllowanceEur: '',
+      annualTaxAdditionEur: '',
+      additionalHealthRatePercent: context.additionalHealthRatePercent,
+      privateHealthPremiumEur: '',
+      privateCarePremiumEur: '',
+      oneOffBonusEur: '',
+      oneOffBonusMonth: '',
+    },
+  })
   // Recalculate from current props and context. Invalid edits cannot retain an old result.
   const result = requested
     ? calculateOfferNetCompensation(draft, context, inputValidity)
@@ -169,13 +183,12 @@ export function OfferNetCompensation({
         assumptions for both offers. These settings are separate from the salary
         calculator above.
       </p>
-      <p id="comparison-payroll-scope">
-        Supported scope: 2026, twelve equal payroll months, monthly gross above
-        €2,000 and below €5,800, compulsory statutory insurance, no children or
-        church tax, and birth dates from 1963 through 2002. Annual inputs must
-        divide into twelve exact monthly cent amounts. Additional cash payments
-        need separate settlement and currently make that offer unavailable.
-      </p>
+      <PayrollScopeSummary id="comparison-payroll-scope" />
+      <div aria-live="polite">
+        {sharedScopeIssues.map((scopeIssue) => (
+          <p key={scopeIssue.reason}>{scopeIssue.message}</p>
+        ))}
+      </div>
       <fieldset className="offer-payroll-context">
         <legend>Shared payroll assumptions</legend>
         <p id="comparison-payroll-help">

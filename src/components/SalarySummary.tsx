@@ -77,7 +77,7 @@ function SummaryFigures({
 }
 
 /**
- * Displays only independently admitted, pre-calculated monthly payroll.
+ * Leads with independently admitted recurring monthly take-home pay.
  * Never treats input gross salary as a calculated net salary.
  */
 export function SalarySummary({
@@ -113,23 +113,40 @@ export function SalarySummary({
       <h2 id="salary-summary-heading">Salary summary</h2>
       {result.state === 'calculated' ? (
         <>
-          {inputs !== undefined && advancedInputs !== undefined && (
-            <div className="np-print-action">
+          <section
+            className="salary-recurring-net"
+            aria-labelledby="salary-recurring-net-heading"
+          >
+            <h3 id="salary-recurring-net-heading">
+              Recurring monthly take-home pay
+            </h3>
+            <p>
+              Estimated take-home pay for tax year {result.calculationYear}.
+            </p>
+            {result.recurringMonthlyNetIsStable &&
+            result.recurringMonthlyNetCents !== null ? (
+              <>
+                <dl className="salary-summary-figures">
+                  <div>
+                    <dt>Available each recurring month</dt>
+                    <dd>{euro(result.recurringMonthlyNetCents)}</dd>
+                  </div>
+                </dl>
+                <p>
+                  {result.months.some(
+                    (month) => month.privateInsuranceOutflowCents > 0,
+                  ) && 'After private insurance cash outflow. '}
+                  Excludes one-off payments.
+                </p>
+              </>
+            ) : (
               <p>
-                Printing includes your personal salary and payroll inputs.
-                Review the contents before sharing or saving.
+                Recurring monthly take-home pay varies across the year. No
+                monthly average is inferred; use annual totals for the complete
+                result.
               </p>
-              <button
-                type="button"
-                className="np-button-secondary"
-                onClick={() => {
-                  window.print()
-                }}
-              >
-                Print or save as PDF
-              </button>
-            </div>
-          )}
+            )}
+          </section>
           <div
             className="np-period-toggle"
             role="group"
@@ -171,13 +188,30 @@ export function SalarySummary({
             </>
           )}
           {inputs !== undefined && advancedInputs !== undefined && (
-            <SalaryPrintReport
-              inputs={inputs}
-              advanced={advancedInputs}
-              totals={result.annual}
-              calculationYear={result.calculationYear}
-              generatedOn={new Date().toISOString().slice(0, 10)}
-            />
+            <>
+              <div className="np-print-action">
+                <p>
+                  Printing includes your personal salary and payroll inputs.
+                  Review the contents before sharing or saving.
+                </p>
+                <button
+                  type="button"
+                  className="np-button-secondary"
+                  onClick={() => {
+                    window.print()
+                  }}
+                >
+                  Print or save as PDF
+                </button>
+              </div>
+              <SalaryPrintReport
+                inputs={inputs}
+                advanced={advancedInputs}
+                totals={result.annual}
+                calculationYear={result.calculationYear}
+                generatedOn={new Date().toISOString().slice(0, 10)}
+              />
+            </>
           )}
         </>
       ) : (

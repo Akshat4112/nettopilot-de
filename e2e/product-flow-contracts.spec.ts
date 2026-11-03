@@ -84,10 +84,188 @@ test.describe('product-flow smoke contracts', () => {
     )
   })
 
-  test('compares two job offers', () => {
-    test.fixme(
-      true,
-      'Activate after NP-CMP-002 and NP-CMP-012 provide the comparison journey.',
-    )
+  test('compares two job offers in a current, private summary at mobile width', async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ width: 375, height: 900 })
+    await page.goto('./')
+    const summary = page.getByRole('region', {
+      name: 'Offer comparison summary',
+      exact: true,
+    })
+    await expect(summary).toHaveCount(0)
+    for (const [side, gross, vacation] of [
+      ['A', '48000', '20'],
+      ['B', '60000', '25'],
+    ] as const) {
+      await page
+        .getByLabel(`Offer ${side} gross salary (EUR)`, { exact: true })
+        .fill(gross)
+      await page.getByLabel(`Offer ${side} contractual weekly hours`).fill('40')
+      await page
+        .getByLabel(`Offer ${side} working days per week`, { exact: true })
+        .selectOption('5')
+      await page
+        .getByLabel(`Offer ${side} paid vacation days per year`)
+        .fill(vacation)
+      await page
+        .getByLabel(`Offer ${side} office days per week`, { exact: true })
+        .selectOption('5')
+      for (const category of [
+        'public transport',
+        'fuel',
+        'parking',
+        'other costs',
+      ]) {
+        await page
+          .getByLabel(`Offer ${side} ${category} per office day (EUR)`)
+          .fill(category === 'fuel' ? '5' : '0')
+      }
+      await page
+        .getByLabel(`Offer ${side} one-way commute (minutes)`)
+        .fill('30')
+    }
+    await page
+      .getByLabel('Offer A employer pension annual (EUR)')
+      .fill('1200.05')
+    await page.getByRole('button', { name: 'Add benefit to Offer A' }).click()
+    await page
+      .getByLabel('Offer A benefit 1 label', { exact: true })
+      .fill('Training')
+    await page
+      .getByLabel('Offer A benefit 1 employer-stated annual value (EUR)')
+      .fill('500')
+    await page
+      .getByLabel('Offer A benefit 1 user-assigned annual value (EUR)')
+      .fill('0')
+    await page.getByLabel('Comparison tax class').selectOption('1')
+    await page.getByLabel('Comparison federal state').selectOption('DE-BW')
+    await page.getByLabel('Comparison date of birth').fill('1990-01-01')
+    await page.getByLabel(/Confirm shared standard payroll assumptions/).check()
+    await page
+      .getByRole('button', { name: 'Calculate net compensation' })
+      .click()
+    await expect(summary).toBeVisible()
+    const table = summary.getByRole('table', {
+      name: 'Current offer comparison — EUR, 2026',
+    })
+    await expect(
+      table.getByRole('columnheader', { name: 'Offer A', exact: true }),
+    ).toBeVisible()
+    await expect(
+      table.getByRole('columnheader', { name: 'Offer B', exact: true }),
+    ).toBeVisible()
+    await expect(
+      table.getByRole('row', { name: /^Annual base gross/ }),
+    ).toContainText('+€12,000.00')
+    await expect(
+      table.getByRole('row', { name: /^Paid vacation days/ }),
+    ).toContainText('+5 days')
+    await expect(
+      table.getByRole('row', { name: /^Annual entered commute costs/ }),
+    ).toContainText('−€25.00')
+    await expect(
+      table.getByRole('row', { name: /^Employer-stated benefit values/ }),
+    ).toContainText('€500.00')
+    await expect(
+      table.getByRole('row', { name: /^User-assigned benefit values/ }),
+    ).toContainText('€0.00')
+    const net = table.getByRole('row', { name: /^Annual base-pay net/ })
+    const originalNet = await net.innerText()
+    await page
+      .getByLabel('Offer A employer pension annual (EUR)')
+      .fill('90071992547409.91')
+    await expect(
+      table.getByRole('row', { name: /^Employer pension contribution/ }),
+    ).toContainText('€90,071,992,547,409.91')
+    expect(await net.innerText()).toBe(originalNet)
+    expect(
+      await table.locator('caption').evaluate((caption) => {
+        const range = document.createRange()
+        range.selectNodeContents(caption)
+        return range.getClientRects().length
+      }),
+    ).toBeLessThanOrEqual(2)
+    const grossAmount = table
+      .getByRole('row', { name: /^Annual base gross/ })
+      .getByText('€48,000.00', { exact: true })
+    expect(
+      await grossAmount.evaluate((cell) => {
+        const range = document.createRange()
+        range.selectNodeContents(cell)
+        return range.getClientRects().length
+      }),
+    ).toBe(1)
+    await expect(
+      table
+        .getByRole('row', { name: /^Annual base gross/ })
+        .getByText('Offer A', { exact: true }),
+    ).toBeVisible()
+    await expect(
+      table
+        .getByRole('row', { name: /^Annual base gross/ })
+        .getByText('Offer B', { exact: true }),
+    ).toBeVisible()
+    const pensionAmount = table
+      .getByRole('row', { name: /^Employer pension contribution/ })
+      .getByText('€90,071,992,547,409.91', { exact: true })
+    expect(
+      await pensionAmount.evaluate((amount) => {
+        const range = document.createRange()
+        range.selectNodeContents(amount)
+        return range.getClientRects().length
+      }),
+    ).toBe(1)
+    await table.screenshot({
+      path: testInfo.outputPath('comparison-summary-375.png'),
+    })
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(375)
+    await page.setViewportSize({ width: 1280, height: 900 })
+    expect(
+      await pensionAmount.evaluate((amount) => {
+        const range = document.createRange()
+        range.selectNodeContents(amount)
+        return range.getClientRects().length
+      }),
+    ).toBe(1)
+    await table.screenshot({
+      path: testInfo.outputPath('comparison-summary-1280.png'),
+    })
+    for (const pension of ['90071992547409.90', '45035996273704.95']) {
+      await page
+        .getByLabel('Offer B employer pension annual (EUR)')
+        .fill(pension)
+      for (const width of [621, 768]) {
+        await page.setViewportSize({ width, height: 900 })
+        expect(
+          await page.evaluate(() => document.documentElement.scrollWidth),
+        ).toBeLessThanOrEqual(width)
+      }
+    }
+    await page.setViewportSize({ width: 375, height: 900 })
+    await page.getByLabel('Offer A fuel per office day (EUR)').fill('')
+    const cost = table.getByRole('row', {
+      name: /^Annual entered commute costs/,
+    })
+    await expect(cost.getByText('Unavailable', { exact: true })).toHaveCount(2)
+    await expect(cost).toContainText('€1,175.00')
+    const reason = cost.locator('summary')
+    await reason.focus()
+    await page.keyboard.press('Enter')
+    await expect(cost.getByText(/every daily cost/)).toBeVisible()
+    expect(await net.innerText()).toBe(originalNet)
+    await page.emulateMedia({ media: 'print' })
+    await expect(summary).toBeHidden()
+    await expect(
+      page.getByLabel('Offer A benefit 1 label', { exact: true }),
+    ).toBeHidden()
+    await page.emulateMedia({ media: 'screen' })
+    await expect(page).not.toHaveURL(/48000|60000|1990|90071992547409/)
+    await page
+      .getByRole('button', { name: 'Reset payroll assumptions' })
+      .click()
+    await expect(summary).toHaveCount(0)
   })
 })

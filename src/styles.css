@@ -910,3 +910,87 @@ main {
     grid-template-columns: 1fr;
   }
 }
+
+.offer-comparison-summary-table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.offer-comparison-summary-table :is(th, td) {
+  padding: var(--np-space-2);
+  border-bottom: 1px solid var(--np-color-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.offer-comparison-summary-table caption {
+  padding-block: var(--np-space-3);
+  color: var(--np-color-muted);
+  text-align: left;
+}
+
+.offer-comparison-summary-table summary {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.offer-summary-mobile-label {
+  display: none;
+}
+
+.offer-summary-number {
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 760px) {
+  /* Explicit table roles preserve semantics when rows become labelled cards. */
+  .offer-comparison-summary-table,
+  .offer-comparison-summary-table tbody {
+    display: block;
+  }
+
+  .offer-comparison-summary-table caption {
+    display: block;
+  }
+
+  .offer-comparison-summary-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .offer-comparison-summary-table tbody tr {
+    display: block;
+    margin-bottom: var(--np-space-3);
+    border: 1px solid var(--np-color-line);
+    border-radius: var(--np-radius-sm);
+  }
+
+  .offer-comparison-summary-table tbody th {
+    display: block;
+    background: var(--np-color-canvas);
+  }
+
+  .offer-comparison-summary-table td {
+    display: grid;
+    grid-template-columns: 3.75rem minmax(0, 1fr);
+    gap: var(--np-space-2);
+  }
+
+  .offer-comparison-summary-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .offer-summary-mobile-label {
+    display: block;
+    font-weight: 650;
+  }
+}

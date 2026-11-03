@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { focusDestination } from './focus-destination'
 import { AdvancedSalaryInputs } from './AdvancedSalaryInputs'
 import { validateEssentialSalaryDraft } from './essential-salary-validation'
 import { SalarySummary } from './SalarySummary'
@@ -103,6 +104,25 @@ const examples = [
 type Field = keyof EssentialSalaryDraft
 
 export function EssentialSalaryInputs() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const [focusRequest, setFocusRequest] = useState<{
+    readonly target: 'submit' | 'reset'
+  } | null>(null)
+  useLayoutEffect(() => {
+    const section = sectionRef.current
+    if (section === null || focusRequest === null) return
+    focusDestination(
+      focusRequest.target === 'reset'
+        ? section.querySelector<HTMLElement>('#np-gross')
+        : (section.querySelector<HTMLElement>('[aria-invalid="true"]') ??
+            section.querySelector<HTMLElement>(
+              '#np-standard-employment:not(:checked)',
+            ) ??
+            section.querySelector<HTMLElement>(
+              '[aria-labelledby="salary-summary-heading"]',
+            )),
+    )
+  }, [focusRequest])
   const [restoration, setRestoration] = useState<ShareReadResult>(() =>
     readShareableSalarySettings(
       typeof window === 'undefined' ? '' : window.location.search,
@@ -127,6 +147,7 @@ export function EssentialSalaryInputs() {
     }
   }
   const resetAll = () => {
+    setFocusRequest({ target: 'reset' })
     setDraft(empty)
     setSubmitted(false)
     setResetToken((previous) => previous + 1)
@@ -183,6 +204,7 @@ export function EssentialSalaryInputs() {
 
   return (
     <section
+      ref={sectionRef}
       className="np-panel salary-inputs"
       aria-labelledby="salary-input-heading"
     >
@@ -207,6 +229,7 @@ export function EssentialSalaryInputs() {
         onSubmit={(event) => {
           event.preventDefault()
           setSubmitted(true)
+          setFocusRequest({ target: 'submit' })
         }}
         noValidate
       >

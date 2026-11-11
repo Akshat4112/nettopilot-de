@@ -144,7 +144,7 @@ describe('NP-CMP-009 pension and benefits', () => {
         ).getByRole('region', {
           name: 'Offer B pension and benefits summary',
         }),
-      ).getByText(/Employer pension: Not specified/),
+      ).getByText(/Employer occupational pension: Not specified/),
     ).toBeInTheDocument()
     await user.click(
       within(

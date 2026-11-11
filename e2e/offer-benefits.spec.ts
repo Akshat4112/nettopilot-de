@@ -8,10 +8,10 @@ test('annual pension and benefit valuations stay independent on mobile and out o
   await page.goto('./')
   await openOfferCategories(page, 'Pension and benefits')
   await page
-    .getByRole('textbox', { name: 'Offer A employer pension annual (EUR)' })
+    .getByRole('textbox', { name: 'Offer A employer occupational pension annual (EUR)' })
     .fill('1200.05')
   await page
-    .getByRole('combobox', { name: 'Offer A pension certainty' })
+    .getByRole('combobox', { name: 'Offer A occupational pension certainty' })
     .selectOption('conditional')
   await page.getByRole('button', { name: 'Add benefit to Offer A' }).click()
   await page
@@ -30,7 +30,7 @@ test('annual pension and benefit valuations stay independent on mobile and out o
   await page.getByRole('button', { name: 'Copy Offer A to Offer B' }).click()
   await expect(
     page.getByRole('textbox', {
-      name: 'Offer B employer pension annual (EUR)',
+      name: 'Offer B employer occupational pension annual (EUR)',
     }),
   ).toHaveValue('1200.05')
   await expect(
@@ -45,7 +45,7 @@ test('annual pension and benefit valuations stay independent on mobile and out o
     page.getByRole('textbox', { name: 'Offer A benefit 1 label' }),
   ).toHaveValue('Training')
   const summary = page.getByRole('region', {
-    name: 'Offer A pension and benefits summary',
+    name: 'Offer A occupational pension and benefits summary',
   })
   await expect(summary.getByText(/Employer-stated:.*500.25/)).toBeVisible()
   await expect(summary.getByText(/User-assigned:.*0.00/)).toBeVisible()
@@ -61,7 +61,7 @@ test('annual pension and benefit valuations stay independent on mobile and out o
   await page.getByRole('button', { name: 'Clear Offer B' }).click()
   await expect(
     page.getByRole('textbox', {
-      name: 'Offer B employer pension annual (EUR)',
+      name: 'Offer B employer occupational pension annual (EUR)',
     }),
   ).toHaveValue('')
   await expect(

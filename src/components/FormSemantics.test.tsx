@@ -111,7 +111,7 @@ describe('NP-A11Y-001 form semantics', () => {
     expect(
       screen.getByLabelText('Offer A employer occupational pension annual (EUR)'),
     ).toHaveAccessibleDescription(
-      /Pension and benefits remain separate from salary/,
+      /Occupational pension and benefits stay outside payroll net/,
     )
     await user.type(
       screen.getByLabelText('Offer A expected annual variable pay (EUR)'),

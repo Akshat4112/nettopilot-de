@@ -30,8 +30,8 @@ function LocalizedApp() {
         </a>
         <div className="site-header-controls">
           <span className="status">{t('navigation.preview')}</span>
-          <label className="language-picker" htmlFor="np-language">
-            {t('navigation.language')}
+          <div className="language-picker">
+            <label htmlFor="np-language">{t('navigation.language')}</label>
             <select
               id="np-language"
               value={locale}
@@ -42,7 +42,7 @@ function LocalizedApp() {
               <option value="en">English</option>
               <option value="de">Deutsch</option>
             </select>
-          </label>
+          </div>
         </div>
       </header>
 

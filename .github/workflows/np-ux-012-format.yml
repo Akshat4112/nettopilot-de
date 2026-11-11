@@ -1,0 +1,34 @@
+name: NP-UX-012 temporary formatter
+on:
+  push:
+    branches:
+      - np-ux-012-calculator-visual-polish
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Format salary and Playwright changes
+        run: |
+          npx prettier --write src/components/EssentialSalaryInputs.tsx src/components/SalarySummary.tsx src/styles.css e2e/calculator-visual-polish.spec.ts
+          git diff --check
+      - name: Commit formatter results
+        run: |
+          if ! git diff --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add src/components/EssentialSalaryInputs.tsx src/components/SalarySummary.tsx src/styles.css e2e/calculator-visual-polish.spec.ts
+            git commit -m 'style: format calculator visual polish'
+            git push origin HEAD:np-ux-012-calculator-visual-polish
+          fi

@@ -11,6 +11,7 @@ describe('EssentialSalaryInputs', () => {
   it('renders material payroll fields without a hidden tax-class default', () => {
     renderWithUser(<EssentialSalaryInputs />)
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
+    expect(screen.getByLabelText('Calculation year')).toHaveValue('2026')
     expect(screen.getByLabelText('Tax class')).toHaveValue('')
     expect(screen.getByLabelText('Federal state')).toHaveValue('')
     expect(screen.getByLabelText('Health insurance')).toHaveValue('')
@@ -31,6 +32,7 @@ describe('EssentialSalaryInputs', () => {
     await user.selectOptions(screen.getByLabelText('Tax class'), '1')
     await user.click(screen.getByRole('button', { name: 'Reset' }))
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
+    expect(screen.getByLabelText('Calculation year')).toHaveValue('2026')
     expect(screen.getByLabelText('Tax class')).toHaveValue('')
   })
   it('validates a complete supported essential-input draft', async () => {
@@ -134,6 +136,7 @@ describe('EssentialSalaryInputs', () => {
     expect(screen.getByLabelText('Salary frequency')).toHaveValue('annual')
     expect(screen.getByLabelText('Federal state')).toHaveValue('DE-BE')
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
+    expect(screen.getByLabelText('Calculation year')).toHaveValue('2026')
     expect(screen.getByLabelText('Tax class')).toHaveValue('')
     expect(screen.getByRole('checkbox')).not.toBeChecked()
     expect(
@@ -162,7 +165,7 @@ describe('EssentialSalaryInputs', () => {
       screen.getByRole('button', { name: 'Create privacy-safe link' }),
     )
     const link = screen.getByLabelText(
-      'Private-settings link (select and copy)',
+      'Shareable settings link (select and copy)',
     )
     const url = (link as HTMLInputElement).value
     expect(new URL(url).search).toBe(
@@ -176,7 +179,7 @@ describe('EssentialSalaryInputs', () => {
     )
     expect(screen.getByLabelText('Gross salary (EUR)')).toHaveValue('')
     expect(
-      screen.queryByLabelText('Private-settings link (select and copy)'),
+      screen.queryByLabelText('Shareable settings link (select and copy)'),
     ).not.toBeInTheDocument()
     expect(window.location.search).toBe('')
   })

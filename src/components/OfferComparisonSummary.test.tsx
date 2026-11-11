@@ -225,7 +225,9 @@ describe('NP-CMP-012 comparison summary', () => {
     ).not.toBeInTheDocument()
     expect(row('Remote days per week').getByText('Not supplied')).toBeVisible()
     expect(
-      row('Employer occupational pension contribution').getByText('Not supplied'),
+      row('Employer occupational pension contribution').getByText(
+        'Not supplied',
+      ),
     ).toBeVisible()
   })
 
@@ -342,7 +344,9 @@ describe('NP-CMP-012 comparison summary', () => {
       />,
     )
     expect(
-      row('Employer occupational pension contribution').getAllByText('Unavailable'),
+      row('Employer occupational pension contribution').getAllByText(
+        'Unavailable',
+      ),
     ).toHaveLength(2)
     expect(
       row('Employer occupational pension contribution').getByText('€0.00'),

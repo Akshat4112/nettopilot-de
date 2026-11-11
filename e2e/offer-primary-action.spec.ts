@@ -41,7 +41,9 @@ test('one calculation action separates optional completeness from current per-of
     .getByLabel('Offer A contractual weekly hours', { exact: true })
     .fill('40')
   await page
-    .getByLabel('Offer A employer occupational pension annual (EUR)', { exact: true })
+    .getByLabel('Offer A employer occupational pension annual (EUR)', {
+      exact: true,
+    })
     .fill('-1')
   await calculate.focus()
   await page.keyboard.press('Enter')

@@ -97,7 +97,8 @@ export function OfferBenefitsInputs({
       <h3>Employer occupational pension and benefits</h3>
       <p id={id + '-benefits-help'}>
         Optional annual EUR values. Leave unknown amounts blank; enter zero only
-        when confirmed. Occupational pension and benefits stay outside payroll net.
+        when confirmed. Occupational pension and benefits stay outside payroll
+        net.
       </p>
       <div className="np-field">
         <label htmlFor={id + '-pension'}>
@@ -255,7 +256,9 @@ export function OfferBenefitsInputs({
           {label}: {result.reason}
         </p>
       )}
-      <section aria-label={label + ' occupational pension and benefits summary'}>
+      <section
+        aria-label={label + ' occupational pension and benefits summary'}
+      >
         {result.state === 'valid' ? (
           <>
             <p>
@@ -291,8 +294,8 @@ export function OfferBenefitsInputs({
         )}
         <p>
           Tax treatment is not calculated. Values are shown separately, never
-          added together or included in net pay. Occupational pension is not spendable cash;
-          no investment return is assumed.
+          added together or included in net pay. Occupational pension is not
+          spendable cash; no investment return is assumed.
         </p>
       </section>
     </div>

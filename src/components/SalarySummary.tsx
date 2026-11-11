@@ -125,7 +125,8 @@ export function SalarySummary({
               Recurring monthly take-home pay
             </h3>
             <p>
-              Estimated take-home pay for calculation year {result.calculationYear}.
+              Estimated take-home pay for calculation year{' '}
+              {result.calculationYear}.
             </p>
             {result.recurringMonthlyNetIsStable &&
             result.recurringMonthlyNetCents !== null ? (

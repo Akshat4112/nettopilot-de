@@ -8,7 +8,9 @@ test('annual pension and benefit valuations stay independent on mobile and out o
   await page.goto('./')
   await openOfferCategories(page, 'Pension and benefits')
   await page
-    .getByRole('textbox', { name: 'Offer A employer occupational pension annual (EUR)' })
+    .getByRole('textbox', {
+      name: 'Offer A employer occupational pension annual (EUR)',
+    })
     .fill('1200.05')
   await page
     .getByRole('combobox', { name: 'Offer A occupational pension certainty' })

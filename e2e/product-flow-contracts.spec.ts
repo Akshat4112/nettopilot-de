@@ -183,7 +183,9 @@ test.describe('product-flow smoke contracts', () => {
       .getByLabel('Offer A employer occupational pension annual (EUR)')
       .fill('90071992547409.91')
     await expect(
-      table.getByRole('row', { name: /^Employer occupational pension contribution/ }),
+      table.getByRole('row', {
+        name: /^Employer occupational pension contribution/,
+      }),
     ).toContainText('€90,071,992,547,409.91')
     expect(await net.innerText()).toBe(originalNet)
     expect(

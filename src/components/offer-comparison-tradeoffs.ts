@@ -101,7 +101,11 @@ export function explainOfferComparison(
   const vacation = fact('vacation', 'Entered paid vacation day count', days)
   const commuteTime = fact('commuteTime', 'Annual commute time', hours)
   const remote = fact('remote', 'Remote days per week', weeklyDays)
-  const pension = fact('pension', 'Annual employer occupational pension contribution', euro)
+  const pension = fact(
+    'pension',
+    'Annual employer occupational pension contribution',
+    euro,
+  )
   const employerBenefits = fact(
     'employerBenefits',
     'Annual employer-stated benefit values',

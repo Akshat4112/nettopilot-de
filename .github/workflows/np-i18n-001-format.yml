@@ -1,0 +1,35 @@
+name: NP-I18N-001 temporary formatting
+on:
+  push:
+    branches:
+      - np-i18n-001-terminology-standard
+
+permissions:
+  contents: write
+
+jobs:
+  format-glossary-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Format terminology test
+        run: |
+          npx prettier --write src/i18n/terminology.test.ts
+          git diff --check
+          git diff -- src/i18n/terminology.test.ts
+      - name: Commit formatting to feature branch
+        run: |
+          if ! git diff --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add src/i18n/terminology.test.ts
+            git commit -m 'style: apply exact formatter to terminology test'
+            git push origin HEAD:np-i18n-001-terminology-standard
+          fi

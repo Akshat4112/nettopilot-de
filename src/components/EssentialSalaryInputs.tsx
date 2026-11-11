@@ -294,7 +294,7 @@ export function EssentialSalaryInputs() {
           {shareUrl !== '' && (
             <div className="np-field">
               <label htmlFor="np-share-url">
-                Private-settings link (select and copy)
+                Shareable settings link (select and copy)
               </label>
               <input
                 id="np-share-url"
@@ -350,7 +350,7 @@ export function EssentialSalaryInputs() {
           {fieldError('period')}
         </div>
         <div className="np-field">
-          <label htmlFor="np-year">Tax year</label>
+          <label htmlFor="np-year">Calculation year</label>
           <select
             id="np-year"
             aria-invalid={submitted && Boolean(fieldErrors.year)}

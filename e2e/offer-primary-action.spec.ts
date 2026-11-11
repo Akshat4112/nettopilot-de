@@ -41,7 +41,7 @@ test('one calculation action separates optional completeness from current per-of
     .getByLabel('Offer A contractual weekly hours', { exact: true })
     .fill('40')
   await page
-    .getByLabel('Offer A employer pension annual (EUR)', { exact: true })
+    .getByLabel('Offer A employer occupational pension annual (EUR)', { exact: true })
     .fill('-1')
   await calculate.focus()
   await page.keyboard.press('Enter')
@@ -65,7 +65,7 @@ test('one calculation action separates optional completeness from current per-of
   ).toHaveAttribute('aria-invalid', 'true')
   await expect(
     page.getByRole('group', {
-      name: 'Offer A pension and benefits inputs',
+      name: 'Offer A occupational pension and benefits inputs',
       exact: true,
     }),
   ).toHaveAttribute('aria-invalid', 'true')

@@ -1223,6 +1223,7 @@ main {
 
 .salary-utilities {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-column: 1 / -1;
   gap: var(--np-space-4);
   min-width: 0;
@@ -1233,6 +1234,13 @@ main {
 
 .salary-utilities .salary-actions {
   align-items: start;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.salary-utilities .salary-actions > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .salary-utilities .salary-actions p {

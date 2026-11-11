@@ -51,7 +51,7 @@ test('same-profile net compensation reconciles across pay frequencies and invali
     .getByRole('region', { name: 'Offer A net result' })
     .innerText()
   await page
-    .getByRole('textbox', { name: 'Offer A employer pension annual (EUR)' })
+    .getByRole('textbox', { name: 'Offer A employer occupational pension annual (EUR)' })
     .fill('1000')
   expect(
     await results

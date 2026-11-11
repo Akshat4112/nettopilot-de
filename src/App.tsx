@@ -2,7 +2,8 @@ import { EssentialSalaryInputs } from './components/EssentialSalaryInputs'
 import { OfferComparisonInputs } from './components/OfferComparisonInputs'
 import { CalculationMethodology } from './components/CalculationMethodology'
 import { APP_BASE_PATH } from './config/app'
-import { LanguageProvider, useLanguage } from './i18n/LanguageProvider'
+import { LanguageProvider } from './i18n/LanguageProvider'
+import { useLanguage } from './i18n/context'
 import type { MessageKey } from './i18n/messages'
 
 const principles: readonly MessageKey[] = [

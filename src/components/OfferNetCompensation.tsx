@@ -2,6 +2,8 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { focusDestination } from './focus-destination'
 import { EffectiveHourlyComparison } from './EffectiveHourlyComparison'
 import { OfferComparisonTradeoffs } from './OfferComparisonTradeoffs'
+import { OfferComparisonShare } from './OfferComparisonShare'
+import { calculateOfferComparisonMetrics } from './offer-comparison-metrics'
 import {
   OfferComparisonSummary,
   type OfferComparisonSummaryInputs,
@@ -357,6 +359,13 @@ export function OfferNetCompensation({
                     {...hourlyInputs}
                     {...summaryInputs}
                     netResult={result}
+                  />
+                  <OfferComparisonShare
+                    metrics={calculateOfferComparisonMetrics({
+                      ...hourlyInputs,
+                      ...summaryInputs,
+                      netResult: result,
+                    })}
                   />
                 </>
               )}

@@ -65,7 +65,8 @@ jobs:
 
   browser-smoke:
     name: Chromium smoke
-    runs-on: ubuntu-latest
+    # Keep Playwright system dependencies on a supported LTS runner.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     steps:

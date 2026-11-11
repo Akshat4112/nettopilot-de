@@ -1,0 +1,794 @@
+{
+  "schemaVersion": "1.0.0",
+  "defaultLocale": "en",
+  "supportedLocales": [
+    "en",
+    "de"
+  ],
+  "terms": [
+    {
+      "id": "ui.calculation_year",
+      "category": "interface",
+      "en": "Calculation year",
+      "de": "Berechnungsjahr",
+      "meaning": "The year of the payroll assumptions, not the filing year."
+    },
+    {
+      "id": "ui.currency_eur",
+      "category": "interface",
+      "en": "Euro (EUR)",
+      "de": "Euro (EUR)",
+      "meaning": "Never translate the ISO currency code EUR."
+    },
+    {
+      "id": "ui.monthly",
+      "category": "interface",
+      "en": "Monthly",
+      "de": "Monatlich",
+      "meaning": "Pay frequency or a clearly labelled monthly output."
+    },
+    {
+      "id": "ui.annual",
+      "category": "interface",
+      "en": "Annual",
+      "de": "Jährlich",
+      "meaning": "Pay frequency or a clearly labelled annual output."
+    },
+    {
+      "id": "ui.month",
+      "category": "interface",
+      "en": "Month",
+      "de": "Monat",
+      "meaning": "Calendar/payroll month."
+    },
+    {
+      "id": "ui.year",
+      "category": "interface",
+      "en": "Year",
+      "de": "Jahr",
+      "meaning": "Calendar or calculation year."
+    },
+    {
+      "id": "ui.required",
+      "category": "interface",
+      "en": "Required",
+      "de": "Erforderlich",
+      "meaning": "A supported calculation needs a supplied valid value."
+    },
+    {
+      "id": "ui.optional",
+      "category": "interface",
+      "en": "Optional",
+      "de": "Optional",
+      "meaning": "An input can be left empty under the stated rules."
+    },
+    {
+      "id": "ui.calculate",
+      "category": "interface",
+      "en": "Calculate",
+      "de": "Berechnen",
+      "meaning": "Use for an actual calculation action, not a saved draft."
+    },
+    {
+      "id": "ui.reset",
+      "category": "interface",
+      "en": "Reset",
+      "de": "Zurücksetzen",
+      "meaning": "Clears the specified current browser state."
+    },
+    {
+      "id": "ui.copy",
+      "category": "interface",
+      "en": "Copy",
+      "de": "Kopieren",
+      "meaning": "Copies only the explicitly described content."
+    },
+    {
+      "id": "ui.download",
+      "category": "interface",
+      "en": "Download",
+      "de": "Herunterladen",
+      "meaning": "Browser-local file download."
+    },
+    {
+      "id": "ui.print",
+      "category": "interface",
+      "en": "Print",
+      "de": "Drucken",
+      "meaning": "Do not imply comparison values appear on the salary report."
+    },
+    {
+      "id": "ui.assumptions",
+      "category": "interface",
+      "en": "Calculation assumptions",
+      "de": "Berechnungsannahmen",
+      "meaning": "Name assumptions before presenting a numeric result."
+    },
+    {
+      "id": "ui.sources",
+      "category": "interface",
+      "en": "Sources",
+      "de": "Quellen",
+      "meaning": "References supporting the assumptions."
+    },
+    {
+      "id": "ui.methodology",
+      "category": "interface",
+      "en": "Calculation methodology",
+      "de": "Berechnungsmethodik",
+      "meaning": "How admitted amounts are calculated and qualified."
+    },
+    {
+      "id": "ui.estimated",
+      "category": "interface",
+      "en": "Estimated",
+      "de": "Geschätzt",
+      "meaning": "Qualify a forecast; not a certified payslip."
+    },
+    {
+      "id": "ui.information_only",
+      "category": "interface",
+      "en": "For information only",
+      "de": "Nur zur Information",
+      "meaning": "Not tax, legal or financial advice."
+    },
+    {
+      "id": "payroll.salary_calculator",
+      "category": "payroll",
+      "en": "Salary calculator",
+      "de": "Gehaltsrechner",
+      "meaning": "The standard employment salary calculator."
+    },
+    {
+      "id": "payroll.gross_salary",
+      "category": "payroll",
+      "en": "Gross salary",
+      "de": "Bruttogehalt",
+      "meaning": "Cash pay before employee withholding/deductions."
+    },
+    {
+      "id": "payroll.net_salary",
+      "category": "payroll",
+      "en": "Net salary",
+      "de": "Nettogehalt",
+      "meaning": "Label estimate status and accounting basis nearby."
+    },
+    {
+      "id": "payroll.base_salary",
+      "category": "payroll",
+      "en": "Base salary",
+      "de": "Grundgehalt",
+      "meaning": "Do not include bonuses, benefits or pension valuation."
+    },
+    {
+      "id": "payroll.annual_base_gross",
+      "category": "payroll",
+      "en": "Annual base gross",
+      "de": "Jährliches Bruttogrundgehalt",
+      "meaning": "Annual base cash only; not total compensation."
+    },
+    {
+      "id": "payroll.recurring_gross",
+      "category": "payroll",
+      "en": "Recurring gross pay",
+      "de": "Regelmäßiges Bruttogehalt",
+      "meaning": "Regular payroll pay, not one-off cash."
+    },
+    {
+      "id": "payroll.recurring_monthly_net",
+      "category": "payroll",
+      "en": "Estimated recurring monthly net pay",
+      "de": "Geschätztes regelmäßiges Monatsnetto",
+      "meaning": "Primary result, not a twelve-month bonus average."
+    },
+    {
+      "id": "payroll.annual_payroll_net",
+      "category": "payroll",
+      "en": "Estimated annual net payroll pay",
+      "de": "Geschätztes jährliches Netto laut Lohnabrechnung",
+      "meaning": "Distinguish payroll net from outside-payroll costs."
+    },
+    {
+      "id": "payroll.payment_frequency",
+      "category": "payroll",
+      "en": "Salary frequency",
+      "de": "Gehaltsintervall",
+      "meaning": "Monthly versus annual input; not number of payroll runs."
+    },
+    {
+      "id": "payroll.deductions",
+      "category": "payroll",
+      "en": "Employee deductions",
+      "de": "Arbeitnehmerabzüge",
+      "meaning": "Identify any additional outside-payroll costs separately."
+    },
+    {
+      "id": "payroll.deduction_breakdown",
+      "category": "payroll",
+      "en": "Deduction breakdown",
+      "de": "Aufschlüsselung der Abzüge",
+      "meaning": "Describe amounts and sources without inventing rates."
+    },
+    {
+      "id": "payroll.employer_cost",
+      "category": "payroll",
+      "en": "Estimated employer cost",
+      "de": "Geschätzte Arbeitgeberkosten",
+      "meaning": "Not identical to employee gross pay."
+    },
+    {
+      "id": "payroll.employer_contribution",
+      "category": "payroll",
+      "en": "Employer contribution",
+      "de": "Arbeitgeberbeitrag",
+      "meaning": "Name the relevant insurance or benefit scheme."
+    },
+    {
+      "id": "payroll.employee_contribution",
+      "category": "payroll",
+      "en": "Employee contribution",
+      "de": "Arbeitnehmerbeitrag",
+      "meaning": "Name the relevant insurance or benefit scheme."
+    },
+    {
+      "id": "payroll.variable_pay",
+      "category": "payroll",
+      "en": "Variable compensation",
+      "de": "Variable Vergütung",
+      "meaning": "Not guaranteed recurring base pay."
+    },
+    {
+      "id": "payroll.guaranteed_cash",
+      "category": "payroll",
+      "en": "Guaranteed cash compensation",
+      "de": "Garantierte Geldvergütung",
+      "meaning": "Only contractually guaranteed cash, not user valuations."
+    },
+    {
+      "id": "payroll.one_off_payment",
+      "category": "payroll",
+      "en": "One-off payment",
+      "de": "Einmalzahlung",
+      "meaning": "Separate event payment, not recurring wages."
+    },
+    {
+      "id": "payroll.bonus",
+      "category": "payroll",
+      "en": "Bonus",
+      "de": "Bonus",
+      "meaning": "Specific compensation type; payment month can matter."
+    },
+    {
+      "id": "payroll.special_payment",
+      "category": "payroll",
+      "en": "Special payment",
+      "de": "Sonderzahlung",
+      "meaning": "Do not infer guaranteed status."
+    },
+    {
+      "id": "payroll.annual_equivalent",
+      "category": "payroll",
+      "en": "Annual equivalent",
+      "de": "Jahresäquivalent",
+      "meaning": "Derived comparable period amount, not necessarily paid at once."
+    },
+    {
+      "id": "payroll.payroll_month",
+      "category": "payroll",
+      "en": "Payroll month",
+      "de": "Abrechnungsmonat",
+      "meaning": "Specific settlement month, not annual total."
+    },
+    {
+      "id": "tax.wage_tax",
+      "category": "tax",
+      "en": "Wage tax withholding",
+      "de": "Lohnsteuer",
+      "meaning": "Payroll wage-tax deduction. Do not translate as Einkommensteuer."
+    },
+    {
+      "id": "tax.income_tax",
+      "category": "tax",
+      "en": "Income tax",
+      "de": "Einkommensteuer",
+      "meaning": "Annual income tax concept; not interchangeable with Lohnsteuer."
+    },
+    {
+      "id": "tax.tax_class",
+      "category": "tax",
+      "en": "Tax class",
+      "de": "Steuerklasse",
+      "meaning": "German payroll tax class, not tax bracket."
+    },
+    {
+      "id": "tax.federal_state",
+      "category": "tax",
+      "en": "Federal state",
+      "de": "Bundesland",
+      "meaning": "German Bundesland; independent of country."
+    },
+    {
+      "id": "tax.solidarity",
+      "category": "tax",
+      "en": "Solidarity surcharge",
+      "de": "Solidaritätszuschlag",
+      "meaning": "Separate levy; never bundle into wage tax label."
+    },
+    {
+      "id": "tax.church_tax",
+      "category": "tax",
+      "en": "Church tax",
+      "de": "Kirchensteuer",
+      "meaning": "Liability selection, not religion inferred from another field."
+    },
+    {
+      "id": "tax.church_tax_liability",
+      "category": "tax",
+      "en": "Church-tax liability",
+      "de": "Kirchensteuerpflicht",
+      "meaning": "Do not infer liability from residence or marital status."
+    },
+    {
+      "id": "tax.allowance",
+      "category": "tax",
+      "en": "Tax allowance",
+      "de": "Steuerfreibetrag",
+      "meaning": "Name exact allowance when available; do not overclaim deductibility."
+    },
+    {
+      "id": "tax.addition_amount",
+      "category": "tax",
+      "en": "Tax addition amount",
+      "de": "Steuerlicher Hinzurechnungsbetrag",
+      "meaning": "Not another allowance; increases relevant tax basis."
+    },
+    {
+      "id": "tax.bmf",
+      "category": "tax",
+      "en": "German Federal Ministry of Finance",
+      "de": "Bundesministerium der Finanzen (BMF)",
+      "meaning": "Official institution/source reference."
+    },
+    {
+      "id": "tax.pap",
+      "category": "tax",
+      "en": "Official payroll-tax calculation algorithm",
+      "de": "Programmablaufplan zur Lohnsteuerberechnung (PAP)",
+      "meaning": "German BMF PAP; not a tax return model."
+    },
+    {
+      "id": "insurance.social",
+      "category": "insurance",
+      "en": "Social insurance",
+      "de": "Sozialversicherung",
+      "meaning": "General collective term, not a separate deduction."
+    },
+    {
+      "id": "insurance.statutory_health",
+      "category": "insurance",
+      "en": "Statutory health insurance (GKV)",
+      "de": "Gesetzliche Krankenversicherung (GKV)",
+      "meaning": "Use GKV for German compulsory/statutory coverage."
+    },
+    {
+      "id": "insurance.private_health",
+      "category": "insurance",
+      "en": "Private health insurance (PKV)",
+      "de": "Private Krankenversicherung (PKV)",
+      "meaning": "Do not imply current calculator supports every PKV case."
+    },
+    {
+      "id": "insurance.health_contribution",
+      "category": "insurance",
+      "en": "Health insurance contribution",
+      "de": "Krankenversicherungsbeitrag",
+      "meaning": "May have separate employee and employer portions."
+    },
+    {
+      "id": "insurance.additional_health_rate",
+      "category": "insurance",
+      "en": "Additional health contribution rate",
+      "de": "Zusatzbeitragssatz zur Krankenversicherung",
+      "meaning": "Rate from insurer/user input or published average; label source."
+    },
+    {
+      "id": "insurance.average_additional_rate",
+      "category": "insurance",
+      "en": "Average additional health contribution rate",
+      "de": "Durchschnittlicher Zusatzbeitragssatz",
+      "meaning": "Published annual average, not a user's actual insurer rate."
+    },
+    {
+      "id": "insurance.pension",
+      "category": "insurance",
+      "en": "Statutory pension insurance",
+      "de": "Gesetzliche Rentenversicherung",
+      "meaning": "Distinct from employer occupational retirement benefits."
+    },
+    {
+      "id": "insurance.pension_employee",
+      "category": "insurance",
+      "en": "Employee pension insurance contribution",
+      "de": "Arbeitnehmerbeitrag zur Rentenversicherung",
+      "meaning": "Employee statutory pension withholding, not occupational pension."
+    },
+    {
+      "id": "insurance.pension_employer",
+      "category": "insurance",
+      "en": "Employer statutory pension contribution",
+      "de": "Arbeitgeberbeitrag zur gesetzlichen Rentenversicherung",
+      "meaning": "Statutory employer contribution, not occupational benefits."
+    },
+    {
+      "id": "insurance.unemployment",
+      "category": "insurance",
+      "en": "Unemployment insurance",
+      "de": "Arbeitslosenversicherung",
+      "meaning": "Separate contribution, not unemployment benefit."
+    },
+    {
+      "id": "insurance.care",
+      "category": "insurance",
+      "en": "Long-term care insurance",
+      "de": "Pflegeversicherung",
+      "meaning": "German social care contribution, not health insurance."
+    },
+    {
+      "id": "insurance.child_count",
+      "category": "insurance",
+      "en": "Number of children",
+      "de": "Anzahl der Kinder",
+      "meaning": "Care-insurance rules require explicit relevant inputs."
+    },
+    {
+      "id": "insurance.contribution_ceiling",
+      "category": "insurance",
+      "en": "Contribution assessment ceiling",
+      "de": "Beitragsbemessungsgrenze",
+      "meaning": "Annual/year-specific insurance basis cap, not salary maximum."
+    },
+    {
+      "id": "insurance.employer_occupational_pension",
+      "category": "insurance",
+      "en": "Employer occupational pension contribution",
+      "de": "Arbeitgeberbeitrag zur betrieblichen Altersversorgung",
+      "meaning": "Never conflate with employer statutory pension contribution."
+    },
+    {
+      "id": "comparison.offer_a",
+      "category": "comparison",
+      "en": "Offer A",
+      "de": "Angebot A",
+      "meaning": "Reference offer for differences."
+    },
+    {
+      "id": "comparison.offer_b",
+      "category": "comparison",
+      "en": "Offer B",
+      "de": "Angebot B",
+      "meaning": "Compared against offer A."
+    },
+    {
+      "id": "comparison.compare_offers",
+      "category": "comparison",
+      "en": "Compare two job offers",
+      "de": "Zwei Stellenangebote vergleichen",
+      "meaning": "Neutral comparison, no overall ranking."
+    },
+    {
+      "id": "comparison.shared_payroll_assumptions",
+      "category": "comparison",
+      "en": "Shared payroll assumptions",
+      "de": "Gemeinsame Annahmen zur Lohnabrechnung",
+      "meaning": "Both offers use the same explicit payroll profile."
+    },
+    {
+      "id": "comparison.b_minus_a",
+      "category": "comparison",
+      "en": "B − A difference",
+      "de": "Differenz B − A",
+      "meaning": "Signed B minus A; not evidence of a better offer."
+    },
+    {
+      "id": "comparison.net_difference",
+      "category": "comparison",
+      "en": "Net-pay difference",
+      "de": "Nettogehaltsdifferenz",
+      "meaning": "Only comparable when both payroll results are supported."
+    },
+    {
+      "id": "comparison.commute_costs",
+      "category": "comparison",
+      "en": "Commuting costs",
+      "de": "Pendelkosten",
+      "meaning": "User-entered costs, not automatically computed tax deductions."
+    },
+    {
+      "id": "comparison.one_way_commute",
+      "category": "comparison",
+      "en": "One-way commute time",
+      "de": "Einfache Pendelzeit",
+      "meaning": "Time for one direction; two trips used for round-trip totals."
+    },
+    {
+      "id": "comparison.annual_commute_hours",
+      "category": "comparison",
+      "en": "Annual commute hours",
+      "de": "Jährliche Pendelstunden",
+      "meaning": "Based on supplied office frequency and paid leave."
+    },
+    {
+      "id": "comparison.office_days",
+      "category": "comparison",
+      "en": "Office days per week",
+      "de": "Bürotage pro Woche",
+      "meaning": "Not identical to working days per week."
+    },
+    {
+      "id": "comparison.remote_days",
+      "category": "comparison",
+      "en": "Remote days per week",
+      "de": "Remote-Tage pro Woche",
+      "meaning": "Derived only from valid working-day and office-day schedule."
+    },
+    {
+      "id": "comparison.work_arrangement",
+      "category": "comparison",
+      "en": "Work arrangement",
+      "de": "Arbeitsmodell",
+      "meaning": "On-site, hybrid, fully remote, or unknown."
+    },
+    {
+      "id": "comparison.onsite",
+      "category": "comparison",
+      "en": "On-site",
+      "de": "Vor Ort",
+      "meaning": "Work physically at workplace."
+    },
+    {
+      "id": "comparison.hybrid",
+      "category": "comparison",
+      "en": "Hybrid",
+      "de": "Hybrid",
+      "meaning": "Combination of workplace and remote work."
+    },
+    {
+      "id": "comparison.fully_remote",
+      "category": "comparison",
+      "en": "Fully remote",
+      "de": "Vollständig remote",
+      "meaning": "Avoid legal inference that a Telearbeitsplatz is established."
+    },
+    {
+      "id": "comparison.home_office_expenses",
+      "category": "comparison",
+      "en": "Home-office expenses",
+      "de": "Homeoffice-Kosten",
+      "meaning": "User-entered expenses, not automatic tax deductions."
+    },
+    {
+      "id": "comparison.remote_allowance",
+      "category": "comparison",
+      "en": "Employer home-office allowance",
+      "de": "Homeoffice-Zuschuss des Arbeitgebers",
+      "meaning": "Show separately; no automatic net-pay treatment."
+    },
+    {
+      "id": "comparison.contractual_hours",
+      "category": "comparison",
+      "en": "Contractual working hours",
+      "de": "Vertragliche Arbeitsstunden",
+      "meaning": "Clarify weekly or annual period."
+    },
+    {
+      "id": "comparison.annual_work_hours",
+      "category": "comparison",
+      "en": "Annual contractual work hours",
+      "de": "Jährliche vertragliche Arbeitsstunden",
+      "meaning": "52-week/paid-leave assumptions must be visible."
+    },
+    {
+      "id": "comparison.paid_vacation",
+      "category": "comparison",
+      "en": "Paid vacation days",
+      "de": "Bezahlte Urlaubstage",
+      "meaning": "Counts may not be comparable for different weekly schedules."
+    },
+    {
+      "id": "comparison.effective_hourly",
+      "category": "comparison",
+      "en": "Effective net after commuting per hour",
+      "de": "Effektives Netto je Stunde nach Pendelkosten",
+      "meaning": "(annual net−entered commute costs)/(work+commute hours), not salary per paid hour."
+    },
+    {
+      "id": "comparison.net_after_commute",
+      "category": "comparison",
+      "en": "Annual net after entered commute costs",
+      "de": "Jahresnetto nach eingegebenen Pendelkosten",
+      "meaning": "No tax relief or implicit route savings inferred."
+    },
+    {
+      "id": "comparison.employer_benefits",
+      "category": "comparison",
+      "en": "Employer-stated annual benefit value",
+      "de": "Jahreswert der Zusatzleistungen laut Arbeitgeber",
+      "meaning": "Distinct from personally estimated benefit value."
+    },
+    {
+      "id": "comparison.personal_benefits",
+      "category": "comparison",
+      "en": "User-assigned annual benefit value",
+      "de": "Selbst geschätzter Jahreswert der Zusatzleistungen",
+      "meaning": "Not guaranteed cash or employer payment."
+    },
+    {
+      "id": "comparison.benefit_eligibility",
+      "category": "comparison",
+      "en": "Benefit eligibility",
+      "de": "Anspruchsvoraussetzungen der Zusatzleistung",
+      "meaning": "Separate conditions from valuation."
+    },
+    {
+      "id": "comparison.benefit_certainty",
+      "category": "comparison",
+      "en": "Benefit certainty",
+      "de": "Verlässlichkeit der Zusatzleistung",
+      "meaning": "Qualify uncertain benefit terms."
+    },
+    {
+      "id": "comparison.vesting",
+      "category": "comparison",
+      "en": "Vesting",
+      "de": "Unverfallbarkeit",
+      "meaning": "Only use in appropriately qualified retirement-benefit context."
+    },
+    {
+      "id": "comparison.tradeoffs",
+      "category": "comparison",
+      "en": "Factors behind the comparison",
+      "de": "Faktoren hinter dem Vergleich",
+      "meaning": "Describe factors without ranking offers."
+    },
+    {
+      "id": "comparison.summary",
+      "category": "comparison",
+      "en": "Offer comparison summary",
+      "de": "Zusammenfassung des Angebotsvergleichs",
+      "meaning": "Current inputs; no stored draft or final offer choice."
+    },
+    {
+      "id": "comparison.share",
+      "category": "comparison",
+      "en": "Share comparison",
+      "de": "Vergleich teilen",
+      "meaning": "Disclose that exported salary amounts are sensitive."
+    },
+    {
+      "id": "comparison.download",
+      "category": "comparison",
+      "en": "Download comparison (.txt)",
+      "de": "Vergleich herunterladen (.txt)",
+      "meaning": "Local text file, not a generated server resource."
+    },
+    {
+      "id": "states.not_supplied",
+      "category": "states",
+      "en": "Not supplied",
+      "de": "Nicht angegeben",
+      "meaning": "Blank field is not numerically zero."
+    },
+    {
+      "id": "states.unknown",
+      "category": "states",
+      "en": "Unknown",
+      "de": "Unbekannt",
+      "meaning": "Not a presumed default or confirmed zero."
+    },
+    {
+      "id": "states.unavailable",
+      "category": "states",
+      "en": "Unavailable",
+      "de": "Nicht verfügbar",
+      "meaning": "A result is missing; preserve the reason when known."
+    },
+    {
+      "id": "states.unsupported",
+      "category": "states",
+      "en": "Unsupported scenario",
+      "de": "Nicht unterstützter Fall",
+      "meaning": "Deliberate calculation-scope restriction, not necessarily a bad input."
+    },
+    {
+      "id": "states.incomplete",
+      "category": "states",
+      "en": "Incomplete",
+      "de": "Unvollständig",
+      "meaning": "Required input is absent or not yet ready."
+    },
+    {
+      "id": "states.invalid",
+      "category": "states",
+      "en": "Invalid",
+      "de": "Ungültig",
+      "meaning": "Provided value fails validation; distinct from unknown."
+    },
+    {
+      "id": "states.calculated",
+      "category": "states",
+      "en": "Calculated",
+      "de": "Berechnet",
+      "meaning": "Valid numeric calculation produced by admitted model."
+    },
+    {
+      "id": "states.supplied",
+      "category": "states",
+      "en": "Supplied",
+      "de": "Angegeben",
+      "meaning": "User-entered information is present and valid."
+    },
+    {
+      "id": "states.explicit_zero",
+      "category": "states",
+      "en": "Explicit zero",
+      "de": "Ausdrücklich angegebener Nullwert",
+      "meaning": "Known amount of 0 EUR, not missing or unavailable."
+    },
+    {
+      "id": "states.loading",
+      "category": "states",
+      "en": "Calculating…",
+      "de": "Berechnung läuft …",
+      "meaning": "Do not imply a result has completed."
+    },
+    {
+      "id": "states.warning",
+      "category": "states",
+      "en": "Important note",
+      "de": "Wichtiger Hinweis",
+      "meaning": "Caution about assumptions or limitations."
+    },
+    {
+      "id": "privacy.browser_only",
+      "category": "privacy",
+      "en": "Inputs remain in your browser",
+      "de": "Eingaben bleiben in Ihrem Browser",
+      "meaning": "No automatic server submission."
+    },
+    {
+      "id": "privacy.sensitive_export",
+      "category": "privacy",
+      "en": "This export contains private compensation figures",
+      "de": "Dieser Export enthält vertrauliche Vergütungsbeträge",
+      "meaning": "Require user consent before clipboard or download."
+    },
+    {
+      "id": "privacy.no_upload",
+      "category": "privacy",
+      "en": "No data is uploaded",
+      "de": "Es werden keine Daten hochgeladen",
+      "meaning": "Only claim for a verified local-only data path."
+    },
+    {
+      "id": "privacy.consent",
+      "category": "privacy",
+      "en": "I understand this export contains private compensation figures",
+      "de": "Mir ist bewusst, dass dieser Export vertrauliche Vergütungsbeträge enthält",
+      "meaning": "Explicit unchecked acknowledgment; not automatic opt-in."
+    },
+    {
+      "id": "privacy.safe_link",
+      "category": "privacy",
+      "en": "Link with non-sensitive settings",
+      "de": "Link mit nicht vertraulichen Einstellungen",
+      "meaning": "Never include salaries or dates of birth in URLs."
+    },
+    {
+      "id": "privacy.not_advice",
+      "category": "privacy",
+      "en": "Educational estimates, not tax or legal advice",
+      "de": "Unverbindliche Schätzungen, keine Steuer- oder Rechtsberatung",
+      "meaning": "Do not present numbers as a payslip or legal entitlement."
+    }
+  ]
+}

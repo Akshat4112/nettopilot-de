@@ -6,6 +6,23 @@ for (const width of [320, 375, 768, 1280]) {
   }) => {
     await page.setViewportSize({ width, height: width === 1280 ? 720 : 812 })
     await page.goto('./')
+    const initialOverflow = await page.evaluate(() => {
+      const viewport = document.documentElement.clientWidth
+      return Array.from(document.querySelectorAll('body *'))
+        .map((element) => ({
+          tag: element.tagName,
+          cssClass: element.getAttribute('class') ?? '',
+          right: Math.ceil(element.getBoundingClientRect().right),
+          width: Math.ceil(element.getBoundingClientRect().width),
+        }))
+        .filter((element) => element.right > viewport + 2)
+        .slice(0, 16)
+    })
+    if (initialOverflow.length > 0) {
+      throw new Error(
+        'Initial mobile overflow elements: ' + JSON.stringify(initialOverflow),
+      )
+    }
     const panel = page.locator('.salary-inputs')
     const gross = panel.getByLabel('Gross salary (EUR)', { exact: true })
     const examples = panel.getByRole('group', {

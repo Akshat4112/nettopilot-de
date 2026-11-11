@@ -24,12 +24,8 @@ test('copy/download sharing requires consent and never publishes salary data in 
   await page
     .getByLabel('Comparison date of birth', { exact: true })
     .fill('1990-01-01')
-  await page
-    .getByLabel(/Confirm shared standard payroll assumptions/)
-    .check()
-  await page
-    .getByRole('button', { name: 'Calculate net compensation' })
-    .click()
+  await page.getByLabel(/Confirm shared standard payroll assumptions/).check()
+  await page.getByRole('button', { name: 'Calculate net compensation' }).click()
 
   await expect(share).toBeVisible()
   const consent = share.getByRole('checkbox', {
@@ -75,17 +71,13 @@ test('copy/download sharing requires consent and never publishes salary data in 
   expect(updatedText).toContain('Annual base gross | €50,000.00')
   expect(updatedText).not.toContain('Annual base gross | €48,000.00')
 
-  const width = await page.evaluate(
-    () => document.documentElement.scrollWidth,
-  )
+  const width = await page.evaluate(() => document.documentElement.scrollWidth)
   expect(width).toBeLessThanOrEqual(375)
   await page.emulateMedia({ media: 'print' })
   await expect(share).toBeHidden()
   await page.emulateMedia({ media: 'screen' })
 
-  await page
-    .getByRole('button', { name: 'Reset payroll assumptions' })
-    .click()
+  await page.getByRole('button', { name: 'Reset payroll assumptions' }).click()
   await expect(share).toHaveCount(0)
   await expect(page).not.toHaveURL(/50000|48000|60000|1990/)
 

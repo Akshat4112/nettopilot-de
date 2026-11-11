@@ -62,7 +62,9 @@ describe('NP-CMP-014 privacy-safe comparison text export', () => {
       'Employer-stated benefit values — annual | Not supplied | €0.00 | Unavailable',
     )
     expect(report).toContain('€90,071,992,547,409.91')
-    expect(report.split('\n').filter((line) => line.includes(' | '))).toHaveLength(13)
+    expect(
+      report.split('\n').filter((line) => line.includes(' | ')),
+    ).toHaveLength(13)
   })
 
   it('never includes payroll profile fields, links or hidden personal inputs', () => {

@@ -1,6 +1,9 @@
 import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import type { OfferComparisonMetrics, OfferMetrics } from './offer-comparison-metrics'
+import type {
+  OfferComparisonMetrics,
+  OfferMetrics,
+} from './offer-comparison-metrics'
 import { OfferComparisonShare } from './OfferComparisonShare'
 import { renderWithUser } from '../test/render'
 
@@ -32,7 +35,9 @@ const metrics = (amount: number): OfferComparisonMetrics => ({
 
 describe('NP-CMP-014 user consent for comparison sharing', () => {
   it('keeps both export actions disabled until an explicit acknowledgement', async () => {
-    const { user } = renderWithUser(<OfferComparisonShare metrics={metrics(4800000)} />)
+    const { user } = renderWithUser(
+      <OfferComparisonShare metrics={metrics(4800000)} />,
+    )
     const checkbox = screen.getByRole('checkbox', {
       name: /I understand this export contains private compensation figures/,
     })

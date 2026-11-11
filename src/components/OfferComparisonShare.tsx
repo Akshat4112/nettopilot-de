@@ -98,9 +98,7 @@ export function OfferComparisonShare({
           Download comparison (.txt)
         </button>
       </div>
-      {feedback?.text === text && (
-        <p role="status">{feedback.message}</p>
-      )}
+      {feedback?.text === text && <p role="status">{feedback.message}</p>}
     </section>
   )
 }

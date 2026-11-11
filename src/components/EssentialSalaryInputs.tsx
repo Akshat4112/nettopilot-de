@@ -241,81 +241,11 @@ export function EssentialSalaryInputs() {
         }}
         noValidate
       >
-        <div
-          className="salary-actions"
-          role="group"
-          aria-label="Fictional salary examples"
-        >
-          <p>
-            Try a fictional 2026 example to fill the form. Examples are
-            illustrative, not personalized advice. Selecting one resets advanced
-            inputs and requires a fresh payroll confirmation.
-          </p>
-          {examples.map((example) => (
-            <button
-              key={example.id}
-              type="button"
-              className="np-button-secondary"
-              onClick={() => {
-                loadExample(example.draft)
-              }}
-            >
-              Load example: {example.label}
-            </button>
-          ))}
+        <div className="salary-form-intro">
+          <h3>Start with your pay</h3>
+          <p>Enter gross salary and pay frequency, then confirm your payroll details.</p>
         </div>
-        <div
-          className="salary-actions"
-          role="group"
-          aria-label="Private sharing"
-        >
-          <p>
-            Share only the 2026 year, frequency and selected federal state. Your
-            gross pay, tax class, birth date, church-tax status, children,
-            health insurance and bonuses are never included in the link.
-          </p>
-          <button
-            type="button"
-            className="np-button-secondary"
-            onClick={() => {
-              setShareUrl(
-                createShareableSalaryUrl(window.location.href, {
-                  year: '2026',
-                  period: draft.period,
-                  ...(draft.federalState
-                    ? { federalState: draft.federalState }
-                    : {}),
-                }),
-              )
-            }}
-          >
-            Create privacy-safe link
-          </button>
-          {shareUrl !== '' && (
-            <div className="np-field">
-              <label htmlFor="np-share-url">
-                Private-settings link (select and copy)
-              </label>
-              <input
-                id="np-share-url"
-                type="text"
-                readOnly
-                value={shareUrl}
-                onFocus={(event) => {
-                  event.target.select()
-                }}
-              />
-            </div>
-          )}
-          <button
-            type="button"
-            className="np-button-secondary"
-            onClick={resetAll}
-          >
-            Clear shared settings and reset
-          </button>
-        </div>
-        <div className="np-field">
+        <div className="np-field salary-gross-field">
           <label htmlFor="np-gross">Gross salary (EUR)</label>
           <input
             id="np-gross"
@@ -364,6 +294,10 @@ export function EssentialSalaryInputs() {
             <option value="2026">2026</option>
           </select>
           {fieldError('year')}
+        </div>
+        <div className="salary-form-divider">
+          <h3>Payroll details</h3>
+          <p>Use the values that apply to your German employment.</p>
         </div>
         <div className="np-field">
           <label htmlFor="np-class">Tax class</label>
@@ -529,6 +463,84 @@ export function EssentialSalaryInputs() {
               : errors.join(' ')}
           </div>
         )}
+        <div className="salary-utilities">
+          <h3>More options</h3>
+          <p>Examples and sharing are optional; your salary remains in this browser.</p>
+          <div
+            className="salary-actions"
+            role="group"
+            aria-label="Fictional salary examples"
+          >
+            <p>
+              Try a fictional 2026 example to fill the form. Examples are
+              illustrative, not personalized advice. Selecting one resets advanced
+              inputs and requires a fresh payroll confirmation.
+            </p>
+            {examples.map((example) => (
+              <button
+                key={example.id}
+                type="button"
+                className="np-button-secondary"
+                onClick={() => {
+                  loadExample(example.draft)
+                }}
+              >
+                Load example: {example.label}
+              </button>
+            ))}
+          </div>
+          <div
+            className="salary-actions"
+            role="group"
+            aria-label="Private sharing"
+          >
+            <p>
+              Share only the 2026 year, frequency and selected federal state. Your
+              gross pay, tax class, birth date, church-tax status, children,
+              health insurance and bonuses are never included in the link.
+            </p>
+            <button
+              type="button"
+              className="np-button-secondary"
+              onClick={() => {
+                setShareUrl(
+                  createShareableSalaryUrl(window.location.href, {
+                    year: '2026',
+                    period: draft.period,
+                    ...(draft.federalState
+                      ? { federalState: draft.federalState }
+                      : {}),
+                  }),
+                )
+              }}
+            >
+              Create privacy-safe link
+            </button>
+            {shareUrl !== '' && (
+              <div className="np-field">
+                <label htmlFor="np-share-url">
+                  Private-settings link (select and copy)
+                </label>
+                <input
+                  id="np-share-url"
+                  type="text"
+                  readOnly
+                  value={shareUrl}
+                  onFocus={(event) => {
+                    event.target.select()
+                  }}
+                />
+              </div>
+            )}
+            <button
+              type="button"
+              className="np-button-secondary"
+              onClick={resetAll}
+            >
+              Clear shared settings and reset
+            </button>
+          </div>
+        </div>
       </form>
       {calculation !== null && (
         <SalarySummary

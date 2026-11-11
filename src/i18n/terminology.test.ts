@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import documentation from '../../docs/i18n/NP-I18N-001-terminology.md?raw'
 import { describe, expect, it } from 'vitest'
 import glossary from '../../docs/i18n/terminology.json'
 
@@ -84,10 +84,6 @@ describe('NP-I18N-001 bilingual terminology contract', () => {
   })
 
   it('keeps the published Markdown glossary in sync with every machine term', () => {
-    const documentation = readFileSync(
-      new URL('../../docs/i18n/NP-I18N-001-terminology.md', import.meta.url),
-      'utf8',
-    )
     expect(documentation).toContain('**Version:** ' + glossary.schemaVersion)
     expect(documentation).toContain(
       'maps **' + String(entries.length) + ' semantic IDs**',

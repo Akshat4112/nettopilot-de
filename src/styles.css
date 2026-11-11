@@ -1025,3 +1025,39 @@ main {
 .offer-category > p {
   margin: var(--np-space-4);
 }
+
+.offer-tradeoffs {
+  margin-block: var(--np-space-6);
+}
+
+.offer-tradeoffs details {
+  margin-block: var(--np-space-3);
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-sm);
+  padding: var(--np-space-3);
+}
+
+.offer-tradeoffs summary {
+  cursor: pointer;
+}
+
+.offer-tradeoffs summary h5 {
+  display: inline;
+  font-size: 1rem;
+}
+
+.offer-tradeoff-headline {
+  display: block;
+  margin-top: var(--np-space-2);
+  color: var(--np-color-muted);
+  line-height: 1.5;
+}
+
+.offer-tradeoffs li,
+.offer-tradeoffs details > p {
+  line-height: 1.5;
+}
+
+.offer-tradeoffs li + li {
+  margin-top: var(--np-space-2);
+}

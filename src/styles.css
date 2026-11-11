@@ -1222,14 +1222,16 @@ main {
 }
 
 .salary-utilities {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  display: block;
   grid-column: 1 / -1;
-  gap: var(--np-space-4);
   min-width: 0;
   margin-top: var(--np-space-6);
   border-top: 1px solid var(--np-color-line);
   padding-top: var(--np-space-6);
+}
+
+.salary-utilities > .salary-actions {
+  margin-top: var(--np-space-4);
 }
 
 .salary-utilities .salary-actions {

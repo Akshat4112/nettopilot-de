@@ -40,10 +40,12 @@ for (const width of [375, 768, 1280]) {
       page.getByRole('heading', { name: 'Salary summary' }),
     ).toBeVisible()
 
-    await page.locator('[aria-labelledby="salary-summary-heading"]').screenshot({
-      path: testInfo.outputPath(`salary-result-${String(width)}.png`),
-      animations: 'disabled',
-    })
+    await page
+      .locator('[aria-labelledby="salary-summary-heading"]')
+      .screenshot({
+        path: testInfo.outputPath(`salary-result-${String(width)}.png`),
+        animations: 'disabled',
+      })
 
     await page.locator('.offer-comparison').screenshot({
       path: testInfo.outputPath(`comparison-${String(width)}.png`),

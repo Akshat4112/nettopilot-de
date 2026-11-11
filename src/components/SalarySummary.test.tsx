@@ -68,7 +68,7 @@ describe('SalarySummary', () => {
     })
     expect(summary.children[1]).toBe(primary)
     expect(primary).toHaveTextContent(
-      'Estimated take-home pay for tax year 2026',
+      'Estimated take-home pay for calculation year 2026',
     )
     expect(primary).toHaveTextContent('€4,300.00')
     for (const detail of [

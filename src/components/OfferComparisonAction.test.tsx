@@ -83,7 +83,9 @@ describe('NP-UX-008 one comparison calculation action', () => {
       '40',
     )
     await user.type(
-      screen.getByLabelText('Offer A employer occupational pension annual (EUR)'),
+      screen.getByLabelText(
+        'Offer A employer occupational pension annual (EUR)',
+      ),
       '-1',
     )
     await user.click(
@@ -105,7 +107,9 @@ describe('NP-UX-008 one comparison calculation action', () => {
       screen.getByRole('region', { name: 'Offer comparison summary' }),
     )
     expect(
-      summary.getByRole('row', { name: /^Employer occupational pension contribution/ }),
+      summary.getByRole('row', {
+        name: /^Employer occupational pension contribution/,
+      }),
     ).toHaveTextContent('Unavailable')
     expect(
       summary.getByRole('row', { name: /^Annual contractual work hours/ }),

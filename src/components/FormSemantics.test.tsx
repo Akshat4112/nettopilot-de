@@ -109,7 +109,9 @@ describe('NP-A11Y-001 form semantics', () => {
       screen.getByLabelText('Offer A fuel per office day (EUR)'),
     ).toHaveAccessibleDescription(/leave unknown amounts blank/)
     expect(
-      screen.getByLabelText('Offer A employer occupational pension annual (EUR)'),
+      screen.getByLabelText(
+        'Offer A employer occupational pension annual (EUR)',
+      ),
     ).toHaveAccessibleDescription(
       /Occupational pension and benefits stay outside payroll net/,
     )
@@ -224,7 +226,9 @@ describe('NP-A11Y-001 form semantics', () => {
     const { user, container } = renderWithUser(<OfferComparisonInputs />)
     await openOfferCategories(user, 'Pension and benefits')
     await user.type(
-      screen.getByLabelText('Offer A employer occupational pension annual (EUR)'),
+      screen.getByLabelText(
+        'Offer A employer occupational pension annual (EUR)',
+      ),
       '-1',
     )
     await user.selectOptions(
@@ -232,7 +236,9 @@ describe('NP-A11Y-001 form semantics', () => {
       'guaranteed',
     )
     await user.type(
-      screen.getByLabelText('Offer A occupational pension eligibility or vesting note'),
+      screen.getByLabelText(
+        'Offer A occupational pension eligibility or vesting note',
+      ),
       'After probation',
     )
     await user.click(

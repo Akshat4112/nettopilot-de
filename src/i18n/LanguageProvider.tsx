@@ -1,10 +1,11 @@
+import { useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import {
-  useLayoutEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react'
-import { getMessage, getTerm, persistLocale, readLocale, type Locale } from './catalog'
+  getMessage,
+  getTerm,
+  persistLocale,
+  readLocale,
+  type Locale,
+} from './catalog'
 import { LanguageContext, type LanguageContextValue } from './context'
 
 export function LanguageProvider({

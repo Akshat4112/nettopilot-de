@@ -63,7 +63,7 @@ describe('NP-CMP-014 privacy-safe comparison text export', () => {
     )
     expect(report).toContain('€90,071,992,547,409.91')
     expect(
-      report.split('\n').filter((line) => line.includes(' | ')),
+      report.split('\n').filter((line) => line.includes(' | ') && !line.startsWith('Calculation year:')),
     ).toHaveLength(13)
   })
 

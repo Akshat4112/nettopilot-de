@@ -60,27 +60,28 @@ describe('NP-CMP-014 user consent for comparison sharing', () => {
     const { user, rerender } = renderWithUser(
       <OfferComparisonShare metrics={metrics(4800000)} />,
     )
-    const checkbox = screen.getByRole('checkbox', {
-      name: /I understand this export contains private compensation figures/,
-    })
-    await user.click(checkbox)
-    expect(checkbox).toBeChecked()
+    const checkbox = () =>
+      screen.getByRole('checkbox', {
+        name: /I understand this export contains private compensation figures/,
+      })
+    await user.click(checkbox())
+    expect(checkbox()).toBeChecked()
     rerender(<OfferComparisonShare metrics={metrics(6000000)} />)
-    expect(checkbox).not.toBeChecked()
+    expect(checkbox()).not.toBeChecked()
     expect(
       screen.getByRole('button', { name: 'Copy comparison as text' }),
     ).toBeDisabled()
 
     // Restoring the original content cannot resurrect an earlier approval.
     rerender(<OfferComparisonShare metrics={metrics(4800000)} />)
-    expect(checkbox).not.toBeChecked()
+    expect(checkbox()).not.toBeChecked()
     expect(
       screen.getByRole('button', { name: 'Copy comparison as text' }),
     ).toBeDisabled()
     expect(
       screen.getByRole('button', { name: 'Download comparison (.txt)' }),
     ).toBeDisabled()
-    await user.click(checkbox)
+    await user.click(checkbox())
     expect(
       screen.getByRole('button', { name: 'Copy comparison as text' }),
     ).toBeEnabled()

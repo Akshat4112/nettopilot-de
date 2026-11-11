@@ -26,7 +26,9 @@ for (const width of [320, 375, 768, 1280]) {
       primaryBounds === null ||
       shareBounds === null
     ) {
-      throw new Error('Expected all calculator actions and inputs to be laid out')
+      throw new Error(
+        'Expected all calculator actions and inputs to be laid out',
+      )
     }
     expect(grossBounds.y).toBeLessThan(primaryBounds.y)
     expect(primaryBounds.y).toBeLessThan(examplesBounds.y)
@@ -53,7 +55,9 @@ for (const width of [320, 375, 768, 1280]) {
       .getByRole('group', { name: 'Salary display period' })
       .boundingBox()
     if (recurringBounds === null || detailsBounds === null) {
-      throw new Error('Expected recurring result and period toggle to be laid out')
+      throw new Error(
+        'Expected recurring result and period toggle to be laid out',
+      )
     }
     expect(recurringBounds.y).toBeLessThan(detailsBounds.y)
     expect(

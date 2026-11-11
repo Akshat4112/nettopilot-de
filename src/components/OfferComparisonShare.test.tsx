@@ -70,5 +70,19 @@ describe('NP-CMP-014 user consent for comparison sharing', () => {
     expect(
       screen.getByRole('button', { name: 'Copy comparison as text' }),
     ).toBeDisabled()
+
+    // Restoring the original content cannot resurrect an earlier approval.
+    rerender(<OfferComparisonShare metrics={metrics(4800000)} />)
+    expect(checkbox).not.toBeChecked()
+    expect(
+      screen.getByRole('button', { name: 'Copy comparison as text' }),
+    ).toBeDisabled()
+    expect(
+      screen.getByRole('button', { name: 'Download comparison (.txt)' }),
+    ).toBeDisabled()
+    await user.click(checkbox)
+    expect(
+      screen.getByRole('button', { name: 'Copy comparison as text' }),
+    ).toBeEnabled()
   })
 })

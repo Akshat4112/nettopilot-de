@@ -1,0 +1,34 @@
+name: NP-I18N-002 one-time code formatting
+on:
+  push:
+    branches:
+      - np-i18n-002-localization-architecture
+
+permissions:
+  contents: write
+
+jobs:
+  format-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Apply Prettier to feature files only
+        run: |
+          npx prettier --write src/i18n/*.ts src/i18n/*.tsx src/App.tsx e2e/language-switch.spec.ts
+          git diff --check
+      - name: Commit formatting
+        run: |
+          if ! git diff --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add src/i18n src/App.tsx e2e/language-switch.spec.ts
+            git commit -m 'style: format NP-I18N-002 files'
+            git push origin HEAD:np-i18n-002-localization-architecture
+          fi

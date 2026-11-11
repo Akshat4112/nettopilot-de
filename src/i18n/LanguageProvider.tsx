@@ -1,28 +1,11 @@
 import {
-  createContext,
-  useContext,
   useLayoutEffect,
   useMemo,
   useState,
   type ReactNode,
 } from 'react'
-import {
-  getMessage,
-  getTerm,
-  persistLocale,
-  readLocale,
-  type Locale,
-} from './catalog'
-import type { MessageKey } from './messages'
-
-interface LanguageContextValue {
-  readonly locale: Locale
-  readonly setLocale: (locale: Locale) => void
-  readonly t: (key: MessageKey) => string
-  readonly term: (id: string) => string
-}
-
-const LanguageContext = createContext<LanguageContextValue | null>(null)
+import { getMessage, getTerm, persistLocale, readLocale, type Locale } from './catalog'
+import { LanguageContext, type LanguageContextValue } from './context'
 
 export function LanguageProvider({
   children,
@@ -31,7 +14,6 @@ export function LanguageProvider({
 }) {
   const [locale, setLocale] = useState<Locale>(readLocale)
 
-  // The document language is accessibility metadata, not financial state.
   useLayoutEffect(() => {
     if (typeof document !== 'undefined') {
       document.documentElement.lang = locale
@@ -54,12 +36,4 @@ export function LanguageProvider({
       {children}
     </LanguageContext.Provider>
   )
-}
-
-export function useLanguage(): LanguageContextValue {
-  const context = useContext(LanguageContext)
-  if (context === null) {
-    throw new Error('useLanguage must be inside LanguageProvider')
-  }
-  return context
 }

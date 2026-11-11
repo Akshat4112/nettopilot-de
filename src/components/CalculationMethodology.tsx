@@ -79,7 +79,7 @@ export function CalculationMethodology() {
         unavailable.
       </p>
       <p>
-        Commuting costs, remote work, benefits, employer pension entries and
+        Commuting costs, remote work, benefits, employer occupational pension entries and
         working time remain separate comparison context. They do not change
         payroll net. Annual contractual hours use weekly hours × (52 − paid
         vacation days ÷ working days per week), excluding public holidays,

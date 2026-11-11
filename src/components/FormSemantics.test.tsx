@@ -109,7 +109,7 @@ describe('NP-A11Y-001 form semantics', () => {
       screen.getByLabelText('Offer A fuel per office day (EUR)'),
     ).toHaveAccessibleDescription(/leave unknown amounts blank/)
     expect(
-      screen.getByLabelText('Offer A employer pension annual (EUR)'),
+      screen.getByLabelText('Offer A employer occupational pension annual (EUR)'),
     ).toHaveAccessibleDescription(
       /Pension and benefits remain separate from salary/,
     )
@@ -203,7 +203,7 @@ describe('NP-A11Y-001 form semantics', () => {
     ).toHaveAttribute('aria-invalid', 'true')
     expect(
       screen.getByRole('group', {
-        name: 'Offer A pension and benefits inputs',
+        name: 'Offer A occupational pension and benefits inputs',
       }),
     ).toHaveAttribute('aria-invalid', 'true')
     expectResolvedFormReferences(container)
@@ -224,15 +224,15 @@ describe('NP-A11Y-001 form semantics', () => {
     const { user, container } = renderWithUser(<OfferComparisonInputs />)
     await openOfferCategories(user, 'Pension and benefits')
     await user.type(
-      screen.getByLabelText('Offer A employer pension annual (EUR)'),
+      screen.getByLabelText('Offer A employer occupational pension annual (EUR)'),
       '-1',
     )
     await user.selectOptions(
-      screen.getByLabelText('Offer A pension certainty'),
+      screen.getByLabelText('Offer A occupational pension certainty'),
       'guaranteed',
     )
     await user.type(
-      screen.getByLabelText('Offer A pension eligibility or vesting note'),
+      screen.getByLabelText('Offer A occupational pension eligibility or vesting note'),
       'After probation',
     )
     await user.click(
@@ -252,15 +252,15 @@ describe('NP-A11Y-001 form semantics', () => {
       screen.getByRole('button', { name: 'Calculate net compensation' }),
     )
     const group = screen.getByRole('group', {
-      name: 'Offer A pension and benefits inputs',
+      name: 'Offer A occupational pension and benefits inputs',
     })
     expect(group).toHaveAttribute('aria-invalid', 'true')
     expect(group).toHaveAccessibleDescription(
       /Employer pension contribution must be non-negative/,
     )
     for (const name of [
-      'Offer A pension certainty',
-      'Offer A pension eligibility or vesting note',
+      'Offer A occupational pension certainty',
+      'Offer A occupational pension eligibility or vesting note',
       'Offer A benefit 1 certainty',
       'Offer A benefit 1 description or eligibility note',
       'Offer A benefit 1 label',

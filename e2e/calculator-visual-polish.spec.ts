@@ -20,14 +20,18 @@ for (const width of [320, 375, 768, 1280]) {
         primary.boundingBox(),
         share.boundingBox(),
       ])
-    expect(grossBounds).not.toBeNull()
-    expect(examplesBounds).not.toBeNull()
-    expect(primaryBounds).not.toBeNull()
-    expect(shareBounds).not.toBeNull()
-    expect(grossBounds!.y).toBeLessThan(primaryBounds!.y)
-    expect(primaryBounds!.y).toBeLessThan(examplesBounds!.y)
-    expect(examplesBounds!.y).toBeLessThan(shareBounds!.y)
-    expect(primaryBounds!.height).toBeGreaterThanOrEqual(44)
+    if (
+      grossBounds === null ||
+      examplesBounds === null ||
+      primaryBounds === null ||
+      shareBounds === null
+    ) {
+      throw new Error('Expected all calculator actions and inputs to be laid out')
+    }
+    expect(grossBounds.y).toBeLessThan(primaryBounds.y)
+    expect(primaryBounds.y).toBeLessThan(examplesBounds.y)
+    expect(examplesBounds.y).toBeLessThan(shareBounds.y)
+    expect(primaryBounds.height).toBeGreaterThanOrEqual(44)
 
     await panel
       .getByRole('button', {
@@ -48,9 +52,10 @@ for (const width of [320, 375, 768, 1280]) {
     const detailsBounds = await summary
       .getByRole('group', { name: 'Salary display period' })
       .boundingBox()
-    expect(recurringBounds).not.toBeNull()
-    expect(detailsBounds).not.toBeNull()
-    expect(recurringBounds!.y).toBeLessThan(detailsBounds!.y)
+    if (recurringBounds === null || detailsBounds === null) {
+      throw new Error('Expected recurring result and period toggle to be laid out')
+    }
+    expect(recurringBounds.y).toBeLessThan(detailsBounds.y)
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBeLessThanOrEqual(width)

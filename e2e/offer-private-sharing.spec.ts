@@ -58,7 +58,7 @@ test('copy/download sharing requires consent and never publishes salary data in 
 
   await page
     .getByLabel('Offer A gross salary (EUR)', { exact: true })
-    .fill('50000')
+    .fill('50400')
   await expect(consent).not.toBeChecked()
   await expect(copy).toBeDisabled()
   await expect(downloadButton).toBeDisabled()
@@ -68,7 +68,7 @@ test('copy/download sharing requires consent and never publishes salary data in 
     downloadButton.click(),
   ])
   const updatedText = await readFile(await updatedDownload.path(), 'utf8')
-  expect(updatedText).toContain('Annual base gross | €50,000.00')
+  expect(updatedText).toContain('Annual base gross | €50,400.00')
   expect(updatedText).not.toContain('Annual base gross | €48,000.00')
 
   const width = await page.evaluate(() => document.documentElement.scrollWidth)
@@ -79,7 +79,7 @@ test('copy/download sharing requires consent and never publishes salary data in 
 
   await page.getByRole('button', { name: 'Reset payroll assumptions' }).click()
   await expect(share).toHaveCount(0)
-  await expect(page).not.toHaveURL(/50000|48000|60000|1990/)
+  await expect(page).not.toHaveURL(/50400|48000|60000|1990/)
 
   await page.reload()
   await expect(share).toHaveCount(0)

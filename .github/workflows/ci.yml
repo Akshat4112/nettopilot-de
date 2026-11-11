@@ -82,8 +82,8 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Install Chromium and system dependencies
-        run: npx --no-install playwright install --with-deps chromium
+      - name: Install Chromium
+        run: npx --no-install playwright install chromium
 
       - name: Run production browser smoke tests
         run: npm run test:e2e

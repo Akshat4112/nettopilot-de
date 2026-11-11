@@ -46,9 +46,9 @@ describe('NP-I18N-001 bilingual terminology contract', () => {
     expect(localized('insurance.employer_occupational_pension', 'de')).toContain(
       'betrieblichen Altersversorgung',
     )
-    expect(
-      localized('insurance.pension_employer', 'de'),
-    ).not.toBe(localized('insurance.employer_occupational_pension', 'de'))
+    expect(localized('insurance.pension_employer', 'de')).not.toBe(
+      localized('insurance.employer_occupational_pension', 'de'),
+    )
     expect(localized('insurance.statutory_health', 'de')).toContain('GKV')
     expect(localized('insurance.private_health', 'de')).toContain('PKV')
   })

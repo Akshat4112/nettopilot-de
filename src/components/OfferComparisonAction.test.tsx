@@ -105,7 +105,7 @@ describe('NP-UX-008 one comparison calculation action', () => {
       screen.getByRole('region', { name: 'Offer comparison summary' }),
     )
     expect(
-      summary.getByRole('row', { name: /^Employer pension contribution/ }),
+      summary.getByRole('row', { name: /^Employer occupational pension contribution/ }),
     ).toHaveTextContent('Unavailable')
     expect(
       summary.getByRole('row', { name: /^Annual contractual work hours/ }),

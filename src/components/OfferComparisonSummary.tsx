@@ -157,7 +157,7 @@ export function OfferComparisonSummary(props: OfferComparisonSummaryInputs) {
             format={weeklyDays}
           />
           <SummaryRow
-            label="Employer pension contribution — annual"
+            label="Employer occupational pension contribution — annual"
             values={values('pension')}
             format={euro}
           />
@@ -182,8 +182,8 @@ export function OfferComparisonSummary(props: OfferComparisonSummaryInputs) {
         difference round independently to EUR cents from exact ratios.
       </p>
       <p>
-        Employer pension, employer-stated benefit values and user-assigned
-        benefit values are separate annual EUR amounts, not added to net pay or
+        Employer occupational pension, employer-stated and user-assigned benefit
+        values are separate annual EUR amounts, not added to net pay or
         combined. Benefit valuations are summed within each column only when
         every listed benefit has a supplied value. Certainty, eligibility and
         vesting remain in the benefit inputs. Remote days describe the entered

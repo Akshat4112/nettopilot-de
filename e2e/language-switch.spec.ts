@@ -19,10 +19,16 @@ test('language selection is accessible, persists only preference, and preserves 
     page.getByText(/Die deutsche Übersetzung wird schrittweise ergänzt/),
   ).toBeVisible()
   await expect(gross).toHaveValue('48000')
-  const keys = await page.evaluate(() =>
-    Object.entries(localStorage).map(([key, value]) => [key, value]),
-  )
-  expect(keys).toEqual([['nettopilot:locale', 'de']])
+  const preference = await page.evaluate(() => ({
+    value: localStorage.getItem('nettopilot:locale'),
+    keys: Array.from({ length: localStorage.length }, (_, index) =>
+      localStorage.key(index),
+    ),
+  }))
+  expect(preference).toEqual({
+    value: 'de',
+    keys: ['nettopilot:locale'],
+  })
   await expect(page).not.toHaveURL(/48000|1990|taxClass/)
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),

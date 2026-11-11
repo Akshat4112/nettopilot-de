@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import type { OfferComparisonMetrics } from './offer-comparison-metrics'
 import { formatOfferComparisonShareText } from './offer-comparison-share'
 
@@ -17,6 +17,12 @@ export function OfferComparisonShare({
     readonly text: string
     readonly message: string
   } | null>(null)
+  // A prior approval must not reappear if someone edits and restores a value.
+  // Layout effects revoke consent before the updated report can be used.
+  useLayoutEffect(() => {
+    setApprovedText(null)
+    setFeedback(null)
+  }, [text])
   const approved = approvedText === text
   const copy = async (): Promise<void> => {
     if (!approved) return

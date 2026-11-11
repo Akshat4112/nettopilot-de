@@ -2,67 +2,93 @@ import { EssentialSalaryInputs } from './components/EssentialSalaryInputs'
 import { OfferComparisonInputs } from './components/OfferComparisonInputs'
 import { CalculationMethodology } from './components/CalculationMethodology'
 import { APP_BASE_PATH } from './config/app'
+import { LanguageProvider } from './i18n/LanguageProvider'
+import { useLanguage } from './i18n/context'
+import type { MessageKey } from './i18n/messages'
 
-const principles = [
-  'Transparent estimates',
-  'Browser-only by default',
-  'German and English',
-] as const
+const principles: readonly MessageKey[] = [
+  'hero.principle.transparent',
+  'hero.principle.private',
+  'hero.principle.languages',
+]
 
-export function App() {
+function LocalizedApp() {
+  const { locale, setLocale, t } = useLanguage()
+
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main-content">
-        Skip to main content
+        {t('navigation.skipToMain')}
       </a>
       <header className="site-header">
         <a
           className="brand"
           href={APP_BASE_PATH}
-          aria-label="NettoPilot DE home"
+          aria-label={t('navigation.home')}
         >
           NettoPilot <span>DE</span>
         </a>
-        <span className="status">2026 calculator preview</span>
+        <div className="site-header-controls">
+          <span className="status">{t('navigation.preview')}</span>
+          <div className="language-picker">
+            <label htmlFor="np-language">{t('navigation.language')}</label>
+            <select
+              id="np-language"
+              value={locale}
+              onChange={(event) => {
+                setLocale(event.target.value === 'de' ? 'de' : 'en')
+              }}
+            >
+              <option value="en">English</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+        </div>
       </header>
 
       <main id="main-content" tabIndex={-1}>
         <section className="hero" aria-labelledby="hero-title">
-          <p className="eyebrow">German salary clarity</p>
-          <h1 id="hero-title">Understand the money behind a job offer.</h1>
-          <p className="intro">
-            NettoPilot DE is being built to explain estimated net salary,
-            deductions, and offer trade-offs without hiding the assumptions.
-          </p>
+          <p className="eyebrow">{t('hero.eyebrow')}</p>
+          <h1 id="hero-title">{t('hero.title')}</h1>
+          <p className="intro">{t('hero.intro')}</p>
 
-          <ul className="principles" aria-label="Product principles">
+          <ul className="principles" aria-label={t('hero.principles')}>
             {principles.map((principle) => (
-              <li key={principle}>{principle}</li>
+              <li key={principle}>{t(principle)}</li>
             ))}
           </ul>
 
-          <aside className="notice" aria-label="Application status">
-            <strong>A limited 2026 gross-to-net estimate is available.</strong>
-            <span>
-              The calculator currently supports confirmed standard employee
-              scenarios with compulsory statutory insurance, no children, no
-              church tax and no special payments. Other cases are explicitly
-              excluded.
-            </span>
+          <aside className="notice" aria-label={t('hero.status')}>
+            <strong>{t('hero.scopeTitle')}</strong>
+            <span>{t('hero.scopeBody')}</span>
           </aside>
+          {locale === 'de' && (
+            <p className="locale-progress-note" role="note">
+              {t('language.partialNotice')}
+            </p>
+          )}
         </section>
+
         <EssentialSalaryInputs />
         <OfferComparisonInputs />
         <CalculationMethodology />
       </main>
 
       <footer>
-        <span>Educational estimates, not tax or legal advice.</span>
-        <a href="#methodology">Calculation methodology</a>
+        <span>{t('footer.disclaimer')}</span>
+        <a href="#methodology">{t('footer.methodology')}</a>
         <a href="https://github.com/Akshat4112/nettopilot-de">
-          View the open-source project
+          {t('footer.repository')}
         </a>
       </footer>
     </div>
+  )
+}
+
+export function App() {
+  return (
+    <LanguageProvider>
+      <LocalizedApp />
+    </LanguageProvider>
   )
 }

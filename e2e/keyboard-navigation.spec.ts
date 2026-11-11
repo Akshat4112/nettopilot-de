@@ -38,7 +38,7 @@ test('salary submission focuses the first invalid input, then confirmation, then
   await page.keyboard.press('Tab')
   await expect(page.getByLabel('Salary frequency')).toBeFocused()
   await page.keyboard.press('Tab')
-  await expect(page.getByLabel('Tax year', { exact: true })).toBeFocused()
+  await expect(page.getByLabel('Calculation year', { exact: true })).toBeFocused()
   await page.keyboard.press('Tab')
   await expect(page.getByLabel('Tax class', { exact: true })).toBeFocused()
   await page.locator('#np-gross').focus()

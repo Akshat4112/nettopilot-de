@@ -59,16 +59,12 @@ describe('NP-I18N-002 language selection', () => {
     window.localStorage.setItem(LOCALE_STORAGE_KEY, 'de')
     const { unmount } = renderWithUser(<App />)
     expect(document.documentElement.lang).toBe('de')
-    expect(screen.getByRole('combobox', { name: 'Sprache' })).toHaveValue(
-      'de',
-    )
+    expect(screen.getByRole('combobox', { name: 'Sprache' })).toHaveValue('de')
     unmount()
 
     window.localStorage.setItem(LOCALE_STORAGE_KEY, 'xx')
     renderWithUser(<App />)
     expect(document.documentElement.lang).toBe('en')
-    expect(screen.getByRole('combobox', { name: 'Language' })).toHaveValue(
-      'en',
-    )
+    expect(screen.getByRole('combobox', { name: 'Language' })).toHaveValue('en')
   })
 })

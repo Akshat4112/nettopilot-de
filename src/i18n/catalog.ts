@@ -14,9 +14,7 @@ export function getMessage(locale: Locale, key: MessageKey): string {
   return messages[locale][key]
 }
 
-const glossary = new Map(
-  terminology.terms.map((term) => [term.id, term]),
-)
+const glossary = new Map(terminology.terms.map((term) => [term.id, term]))
 
 /** NP-I18N-001 canonical glossary is a separate, versioned source. */
 export function getTerm(locale: Locale, id: string): string {

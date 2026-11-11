@@ -31,9 +31,9 @@ test('language selection is accessible, persists only preference, and preserves 
   await page.reload()
   await expect(page.locator('html')).toHaveAttribute('lang', 'de')
   await expect(page.getByLabel('Sprache', { exact: true })).toHaveValue('de')
-  await expect(page.getByLabel('Gross salary (EUR)', { exact: true })).toHaveValue(
-    '',
-  )
+  await expect(
+    page.getByLabel('Gross salary (EUR)', { exact: true }),
+  ).toHaveValue('')
   await page.getByLabel('Sprache', { exact: true }).selectOption('en')
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.getByLabel('Language', { exact: true })).toHaveValue('en')

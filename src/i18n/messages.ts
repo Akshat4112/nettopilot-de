@@ -43,7 +43,8 @@ export const germanMessages: Record<MessageKey, string> = {
   'hero.principle.private': 'Standardmäßig nur im Browser',
   'hero.principle.languages': 'Deutsch und Englisch',
   'hero.status': 'Anwendungsstatus',
-  'hero.scopeTitle': 'Eine eingeschränkte Brutto-Netto-Schätzung für 2026 ist verfügbar.',
+  'hero.scopeTitle':
+    'Eine eingeschränkte Brutto-Netto-Schätzung für 2026 ist verfügbar.',
   'hero.scopeBody':
     'Der Rechner unterstützt derzeit bestätigte Standardfälle mit gesetzlicher Pflichtversicherung, ohne Kinder, Kirchensteuer und Sonderzahlungen. Andere Fälle sind ausdrücklich ausgeschlossen.',
   'footer.disclaimer':

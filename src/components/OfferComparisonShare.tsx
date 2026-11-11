@@ -19,20 +19,14 @@ export function OfferComparisonShare({
   } | null>(null)
   const approved = approvedText === text
   const copy = async (): Promise<void> => {
-    if (!approved || navigator.clipboard?.writeText === undefined) {
-      setFeedback({
-        text,
-        message: 'Clipboard unavailable. You can download the text instead.',
-      })
-      return
-    }
+    if (!approved) return
     try {
       await navigator.clipboard.writeText(text)
       setFeedback({ text, message: 'Current comparison copied as text.' })
     } catch {
       setFeedback({
         text,
-        message: 'Clipboard permission was denied. Use Download instead.',
+        message: 'Clipboard unavailable or blocked. Use Download instead.',
       })
     }
   }

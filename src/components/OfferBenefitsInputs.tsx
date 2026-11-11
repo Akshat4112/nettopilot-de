@@ -120,7 +120,7 @@ export function OfferBenefitsInputs({
       <CertaintyInput
         id={id + '-pension-certainty'}
         describedBy={description}
-        label={label + ' pension certainty'}
+        label={label + ' occupational pension certainty'}
         value={value.pensionCertainty}
         onChange={(pensionCertainty) => {
           onChange({ ...value, pensionCertainty })
@@ -128,7 +128,7 @@ export function OfferBenefitsInputs({
       />
       <div className="np-field">
         <label htmlFor={id + '-pension-note'}>
-          {label} pension eligibility or vesting note
+          {label} occupational pension eligibility or vesting note
         </label>
         <input
           id={id + '-pension-note'}
@@ -255,7 +255,7 @@ export function OfferBenefitsInputs({
           {label}: {result.reason}
         </p>
       )}
-      <section aria-label={label + ' pension and benefits summary'}>
+      <section aria-label={label + ' occupational pension and benefits summary'}>
         {result.state === 'valid' ? (
           <>
             <p>

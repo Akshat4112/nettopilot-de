@@ -29,9 +29,11 @@ for (const width of [320, 375, 768, 1280]) {
     expect(examplesBounds!.y).toBeLessThan(shareBounds!.y)
     expect(primaryBounds!.height).toBeGreaterThanOrEqual(44)
 
-    await panel.getByRole('button', {
-      name: /Load example: €3,500 monthly/,
-    }).click()
+    await panel
+      .getByRole('button', {
+        name: /Load example: €3,500 monthly/,
+      })
+      .click()
     await expect(gross).toHaveValue('3500')
     await expect(panel.getByRole('checkbox')).not.toBeChecked()
     await panel.locator('#np-standard-employment').check()

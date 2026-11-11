@@ -243,7 +243,10 @@ export function EssentialSalaryInputs() {
       >
         <div className="salary-form-intro">
           <h3>Start with your pay</h3>
-          <p>Enter gross salary and pay frequency, then confirm your payroll details.</p>
+          <p>
+            Enter gross salary and pay frequency, then confirm your payroll
+            details.
+          </p>
         </div>
         <div className="np-field salary-gross-field">
           <label htmlFor="np-gross">Gross salary (EUR)</label>
@@ -465,7 +468,10 @@ export function EssentialSalaryInputs() {
         )}
         <div className="salary-utilities">
           <h3>More options</h3>
-          <p>Examples and sharing are optional; your salary remains in this browser.</p>
+          <p>
+            Examples and sharing are optional; your salary remains in this
+            browser.
+          </p>
           <div
             className="salary-actions"
             role="group"
@@ -473,8 +479,8 @@ export function EssentialSalaryInputs() {
           >
             <p>
               Try a fictional 2026 example to fill the form. Examples are
-              illustrative, not personalized advice. Selecting one resets advanced
-              inputs and requires a fresh payroll confirmation.
+              illustrative, not personalized advice. Selecting one resets
+              advanced inputs and requires a fresh payroll confirmation.
             </p>
             {examples.map((example) => (
               <button
@@ -495,9 +501,10 @@ export function EssentialSalaryInputs() {
             aria-label="Private sharing"
           >
             <p>
-              Share only the 2026 year, frequency and selected federal state. Your
-              gross pay, tax class, birth date, church-tax status, children,
-              health insurance and bonuses are never included in the link.
+              Share only the 2026 year, frequency and selected federal state.
+              Your gross pay, tax class, birth date, church-tax status,
+              children, health insurance and bonuses are never included in the
+              link.
             </p>
             <button
               type="button"

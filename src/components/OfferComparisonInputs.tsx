@@ -565,7 +565,9 @@ export function OfferComparisonInputs() {
                     key={side}
                     className="offer-category-status"
                     data-offer={side === 0 ? 'a' : 'b'}
-                    data-status={categoryStatuses[side][category].toLowerCase().replaceAll(' ', '-')}
+                    data-status={categoryStatuses[side][category]
+                      .toLowerCase()
+                      .replaceAll(' ', '-')}
                   >
                     Offer {side === 0 ? 'A' : 'B'}:{' '}
                     {categoryStatuses[side][category]}

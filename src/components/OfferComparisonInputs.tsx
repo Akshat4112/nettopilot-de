@@ -266,6 +266,7 @@ export function OfferComparisonInputs() {
     return (
       <fieldset
         className="offer-card"
+        data-offer={side === 0 ? 'a' : 'b'}
         key={id}
         aria-label={
           category === 'base'
@@ -560,7 +561,12 @@ export function OfferComparisonInputs() {
               <h3>{categoryTitles[category]}</h3>
               <span className="offer-category-statuses">
                 {([0, 1] as const).map((side) => (
-                  <span key={side}>
+                  <span
+                    key={side}
+                    className="offer-category-status"
+                    data-offer={side === 0 ? 'a' : 'b'}
+                    data-status={categoryStatuses[side][category].toLowerCase().replaceAll(' ', '-')}
+                  >
                     Offer {side === 0 ? 'A' : 'B'}:{' '}
                     {categoryStatuses[side][category]}
                   </span>

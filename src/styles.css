@@ -1553,3 +1553,97 @@ main {
     background: var(--np-color-canvas);
   }
 }
+
+/* NP-UX-014: presentation states reflect existing semantics; no synthetic
+   calculating/success state is inferred from unsupported payroll inputs. */
+:where(input, select, textarea):not(:disabled):hover {
+  border-color: var(--np-color-muted);
+}
+
+:is(.np-field, .offer-card) :is(input, select, textarea)[aria-invalid='true'],
+:is(.np-field, .offer-card) :is(input, select, textarea):user-invalid {
+  border-color: var(--np-color-error);
+  box-shadow: inset 0 0 0 1px var(--np-color-error);
+}
+
+:where(input, select, textarea)[aria-invalid='true']:focus-visible {
+  outline-color: var(--np-color-focus);
+  outline-offset: 3px;
+}
+
+:where(input, select, textarea):disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  background: var(--np-color-canvas);
+  border-style: dashed;
+}
+
+:where(button):disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  border: 1px dashed var(--np-color-muted);
+  background: var(--np-color-canvas);
+  color: var(--np-color-muted);
+}
+
+.np-button-primary:not(:disabled):hover {
+  background: var(--np-color-muted);
+}
+
+.np-button-secondary:not(:disabled):hover {
+  border-color: var(--np-color-focus);
+  background: var(--np-color-canvas);
+}
+
+:where(button):not(:disabled):active {
+  box-shadow: inset 0 0 0 2px var(--np-color-muted);
+}
+
+:where(button)[aria-pressed='true'] {
+  font-weight: 750;
+}
+
+:where(button)[aria-busy='true'],
+:where(button)[data-state='calculating'] {
+  cursor: progress;
+}
+
+:where([role='alert'], .np-field-error) {
+  color: var(--np-color-error);
+  overflow-wrap: anywhere;
+}
+
+:where(.np-field, .offer-card) [aria-invalid='true'] {
+  border-color: var(--np-color-error);
+}
+
+:where(.np-panel, .offer-category, .offer-tradeoffs) summary {
+  text-underline-offset: 0.2em;
+}
+
+:where(.np-panel, .offer-category, .offer-tradeoffs) summary:hover {
+  color: var(--np-color-focus);
+}
+
+.offer-category[open] > summary {
+  border-bottom-color: var(--np-color-line);
+}
+
+:where([role='status'][data-state='success'], .np-status-success) {
+  border-left: 4px solid var(--np-color-success);
+}
+
+:where([role='status'][data-state='error'], .np-status-error) {
+  border-left: 4px solid var(--np-color-error);
+}
+
+:where([role='status'], [role='alert']):not(:empty) {
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button, input, select, textarea, summary) {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

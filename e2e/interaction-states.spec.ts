@@ -35,6 +35,9 @@ for (const width of [375, 1280]) {
     await category.locator('summary').click()
     await expect(category).toHaveAttribute('open')
     await category.locator('summary').focus()
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Shift+Tab')
+    await expect(category.locator('summary')).toBeFocused()
     await expect(category.locator('summary')).toHaveCSS(
       'outline-style',
       'solid',

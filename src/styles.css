@@ -1647,3 +1647,45 @@ main {
     animation-duration: 0s !important;
   }
 }
+
+/* NP-UX-004: error recovery remains visible while individual fields change. */
+.salary-corrections {
+  grid-column: 1 / -1;
+  min-width: 0;
+  border: 1px solid var(--np-color-error);
+  border-left-width: 4px;
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+  background: var(--np-color-canvas);
+}
+
+.salary-corrections h3 {
+  margin: 0 0 var(--np-space-2);
+  font-size: 1.1rem;
+}
+
+.salary-corrections p {
+  margin: 0 0 var(--np-space-3);
+  line-height: 1.5;
+}
+
+.salary-corrections ul {
+  margin: 0;
+  padding-inline-start: var(--np-space-6);
+}
+
+.salary-corrections li {
+  margin-block: var(--np-space-2);
+  line-height: 1.5;
+}
+
+.salary-corrections a {
+  color: var(--np-color-focus);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}
+
+.salary-corrections a:hover {
+  color: var(--np-color-ink);
+}

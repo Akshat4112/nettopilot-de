@@ -104,6 +104,19 @@ const examples = [
 
 type Field = keyof EssentialSalaryDraft
 
+const correctionFields: readonly { field: Field; id: string; label: string }[] =
+  [
+    { field: 'gross', id: 'np-gross', label: 'Gross salary' },
+    { field: 'period', id: 'np-period', label: 'Salary frequency' },
+    { field: 'year', id: 'np-year', label: 'Tax year' },
+    { field: 'taxClass', id: 'np-class', label: 'Tax class' },
+    { field: 'federalState', id: 'np-state', label: 'Federal state' },
+    { field: 'churchTax', id: 'np-church', label: 'Church-tax liability' },
+    { field: 'dateOfBirth', id: 'np-birth', label: 'Date of birth' },
+    { field: 'children', id: 'np-children', label: 'Number of children' },
+    { field: 'insurance', id: 'np-insurance', label: 'Health insurance' },
+  ]
+
 export function EssentialSalaryInputs() {
   const sectionRef = useRef<HTMLElement>(null)
   const [focusRequest, setFocusRequest] = useState<{
@@ -136,6 +149,7 @@ export function EssentialSalaryInputs() {
   )
   const [shareUrl, setShareUrl] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [resultFresh, setResultFresh] = useState(false)
   const [resetToken, setResetToken] = useState(0)
   const [advancedErrors, setAdvancedErrors] = useState<readonly string[]>([])
   const [advancedDraft, setAdvancedDraft] =
@@ -151,6 +165,7 @@ export function EssentialSalaryInputs() {
     setFocusRequest({ target: 'reset' })
     setDraft(empty)
     setSubmitted(false)
+    setResultFresh(false)
     setResetToken((previous) => previous + 1)
     setAdvancedErrors([])
     setAdvancedDraft(emptyAdvanced)
@@ -163,7 +178,7 @@ export function EssentialSalaryInputs() {
     setShareUrl('')
     setRestoration({ status: 'none' })
     setDraft((previous) => ({ ...previous, [field]: value }))
-    setSubmitted(false)
+    setResultFresh(false)
     if (field === 'insurance') {
       setResetToken((previous) => previous + 1)
       setAdvancedErrors([])
@@ -176,6 +191,7 @@ export function EssentialSalaryInputs() {
     clearShareUrlFromBrowser()
     setDraft(example)
     setSubmitted(false)
+    setResultFresh(false)
     setResetToken((previous) => previous + 1)
     setAdvancedErrors([])
     setAdvancedDraft(emptyAdvanced)
@@ -185,7 +201,7 @@ export function EssentialSalaryInputs() {
   const errors = [...Object.values(fieldErrors), ...advancedErrors]
   const ready = errors.length === 0
   const calculation =
-    submitted && ready && standardEmploymentConfirmed
+    resultFresh && submitted && ready && standardEmploymentConfirmed
       ? calculateSimpleSalary2026({
           essential: draft,
           advanced: advancedDraft,
@@ -237,10 +253,86 @@ export function EssentialSalaryInputs() {
         onSubmit={(event) => {
           event.preventDefault()
           setSubmitted(true)
+          setResultFresh(true)
           setFocusRequest({ target: 'submit' })
         }}
         noValidate
       >
+        {submitted && (!ready || !standardEmploymentConfirmed) && (
+          <div
+            className="salary-corrections"
+            role="status"
+            aria-label="Corrections needed before calculating"
+          >
+            <h3>Correct these inputs</h3>
+            <p>
+              Fix each item, then choose Check inputs again. Other corrections
+              stay visible.
+            </p>
+            <ul>
+              {correctionFields
+                .filter(({ field }) => Boolean(fieldErrors[field]))
+                .map(({ field, id, label }) => (
+                  <li key={field}>
+                    <a
+                      href={'#' + id}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        focusDestination(
+                          sectionRef.current?.querySelector<HTMLElement>(
+                            '#' + id,
+                          ) ?? null,
+                        )
+                      }}
+                    >
+                      {label}: {fieldErrors[field]}
+                    </a>
+                  </li>
+                ))}
+              {advancedErrors.length > 0 && (
+                <li>
+                  <a
+                    href="#np-advanced-errors"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      const details =
+                        sectionRef.current?.querySelector<HTMLDetailsElement>(
+                          'details.np-panel',
+                        )
+                      if (details === null || details === undefined) return
+                      details.open = true
+                      focusDestination(
+                        details.querySelector<HTMLElement>(
+                          '[aria-invalid="true"]',
+                        ) ?? details.querySelector<HTMLElement>('summary'),
+                      )
+                    }}
+                  >
+                    Advanced settings: {advancedErrors.join(' ')}
+                  </a>
+                </li>
+              )}
+              {!standardEmploymentConfirmed && (
+                <li>
+                  <a
+                    href="#np-standard-employment"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      focusDestination(
+                        sectionRef.current?.querySelector<HTMLElement>(
+                          '#np-standard-employment',
+                        ) ?? null,
+                      )
+                    }}
+                  >
+                    Confirm standard full-year employment assumptions, if
+                    applicable.
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
         <div className="salary-form-intro">
           <h3>Start with your pay</h3>
           <p>
@@ -422,7 +514,7 @@ export function EssentialSalaryInputs() {
           onErrorsChange={setAdvancedErrors}
           onDraftChange={(next) => {
             setAdvancedDraft(next)
-            setSubmitted(false)
+            setResultFresh(false)
           }}
         />
         <div className="np-field">
@@ -434,7 +526,7 @@ export function EssentialSalaryInputs() {
               checked={standardEmploymentConfirmed}
               onChange={(event) => {
                 setStandardEmploymentConfirmed(event.target.checked)
-                setSubmitted(false)
+                setResultFresh(false)
               }}
             />
             I confirm full-year ordinary employment (12 equal payroll months),

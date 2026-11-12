@@ -104,17 +104,18 @@ const examples = [
 
 type Field = keyof EssentialSalaryDraft
 
-const correctionFields: readonly { field: Field; id: string; label: string }[] = [
-  { field: 'gross', id: 'np-gross', label: 'Gross salary' },
-  { field: 'period', id: 'np-period', label: 'Salary frequency' },
-  { field: 'year', id: 'np-year', label: 'Tax year' },
-  { field: 'taxClass', id: 'np-class', label: 'Tax class' },
-  { field: 'federalState', id: 'np-state', label: 'Federal state' },
-  { field: 'churchTax', id: 'np-church', label: 'Church-tax liability' },
-  { field: 'dateOfBirth', id: 'np-birth', label: 'Date of birth' },
-  { field: 'children', id: 'np-children', label: 'Number of children' },
-  { field: 'insurance', id: 'np-insurance', label: 'Health insurance' },
-]
+const correctionFields: readonly { field: Field; id: string; label: string }[] =
+  [
+    { field: 'gross', id: 'np-gross', label: 'Gross salary' },
+    { field: 'period', id: 'np-period', label: 'Salary frequency' },
+    { field: 'year', id: 'np-year', label: 'Tax year' },
+    { field: 'taxClass', id: 'np-class', label: 'Tax class' },
+    { field: 'federalState', id: 'np-state', label: 'Federal state' },
+    { field: 'churchTax', id: 'np-church', label: 'Church-tax liability' },
+    { field: 'dateOfBirth', id: 'np-birth', label: 'Date of birth' },
+    { field: 'children', id: 'np-children', label: 'Number of children' },
+    { field: 'insurance', id: 'np-insurance', label: 'Health insurance' },
+  ]
 
 export function EssentialSalaryInputs() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -264,7 +265,10 @@ export function EssentialSalaryInputs() {
             aria-label="Corrections needed before calculating"
           >
             <h3>Correct these inputs</h3>
-            <p>Fix each item, then choose Check inputs again. Other corrections stay visible.</p>
+            <p>
+              Fix each item, then choose Check inputs again. Other corrections
+              stay visible.
+            </p>
             <ul>
               {correctionFields
                 .filter(({ field }) => Boolean(fieldErrors[field]))
@@ -275,7 +279,9 @@ export function EssentialSalaryInputs() {
                       onClick={(event) => {
                         event.preventDefault()
                         focusDestination(
-                          sectionRef.current?.querySelector<HTMLElement>('#' + id) ?? null,
+                          sectionRef.current?.querySelector<HTMLElement>(
+                            '#' + id,
+                          ) ?? null,
                         )
                       }}
                     >
@@ -296,8 +302,9 @@ export function EssentialSalaryInputs() {
                       if (details === null || details === undefined) return
                       details.open = true
                       focusDestination(
-                        details.querySelector<HTMLElement>('[aria-invalid="true"]') ??
-                          details.querySelector<HTMLElement>('summary'),
+                        details.querySelector<HTMLElement>(
+                          '[aria-invalid="true"]',
+                        ) ?? details.querySelector<HTMLElement>('summary'),
                       )
                     }}
                   >
@@ -318,7 +325,8 @@ export function EssentialSalaryInputs() {
                       )
                     }}
                   >
-                    Confirm standard full-year employment assumptions, if applicable.
+                    Confirm standard full-year employment assumptions, if
+                    applicable.
                   </a>
                 </li>
               )}

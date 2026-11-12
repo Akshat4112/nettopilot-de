@@ -9,16 +9,26 @@ test('NP-UX-004 keeps unresolved errors and links to each correction', async ({
     name: 'Corrections needed before calculating',
   })
   await expect(corrections).toBeVisible()
-  await expect(corrections.getByRole('link', { name: /Gross salary:/ })).toBeVisible()
-  await expect(corrections.getByRole('link', { name: /Tax class:/ })).toBeVisible()
+  await expect(
+    corrections.getByRole('link', { name: /Gross salary:/ }),
+  ).toBeVisible()
+  await expect(
+    corrections.getByRole('link', { name: /Tax class:/ }),
+  ).toBeVisible()
 
   await page.getByLabel('Gross salary (EUR)', { exact: true }).fill('3500')
-  await expect(corrections.getByRole('link', { name: /Gross salary:/ })).toHaveCount(0)
-  await expect(corrections.getByRole('link', { name: /Tax class:/ })).toBeVisible()
+  await expect(
+    corrections.getByRole('link', { name: /Gross salary:/ }),
+  ).toHaveCount(0)
+  await expect(
+    corrections.getByRole('link', { name: /Tax class:/ }),
+  ).toBeVisible()
   await corrections.getByRole('link', { name: /Tax class:/ }).click()
   await expect(page.getByLabel('Tax class', { exact: true })).toBeFocused()
   await page.getByLabel('Tax class', { exact: true }).selectOption('1')
-  await expect(corrections.getByRole('link', { name: /Federal state:/ })).toBeVisible()
+  await expect(
+    corrections.getByRole('link', { name: /Federal state:/ }),
+  ).toBeVisible()
   await expect(
     corrections.getByRole('link', {
       name: /Confirm standard full-year employment assumptions/,
@@ -45,7 +55,9 @@ test('NP-UX-004 targets invalid advanced fields inside a closed section', async 
   await expect(details).toHaveAttribute('open')
   await expect(page.getByLabel('Annual tax allowance (EUR)')).toBeFocused()
   await page.getByLabel('Annual tax allowance (EUR)').fill('')
-  await expect(corrections.getByRole('link', { name: /Advanced settings:/ })).toHaveCount(0)
+  await expect(
+    corrections.getByRole('link', { name: /Advanced settings:/ }),
+  ).toHaveCount(0)
 })
 
 test('NP-UX-004 requires fresh submit after valid input edits', async ({

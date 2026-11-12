@@ -55,8 +55,7 @@ test('NP-UX-014 reduced motion leaves focus and feedback visible', async ({
   await expect(submit).toHaveCSS('outline-style', 'solid')
   await expect(submit).toHaveCSS('transition-duration', '0s')
   await submit.click()
-  await expect(page.getByLabel('Gross salary (EUR)', { exact: true })).toHaveAttribute(
-    'aria-invalid',
-    'true',
-  )
+  await expect(
+    page.getByLabel('Gross salary (EUR)', { exact: true }),
+  ).toHaveAttribute('aria-invalid', 'true')
 })

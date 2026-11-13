@@ -14,7 +14,9 @@ test('reduced-motion preference disables interactive transitions', async ({
   await expect(button).toBeVisible()
   await expect
     .poll(async () =>
-      button.evaluate((element) => getComputedStyle(element).transitionDuration),
+      button.evaluate(
+        (element) => getComputedStyle(element).transitionDuration,
+      ),
     )
     .toMatch(/^(0s)(, 0s)*$/)
 
@@ -56,10 +58,12 @@ test('semantic text tokens retain WCAG AA contrast on calculator surfaces', asyn
   await page.goto('./')
   const combinations = await page.evaluate(() => {
     const root = getComputedStyle(document.documentElement)
-    const token = (name: string) => root.getPropertyValue('--np-color-' + name).trim()
+    const token = (name: string) =>
+      root.getPropertyValue('--np-color-' + name).trim()
     const parseHex = (value: string) =>
-      [1, 3, 5].map((position) =>
-        Number.parseInt(value.slice(position, position + 2), 16) / 255,
+      [1, 3, 5].map(
+        (position) =>
+          Number.parseInt(value.slice(position, position + 2), 16) / 255,
       )
     const luminosity = (hex: string) => {
       const [red, green, blue] = parseHex(hex).map((channel) =>

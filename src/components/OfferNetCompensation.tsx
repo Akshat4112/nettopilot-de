@@ -346,7 +346,7 @@ export function OfferNetCompensation({
         >
           <h4>Current payroll results</h4>
           {result !== null && (
-            <p role="status" aria-atomic="true">
+            <p aria-live="polite" aria-atomic="true">
               Offer payroll results updated.{' '}
               {result.offers
                 .map((offer, index) =>

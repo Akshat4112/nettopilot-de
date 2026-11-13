@@ -46,6 +46,11 @@ describe('NP-CMP-010 comparison payroll', () => {
     expect(
       results.getByText('Estimated recurring net pay is equal.'),
     ).toBeInTheDocument()
+    const announcement = results.getByRole('status')
+    expect(announcement).toHaveAttribute('aria-atomic', 'true')
+    expect(announcement).toHaveTextContent('Offer A annual net:')
+    expect(announcement).toHaveTextContent('Offer B annual net:')
+    expect(announcement).toHaveTextContent('Annual B minus A:')
     expect(results.getByText(/Annual net difference/)).toHaveTextContent(/0.00/)
     await user.type(
       screen.getByRole('textbox', {
@@ -54,6 +59,7 @@ describe('NP-CMP-010 comparison payroll', () => {
       '500',
     )
     expect(results.queryByText(/Annual net difference/)).not.toBeInTheDocument()
+    expect(results.getByRole('status')).toHaveTextContent('Offer A result unavailable.')
     expect(
       within(
         results.getByRole('region', { name: 'Offer A net result' }),

@@ -348,11 +348,13 @@ export function OfferNetCompensation({
           {result !== null && (
             <p role="status" aria-atomic="true">
               Offer payroll results updated.{' '}
-              {result.offers.map((offer, index) =>
-                offer.state === 'calculated'
-                  ? `Offer ${index === 0 ? 'A' : 'B'} annual net: ${euro(offer.annual.netPayrollCents)}.`
-                  : `Offer ${index === 0 ? 'A' : 'B'} result unavailable.`,
-              ).join(' ')}{' '}
+              {result.offers
+                .map((offer, index) =>
+                  offer.state === 'calculated'
+                    ? `Offer ${index === 0 ? 'A' : 'B'} annual net: ${euro(offer.annual.netPayrollCents)}.`
+                    : `Offer ${index === 0 ? 'A' : 'B'} result unavailable.`,
+                )
+                .join(' ')}{' '}
               {result.comparison.state === 'calculated'
                 ? `Annual B minus A: ${euro(result.comparison.annualNetDifferenceCents)}.`
                 : 'Net difference unavailable until both offers are supported.'}

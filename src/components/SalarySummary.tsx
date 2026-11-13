@@ -115,6 +115,15 @@ export function SalarySummary({
       tabIndex={-1}
     >
       <h2 id="salary-summary-heading">Salary summary</h2>
+      {result.state === 'calculated' && (
+        <p role="status" aria-atomic="true">
+          Salary calculation updated for {result.calculationYear}.{' '}
+          {result.recurringMonthlyNetIsStable &&
+          result.recurringMonthlyNetCents !== null
+            ? `Recurring monthly take-home pay: ${euro(result.recurringMonthlyNetCents)}.`
+            : 'Recurring monthly take-home pay varies; review annual totals.'}
+        </p>
+      )}
       {result.state === 'calculated' ? (
         <>
           <section

@@ -51,7 +51,9 @@ describe('NP-CMP-010 comparison payroll', () => {
     expect(announcement).toHaveTextContent('Offer A annual net:')
     expect(announcement).toHaveTextContent('Offer B annual net:')
     expect(announcement).toHaveTextContent('Annual B minus A:')
-    expect(results.getByText(/Annual net difference/)).toHaveTextContent(/0.00/)
+    expect(results.getByText(/Annual net difference/)).toHaveTextContent(
+      /0.00/,
+    )
     await user.type(
       screen.getByRole('textbox', {
         name: 'Offer A expected annual variable pay (EUR)',

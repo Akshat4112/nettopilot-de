@@ -104,6 +104,19 @@ const examples = [
 
 type Field = keyof EssentialSalaryDraft
 
+const correctionFields: readonly { field: Field; id: string; label: string }[] =
+  [
+    { field: 'gross', id: 'np-gross', label: 'Gross salary' },
+    { field: 'period', id: 'np-period', label: 'Salary frequency' },
+    { field: 'year', id: 'np-year', label: 'Tax year' },
+    { field: 'taxClass', id: 'np-class', label: 'Tax class' },
+    { field: 'federalState', id: 'np-state', label: 'Federal state' },
+    { field: 'churchTax', id: 'np-church', label: 'Church-tax liability' },
+    { field: 'dateOfBirth', id: 'np-birth', label: 'Date of birth' },
+    { field: 'children', id: 'np-children', label: 'Number of children' },
+    { field: 'insurance', id: 'np-insurance', label: 'Health insurance' },
+  ]
+
 export function EssentialSalaryInputs() {
   const sectionRef = useRef<HTMLElement>(null)
   const [focusRequest, setFocusRequest] = useState<{
@@ -136,6 +149,7 @@ export function EssentialSalaryInputs() {
   )
   const [shareUrl, setShareUrl] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [resultFresh, setResultFresh] = useState(false)
   const [resetToken, setResetToken] = useState(0)
   const [advancedErrors, setAdvancedErrors] = useState<readonly string[]>([])
   const [advancedDraft, setAdvancedDraft] =
@@ -151,6 +165,7 @@ export function EssentialSalaryInputs() {
     setFocusRequest({ target: 'reset' })
     setDraft(empty)
     setSubmitted(false)
+    setResultFresh(false)
     setResetToken((previous) => previous + 1)
     setAdvancedErrors([])
     setAdvancedDraft(emptyAdvanced)
@@ -163,7 +178,7 @@ export function EssentialSalaryInputs() {
     setShareUrl('')
     setRestoration({ status: 'none' })
     setDraft((previous) => ({ ...previous, [field]: value }))
-    setSubmitted(false)
+    setResultFresh(false)
     if (field === 'insurance') {
       setResetToken((previous) => previous + 1)
       setAdvancedErrors([])
@@ -176,6 +191,7 @@ export function EssentialSalaryInputs() {
     clearShareUrlFromBrowser()
     setDraft(example)
     setSubmitted(false)
+    setResultFresh(false)
     setResetToken((previous) => previous + 1)
     setAdvancedErrors([])
     setAdvancedDraft(emptyAdvanced)
@@ -185,7 +201,7 @@ export function EssentialSalaryInputs() {
   const errors = [...Object.values(fieldErrors), ...advancedErrors]
   const ready = errors.length === 0
   const calculation =
-    submitted && ready && standardEmploymentConfirmed
+    resultFresh && submitted && ready && standardEmploymentConfirmed
       ? calculateSimpleSalary2026({
           essential: draft,
           advanced: advancedDraft,
@@ -237,32 +253,92 @@ export function EssentialSalaryInputs() {
         onSubmit={(event) => {
           event.preventDefault()
           setSubmitted(true)
+          setResultFresh(true)
           setFocusRequest({ target: 'submit' })
         }}
         noValidate
       >
-        <div
-          className="salary-actions"
-          role="group"
-          aria-label="Fictional salary examples"
-        >
+        {submitted && (!ready || !standardEmploymentConfirmed) && (
+          <div
+            className="salary-corrections"
+            role="status"
+            aria-label="Corrections needed before calculating"
+          >
+            <h3>Correct these inputs</h3>
+            <p>
+              Fix each item, then choose Check inputs again. Other corrections
+              stay visible.
+            </p>
+            <ul>
+              {correctionFields
+                .filter(({ field }) => Boolean(fieldErrors[field]))
+                .map(({ field, id, label }) => (
+                  <li key={field}>
+                    <a
+                      href={'#' + id}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        focusDestination(
+                          sectionRef.current?.querySelector<HTMLElement>(
+                            '#' + id,
+                          ) ?? null,
+                        )
+                      }}
+                    >
+                      {label}: {fieldErrors[field]}
+                    </a>
+                  </li>
+                ))}
+              {advancedErrors.length > 0 && (
+                <li>
+                  <a
+                    href="#np-advanced-errors"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      const details =
+                        sectionRef.current?.querySelector<HTMLDetailsElement>(
+                          'details.np-panel',
+                        )
+                      if (details === null || details === undefined) return
+                      details.open = true
+                      focusDestination(
+                        details.querySelector<HTMLElement>(
+                          '[aria-invalid="true"]',
+                        ) ?? details.querySelector<HTMLElement>('summary'),
+                      )
+                    }}
+                  >
+                    Advanced settings: {advancedErrors.join(' ')}
+                  </a>
+                </li>
+              )}
+              {!standardEmploymentConfirmed && (
+                <li>
+                  <a
+                    href="#np-standard-employment"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      focusDestination(
+                        sectionRef.current?.querySelector<HTMLElement>(
+                          '#np-standard-employment',
+                        ) ?? null,
+                      )
+                    }}
+                  >
+                    Confirm standard full-year employment assumptions, if
+                    applicable.
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+        <div className="salary-form-intro">
+          <h3>Start with your pay</h3>
           <p>
-            Try a fictional 2026 example to fill the form. Examples are
-            illustrative, not personalized advice. Selecting one resets advanced
-            inputs and requires a fresh payroll confirmation.
+            Enter gross salary and pay frequency, then confirm your payroll
+            details.
           </p>
-          {examples.map((example) => (
-            <button
-              key={example.id}
-              type="button"
-              className="np-button-secondary"
-              onClick={() => {
-                loadExample(example.draft)
-              }}
-            >
-              Load example: {example.label}
-            </button>
-          ))}
         </div>
         <div
           className="salary-actions"
@@ -364,6 +440,10 @@ export function EssentialSalaryInputs() {
             <option value="2026">2026</option>
           </select>
           {fieldError('year')}
+        </div>
+        <div className="salary-form-divider">
+          <h3>Payroll details</h3>
+          <p>Use the values that apply to your German employment.</p>
         </div>
         <div className="np-field">
           <label htmlFor="np-class">Tax class</label>
@@ -485,7 +565,7 @@ export function EssentialSalaryInputs() {
           onErrorsChange={setAdvancedErrors}
           onDraftChange={(next) => {
             setAdvancedDraft(next)
-            setSubmitted(false)
+            setResultFresh(false)
           }}
         />
         <div className="np-field">
@@ -497,7 +577,7 @@ export function EssentialSalaryInputs() {
               checked={standardEmploymentConfirmed}
               onChange={(event) => {
                 setStandardEmploymentConfirmed(event.target.checked)
-                setSubmitted(false)
+                setResultFresh(false)
               }}
             />
             I confirm full-year ordinary employment (12 equal payroll months),
@@ -529,6 +609,88 @@ export function EssentialSalaryInputs() {
               : errors.join(' ')}
           </div>
         )}
+        <div className="salary-utilities">
+          <h3>More options</h3>
+          <p>
+            Examples and sharing are optional; your salary remains in this
+            browser.
+          </p>
+          <div
+            className="salary-actions"
+            role="group"
+            aria-label="Fictional salary examples"
+          >
+            <p>
+              Try a fictional 2026 example to fill the form. Examples are
+              illustrative, not personalized advice. Selecting one resets
+              advanced inputs and requires a fresh payroll confirmation.
+            </p>
+            {examples.map((example) => (
+              <button
+                key={example.id}
+                type="button"
+                className="np-button-secondary"
+                onClick={() => {
+                  loadExample(example.draft)
+                }}
+              >
+                Load example: {example.label}
+              </button>
+            ))}
+          </div>
+          <div
+            className="salary-actions"
+            role="group"
+            aria-label="Private sharing"
+          >
+            <p>
+              Share only the 2026 year, frequency and selected federal state.
+              Your gross pay, tax class, birth date, church-tax status,
+              children, health insurance and bonuses are never included in the
+              link.
+            </p>
+            <button
+              type="button"
+              className="np-button-secondary"
+              onClick={() => {
+                setShareUrl(
+                  createShareableSalaryUrl(window.location.href, {
+                    year: '2026',
+                    period: draft.period,
+                    ...(draft.federalState
+                      ? { federalState: draft.federalState }
+                      : {}),
+                  }),
+                )
+              }}
+            >
+              Create privacy-safe link
+            </button>
+            {shareUrl !== '' && (
+              <div className="np-field">
+                <label htmlFor="np-share-url">
+                  Private-settings link (select and copy)
+                </label>
+                <input
+                  id="np-share-url"
+                  type="text"
+                  readOnly
+                  value={shareUrl}
+                  onFocus={(event) => {
+                    event.target.select()
+                  }}
+                />
+              </div>
+            )}
+            <button
+              type="button"
+              className="np-button-secondary"
+              onClick={resetAll}
+            >
+              Clear shared settings and reset
+            </button>
+          </div>
+        </div>
       </form>
       {calculation !== null && (
         <SalarySummary

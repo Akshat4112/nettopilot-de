@@ -1125,3 +1125,567 @@ main {
 .offer-comparison-share .offer-actions {
   margin-top: var(--np-space-4);
 }
+
+/* NP-UX-012: make the calculator a calm, form-first workflow. */
+.salary-inputs {
+  width: min(100%, 860px);
+  margin-bottom: var(--np-space-12);
+}
+
+.salary-inputs > h2 {
+  margin-bottom: var(--np-space-2);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.025em;
+}
+
+.salary-inputs > p {
+  max-width: 64ch;
+  margin-top: 0;
+  color: var(--np-color-muted);
+  line-height: 1.55;
+}
+
+.salary-inputs form {
+  gap: var(--np-space-4);
+}
+
+.salary-form-intro,
+.salary-form-divider {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.salary-form-intro {
+  margin-top: var(--np-space-4);
+}
+
+.salary-form-divider {
+  margin-top: var(--np-space-3);
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-6);
+}
+
+.salary-form-intro h3,
+.salary-form-divider h3,
+.salary-utilities h3 {
+  margin: 0;
+  font-size: 1.075rem;
+  line-height: 1.3;
+}
+
+.salary-form-intro p,
+.salary-form-divider p,
+.salary-utilities > p {
+  margin: var(--np-space-2) 0 0;
+  color: var(--np-color-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.salary-gross-field {
+  border: 1px solid var(--np-color-line);
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+  background: var(--np-color-canvas);
+}
+
+.salary-gross-field label {
+  font-weight: 700;
+}
+
+.salary-gross-field input {
+  border-color: var(--np-color-muted);
+  background: var(--np-color-surface);
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.salary-inputs .np-field label {
+  line-height: 1.4;
+}
+
+.salary-inputs .np-field small {
+  line-height: 1.5;
+}
+
+.salary-inputs .salary-actions {
+  gap: var(--np-space-3);
+}
+
+.salary-inputs form > .salary-actions {
+  margin-top: var(--np-space-3);
+}
+
+.salary-inputs form > .salary-actions .np-button-primary {
+  min-width: 12rem;
+  padding-inline: var(--np-space-6);
+}
+
+.salary-utilities {
+  display: block;
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: var(--np-space-6);
+  border-top: 1px solid var(--np-color-line);
+  padding-top: var(--np-space-6);
+}
+
+.salary-utilities > .salary-actions {
+  margin-top: var(--np-space-4);
+}
+
+.salary-utilities .salary-actions {
+  align-items: start;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.salary-utilities .salary-actions > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.salary-utilities .salary-actions p {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--np-color-muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.salary-summary {
+  margin-top: var(--np-space-8);
+  border-color: var(--np-color-line);
+  background: var(--np-color-canvas);
+}
+
+.salary-summary > h2 {
+  margin: 0 0 var(--np-space-4);
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+.salary-recurring-net {
+  border-left: 4px solid var(--np-color-success);
+  border-radius: var(--np-radius-md);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: var(--np-color-surface);
+}
+
+.salary-recurring-net h3 {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+}
+
+.salary-recurring-net > p {
+  color: var(--np-color-muted);
+  line-height: 1.5;
+}
+
+.salary-recurring-net .salary-summary-figures {
+  margin-top: var(--np-space-4);
+}
+
+.salary-recurring-net .salary-summary-figures > div {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.salary-recurring-net .salary-summary-figures dd {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  line-height: 1.15;
+}
+
+.salary-summary > .np-period-toggle {
+  margin-top: var(--np-space-6);
+}
+
+.salary-summary > p {
+  color: var(--np-color-muted);
+  line-height: 1.55;
+}
+
+.salary-summary .salary-summary-figures > div {
+  min-width: 0;
+}
+
+@media screen and (max-width: 620px) {
+  .salary-inputs {
+    padding: var(--np-space-4);
+  }
+
+  .salary-form-divider {
+    padding-top: var(--np-space-4);
+  }
+
+  .salary-gross-field {
+    padding: var(--np-space-3);
+  }
+
+  .salary-utilities {
+    margin-top: var(--np-space-4);
+    padding-top: var(--np-space-4);
+  }
+
+  .salary-utilities .salary-actions {
+    align-items: stretch;
+  }
+
+  .salary-summary {
+    margin-top: var(--np-space-6);
+    padding: var(--np-space-3);
+  }
+
+  .salary-recurring-net {
+    padding: var(--np-space-4);
+  }
+}
+
+/* NP-UX-013: matched, clearly identified offers without implicit ranking. */
+.offer-comparison {
+  width: min(100%, 1080px);
+}
+
+.offer-comparison > h2 {
+  margin: 0 0 var(--np-space-2);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.025em;
+}
+
+.offer-comparison > p {
+  max-width: 72ch;
+  color: var(--np-color-muted);
+  line-height: 1.55;
+}
+
+.offer-comparison .offer-grid {
+  min-width: 0;
+  align-items: stretch;
+}
+
+.offer-comparison .offer-card {
+  min-width: 0;
+  gap: var(--np-space-3);
+  border-width: 1px;
+  border-top-width: 4px;
+  background: var(--np-color-surface);
+}
+
+.offer-comparison .offer-card[data-offer='a'] {
+  border-top-color: var(--np-color-focus);
+}
+
+.offer-comparison .offer-card[data-offer='b'] {
+  border-top-color: var(--np-color-accent);
+}
+
+.offer-comparison .offer-card legend {
+  max-width: 100%;
+  padding-inline: var(--np-space-3);
+  color: var(--np-color-ink);
+  font-size: 1.1rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.offer-comparison .offer-card[data-offer='a'] legend::before,
+.offer-comparison .offer-card[data-offer='b'] legend::before {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: var(--np-space-2);
+  border-radius: 50%;
+  content: '';
+  vertical-align: middle;
+}
+
+.offer-comparison .offer-card[data-offer='a'] legend::before {
+  background: var(--np-color-focus);
+}
+
+.offer-comparison .offer-card[data-offer='b'] legend::before {
+  background: var(--np-color-accent);
+}
+
+.offer-comparison .offer-card .np-field {
+  min-width: 0;
+}
+
+.offer-comparison .offer-card .np-field label {
+  line-height: 1.45;
+}
+
+.offer-comparison .offer-card :is(input, select) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.offer-comparison .offer-card .offer-actions {
+  gap: var(--np-space-2);
+  margin-top: var(--np-space-2);
+}
+
+.offer-comparison .offer-card .offer-actions button {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.offer-optional-categories {
+  display: grid;
+  gap: var(--np-space-3);
+  min-width: 0;
+  margin-block: var(--np-space-6);
+}
+
+.offer-optional-categories .offer-category {
+  margin: 0;
+  background: var(--np-color-surface);
+}
+
+.offer-optional-categories .offer-category > summary {
+  padding: var(--np-space-4) var(--np-space-6);
+  line-height: 1.5;
+}
+
+.offer-optional-categories .offer-category[open] > summary {
+  border-bottom: 1px solid var(--np-color-line);
+  background: var(--np-color-canvas);
+}
+
+.offer-optional-categories .offer-category > summary h3 {
+  font-size: 1.025rem;
+  letter-spacing: -0.01em;
+}
+
+.offer-category-statuses {
+  gap: var(--np-space-2);
+  margin-top: var(--np-space-3);
+}
+
+.offer-category-status {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  border: 1px solid var(--np-color-line);
+  border-radius: 999px;
+  padding: var(--np-space-1) var(--np-space-3);
+  background: var(--np-color-canvas);
+  color: var(--np-color-ink);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.offer-category-status[data-offer='a'] {
+  border-left: 3px solid var(--np-color-focus);
+}
+
+.offer-category-status[data-offer='b'] {
+  border-left: 3px solid var(--np-color-accent);
+}
+
+.offer-category-status[data-status='incomplete'] {
+  border-style: dashed;
+}
+
+.offer-optional-categories .offer-category > .offer-grid {
+  margin: var(--np-space-4);
+}
+
+.offer-comparison-summary-table {
+  line-height: 1.5;
+}
+
+.offer-comparison-summary-table :is(th, td) {
+  padding: var(--np-space-3);
+}
+
+.offer-comparison-summary-table thead th {
+  border-bottom: 2px solid var(--np-color-line);
+  font-weight: 700;
+}
+
+.offer-comparison-summary-table tbody tr:nth-child(even) {
+  background: var(--np-color-canvas);
+}
+
+.offer-comparison-summary-table .offer-summary-number {
+  font-weight: 650;
+}
+
+.offer-tradeoffs details {
+  border-radius: var(--np-radius-md);
+  background: var(--np-color-surface);
+}
+
+.offer-comparison-share {
+  margin-top: var(--np-space-8);
+  background: var(--np-color-canvas);
+}
+
+@media screen and (max-width: 760px) {
+  .offer-comparison .offer-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--np-space-4);
+  }
+
+  .offer-comparison .offer-card {
+    padding: var(--np-space-3);
+  }
+
+  .offer-optional-categories .offer-category > summary {
+    padding: var(--np-space-4);
+  }
+
+  .offer-category-status {
+    max-width: 100%;
+  }
+
+  .offer-optional-categories .offer-category > .offer-grid {
+    margin: var(--np-space-3);
+  }
+
+  .offer-comparison-summary-table tbody tr:nth-child(even) {
+    background: transparent;
+  }
+
+  .offer-comparison-summary-table tbody th {
+    background: var(--np-color-canvas);
+  }
+}
+
+/* NP-UX-014: presentation states reflect existing semantics; no synthetic
+   calculating/success state is inferred from unsupported payroll inputs. */
+:where(input, select, textarea):not(:disabled):hover {
+  border-color: var(--np-color-muted);
+}
+
+:is(.np-field, .offer-card) :is(input, select, textarea)[aria-invalid='true'],
+:is(.np-field, .offer-card) :is(input, select, textarea):user-invalid {
+  border-color: var(--np-color-error);
+  box-shadow: inset 0 0 0 1px var(--np-color-error);
+}
+
+:where(input, select, textarea)[aria-invalid='true']:focus-visible {
+  outline-color: var(--np-color-focus);
+  outline-offset: 3px;
+}
+
+:where(input, select, textarea):disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  background: var(--np-color-canvas);
+  border-style: dashed;
+}
+
+:where(button):disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  border: 1px dashed var(--np-color-muted);
+  background: var(--np-color-canvas);
+  color: var(--np-color-muted);
+}
+
+.np-button-primary:not(:disabled):hover {
+  background: var(--np-color-muted);
+}
+
+.np-button-secondary:not(:disabled):hover {
+  border-color: var(--np-color-focus);
+  background: var(--np-color-canvas);
+}
+
+:where(button):not(:disabled):active {
+  box-shadow: inset 0 0 0 2px var(--np-color-muted);
+}
+
+:where(button)[aria-pressed='true'] {
+  font-weight: 750;
+}
+
+:where(button)[aria-busy='true'],
+:where(button)[data-state='calculating'] {
+  cursor: progress;
+}
+
+:where([role='alert'], .np-field-error) {
+  color: var(--np-color-error);
+  overflow-wrap: anywhere;
+}
+
+:where(.np-field, .offer-card) [aria-invalid='true'] {
+  border-color: var(--np-color-error);
+}
+
+:where(.np-panel, .offer-category, .offer-tradeoffs) summary {
+  text-underline-offset: 0.2em;
+}
+
+:where(.np-panel, .offer-category, .offer-tradeoffs) summary:hover {
+  color: var(--np-color-focus);
+}
+
+.offer-category[open] > summary {
+  border-bottom-color: var(--np-color-line);
+}
+
+:where([role='status'][data-state='success'], .np-status-success) {
+  border-left: 4px solid var(--np-color-success);
+}
+
+:where([role='status'][data-state='error'], .np-status-error) {
+  border-left: 4px solid var(--np-color-error);
+}
+
+:where([role='status'], [role='alert']):not(:empty) {
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button, input, select, textarea, summary) {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+
+/* NP-UX-004: error recovery remains visible while individual fields change. */
+.salary-corrections {
+  grid-column: 1 / -1;
+  min-width: 0;
+  border: 1px solid var(--np-color-error);
+  border-left-width: 4px;
+  border-radius: var(--np-radius-md);
+  padding: var(--np-space-4);
+  background: var(--np-color-canvas);
+}
+
+.salary-corrections h3 {
+  margin: 0 0 var(--np-space-2);
+  font-size: 1.1rem;
+}
+
+.salary-corrections p {
+  margin: 0 0 var(--np-space-3);
+  line-height: 1.5;
+}
+
+.salary-corrections ul {
+  margin: 0;
+  padding-inline-start: var(--np-space-6);
+}
+
+.salary-corrections li {
+  margin-block: var(--np-space-2);
+  line-height: 1.5;
+}
+
+.salary-corrections a {
+  color: var(--np-color-focus);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}
+
+.salary-corrections a:hover {
+  color: var(--np-color-ink);
+}

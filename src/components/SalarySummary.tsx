@@ -110,7 +110,7 @@ export function SalarySummary({
 
   return (
     <section
-      className="np-panel"
+      className="np-panel salary-summary"
       aria-labelledby="salary-summary-heading"
       tabIndex={-1}
     >

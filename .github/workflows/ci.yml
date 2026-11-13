@@ -88,6 +88,15 @@ jobs:
       - name: Run production browser smoke tests
         run: npm run test:e2e
 
+      - name: Upload fictional visual audit baseline screenshots
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: np-ux-011-visual-baseline
+          path: test-results/visual-audit-*/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Upload browser failure artifacts
         if: ${{ failure() }}
         uses: actions/upload-artifact@v7

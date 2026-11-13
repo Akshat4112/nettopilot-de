@@ -59,7 +59,9 @@ describe('NP-CMP-010 comparison payroll', () => {
       '500',
     )
     expect(results.queryByText(/Annual net difference/)).not.toBeInTheDocument()
-    expect(results.getByRole('status')).toHaveTextContent('Offer A result unavailable.')
+    expect(results.getByRole('status')).toHaveTextContent(
+      'Offer A result unavailable.',
+    )
     expect(
       within(
         results.getByRole('region', { name: 'Offer A net result' }),

@@ -71,7 +71,7 @@ test('semantic text tokens retain WCAG AA contrast on calculator surfaces', asyn
           ? channel / 12.92
           : ((channel + 0.055) / 1.055) ** 2.4,
       )
-      return red * 0.2126 + green * 0.7152 + blue * 0.0722
+      return (red ?? 0) * 0.2126 + (green ?? 0) * 0.7152 + (blue ?? 0) * 0.0722
     }
     const ratio = (foreground: string, background: string) => {
       const one = luminosity(token(foreground))

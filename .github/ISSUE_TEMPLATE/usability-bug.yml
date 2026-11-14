@@ -1,0 +1,46 @@
+name: Accessibility or usability bug
+description: Report a reproducible UI, language, keyboard, or screen-reader problem.
+title: "[UX/A11Y] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use fictional inputs only. Remove salary values, names, personal data and URL query parameters from screenshots. Report security issues privately via SECURITY.md.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected workflow
+      options:
+        - Salary calculator
+        - Offer comparison
+        - Methodology / help
+        - Print / export / sharing
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps and expected behavior
+      description: Include keyboard or assistive-technology steps where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and impact
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, OS, viewport and assistive technology
+      placeholder: Safari / macOS / 375px / VoiceOver
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Privacy-safe screenshots or notes
+      description: Never attach real salary or identifying information.

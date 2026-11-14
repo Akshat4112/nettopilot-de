@@ -598,7 +598,6 @@ export function OfferComparisonInputs() {
         offerB={commuteTimeFor(1)}
       />
       <RemoteWorkComparison offerA={remoteFor(0)} offerB={remoteFor(1)} />
-      <InformationalDisclaimer />
       <OfferNetCompensation
         draft={model}
         onCalculate={() => {
@@ -622,6 +621,7 @@ export function OfferComparisonInputs() {
           validateAdditionalPay(additional[1]).length === 0,
         ]}
       />
+      <InformationalDisclaimer />
       {checked && (
         <div className="offer-review">
           <p role="status" aria-label="Optional comparison input review">

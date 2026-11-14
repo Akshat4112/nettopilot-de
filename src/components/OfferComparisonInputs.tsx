@@ -1,3 +1,4 @@
+import { InformationalDisclaimer } from './InformationalDisclaimer'
 import { useState } from 'react'
 import {
   optionalCategoryStatuses,
@@ -597,6 +598,7 @@ export function OfferComparisonInputs() {
         offerB={commuteTimeFor(1)}
       />
       <RemoteWorkComparison offerA={remoteFor(0)} offerB={remoteFor(1)} />
+      <InformationalDisclaimer />
       <OfferNetCompensation
         draft={model}
         onCalculate={() => {

@@ -119,6 +119,8 @@ export function SalarySummary({
         <>
           <section
             className="salary-recurring-net"
+            aria-live="polite"
+            aria-atomic="true"
             aria-labelledby="salary-recurring-net-heading"
           >
             <h3 id="salary-recurring-net-heading">

@@ -66,6 +66,8 @@ describe('SalarySummary', () => {
     const primary = within(summary).getByRole('region', {
       name: 'Recurring monthly take-home pay',
     })
+    expect(primary).toHaveAttribute('aria-live', 'polite')
+    expect(primary).toHaveAttribute('aria-atomic', 'true')
     expect(summary.children[1]).toBe(primary)
     expect(primary).toHaveTextContent(
       'Estimated take-home pay for tax year 2026',

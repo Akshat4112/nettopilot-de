@@ -1,4 +1,5 @@
-import { useLanguage } from '../i18n/context'
+import { useContext } from 'react'
+import { LanguageContext } from '../i18n/context'
 
 const copy = {
   en: {
@@ -14,8 +15,10 @@ const copy = {
 } as const
 
 export function InformationalDisclaimer() {
-  const { locale } = useLanguage()
-  const message = copy[locale]
+  // The disclaimer is also rendered by isolated comparison tests without an app provider.
+  // Default to English only when no language context exists; use the active locale in the app.
+  const language = useContext(LanguageContext)
+  const message = copy[language?.locale ?? 'en']
   return (
     <aside className="notice" aria-label={message.heading}>
       <strong>{message.heading}</strong>

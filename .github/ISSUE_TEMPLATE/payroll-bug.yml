@@ -1,0 +1,52 @@
+name: Payroll calculation bug
+description: Report a reproducible calculation discrepancy using fictional or published reference data.
+title: "[Payroll] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Privacy first:** Do not upload payslips, real salary details, names, tax IDs, screenshots containing personal information, or credentials. Use synthetic or official reference examples only. Do not post security vulnerabilities publicly; follow SECURITY.md.
+  - type: input
+    id: task
+    attributes:
+      label: Related tracker task (if known)
+      placeholder: NP-CALC-...
+  - type: input
+    id: year
+    attributes:
+      label: Calculation year
+      placeholder: "2026"
+    validations:
+      required: true
+  - type: textarea
+    id: synthetic-inputs
+    attributes:
+      label: Synthetic or official reference inputs
+      description: Include pay frequency, fictional gross pay, tax class, state, insurance settings, and any relevant optional settings. Never include personal data.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior and authoritative evidence
+      description: Include a dated official source URL, published reference result, and relevant rounding assumptions when available. Do not assume an annual assessment equals payroll withholding.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and reproduction steps
+      description: Describe observed numbers and steps using only the fictional reference case.
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      placeholder: Firefox 132 / Windows 11
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Privacy-safe evidence
+      description: Attach only redacted or synthetic screenshots; describe whether issue reproduces on the live site or main branch.

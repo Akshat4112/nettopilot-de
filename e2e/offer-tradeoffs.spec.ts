@@ -51,7 +51,7 @@ test('current entered factors stay factual, explainable and private at mobile an
       .getByLabel(`Offer ${side} one-way commute (minutes)`, { exact: true })
       .fill('30')
     await page
-      .getByLabel(`Offer ${side} employer pension annual (EUR)`, {
+      .getByLabel(`Offer ${side} employer occupational pension annual (EUR)`, {
         exact: true,
       })
       .fill(side === 'A' ? '1000' : '1200')
@@ -89,7 +89,7 @@ test('current entered factors stay factual, explainable and private at mobile an
   ).toBeVisible()
   await expect(
     factors.getByText(
-      /^Annual employer pension contribution: B − A: \+€200.00/,
+      /^Annual employer occupational pension contribution: B − A: \+€200.00/,
     ),
   ).toBeVisible()
   const paySummary = factors

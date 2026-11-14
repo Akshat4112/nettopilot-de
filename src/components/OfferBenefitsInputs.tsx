@@ -90,18 +90,19 @@ export function OfferBenefitsInputs({
     <div
       className="offer-benefits"
       role="group"
-      aria-label={label + ' pension and benefits inputs'}
+      aria-label={label + ' occupational pension and benefits inputs'}
       aria-invalid={invalid}
       aria-describedby={description}
     >
-      <h3>Employer pension and benefits</h3>
+      <h3>Employer occupational pension and benefits</h3>
       <p id={id + '-benefits-help'}>
         Optional annual EUR values. Leave unknown amounts blank; enter zero only
-        when confirmed. Pension and benefits remain separate from salary.
+        when confirmed. Occupational pension and benefits stay outside payroll
+        net.
       </p>
       <div className="np-field">
         <label htmlFor={id + '-pension'}>
-          {label} employer pension annual (EUR)
+          {label} employer occupational pension annual (EUR)
         </label>
         <input
           id={id + '-pension'}
@@ -120,7 +121,7 @@ export function OfferBenefitsInputs({
       <CertaintyInput
         id={id + '-pension-certainty'}
         describedBy={description}
-        label={label + ' pension certainty'}
+        label={label + ' occupational pension certainty'}
         value={value.pensionCertainty}
         onChange={(pensionCertainty) => {
           onChange({ ...value, pensionCertainty })
@@ -128,7 +129,7 @@ export function OfferBenefitsInputs({
       />
       <div className="np-field">
         <label htmlFor={id + '-pension-note'}>
-          {label} pension eligibility or vesting note
+          {label} occupational pension eligibility or vesting note
         </label>
         <input
           id={id + '-pension-note'}
@@ -255,11 +256,13 @@ export function OfferBenefitsInputs({
           {label}: {result.reason}
         </p>
       )}
-      <section aria-label={label + ' pension and benefits summary'}>
+      <section
+        aria-label={label + ' occupational pension and benefits summary'}
+      >
         {result.state === 'valid' ? (
           <>
             <p>
-              Employer pension:{' '}
+              Employer occupational pension:{' '}
               {displayMoney(result.employerPension.employerContributionAnnual)}{' '}
               · Certainty: {result.employerPension.certainty}
             </p>
@@ -291,8 +294,8 @@ export function OfferBenefitsInputs({
         )}
         <p>
           Tax treatment is not calculated. Values are shown separately, never
-          added together or included in net pay. Pension is not spendable cash;
-          no investment return is assumed.
+          added together or included in net pay. Occupational pension is not
+          spendable cash; no investment return is assumed.
         </p>
       </section>
     </div>

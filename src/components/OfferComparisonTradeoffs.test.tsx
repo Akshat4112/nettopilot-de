@@ -80,7 +80,7 @@ it('shows a factual primary comparison for every group before details are opened
     /^Annual net after entered commute costs: B − A: \+€6,320.08/,
     /^Effective net after commute cost per hour: B − A: \+€3.28 \/ hour/,
     /^Annual contractual work hours: B − A: −40 hours/,
-    /^Annual employer pension contribution: B − A: \+€100.00/,
+    /^Annual employer occupational pension contribution: B − A: \+€100.00/,
   ])
     expect(screen.getByText(pattern)).toBeVisible()
   const formula = screen.getByText(

@@ -145,7 +145,7 @@ describe('NP-CMP-012 comparison summary', () => {
       row('Remote days per week').getByText('+2 days / week'),
     ).toBeVisible()
     expect(
-      row('Employer pension contribution').getByText('+€100.00'),
+      row('Employer occupational pension contribution').getByText('+€100.00'),
     ).toBeVisible()
     expect(
       row('Employer-stated benefit values').getByText('+€20.01'),
@@ -185,7 +185,7 @@ describe('NP-CMP-012 comparison summary', () => {
       row('Annual contractual work hours').getByText('1,920 hours'),
     ).toBeVisible()
     expect(
-      row('Employer pension contribution').getByText('€1,000.00'),
+      row('Employer occupational pension contribution').getByText('€1,000.00'),
     ).toBeVisible()
     expect(
       row('Effective net after commute cost per hour').getAllByText(
@@ -225,7 +225,9 @@ describe('NP-CMP-012 comparison summary', () => {
     ).not.toBeInTheDocument()
     expect(row('Remote days per week').getByText('Not supplied')).toBeVisible()
     expect(
-      row('Employer pension contribution').getByText('Not supplied'),
+      row('Employer occupational pension contribution').getByText(
+        'Not supplied',
+      ),
     ).toBeVisible()
   })
 
@@ -342,10 +344,12 @@ describe('NP-CMP-012 comparison summary', () => {
       />,
     )
     expect(
-      row('Employer pension contribution').getAllByText('Unavailable'),
+      row('Employer occupational pension contribution').getAllByText(
+        'Unavailable',
+      ),
     ).toHaveLength(2)
     expect(
-      row('Employer pension contribution').getByText('€0.00'),
+      row('Employer occupational pension contribution').getByText('€0.00'),
     ).toBeVisible()
     expect(
       row('Employer-stated benefit values').getByText('€100.01'),
@@ -400,7 +404,7 @@ describe('NP-CMP-012 comparison summary', () => {
     const { rerender } = render(
       <OfferComparisonSummary {...data} benefits={pensionEntries} />,
     )
-    const pension = row('Employer pension contribution')
+    const pension = row('Employer occupational pension contribution')
     expect(pension.getByText('€90,071,992,547,409.90')).toBeVisible()
     expect(pension.getByText('€90,071,992,547,409.91')).toBeVisible()
     expect(pension.getByText('+€0.01')).toBeVisible()

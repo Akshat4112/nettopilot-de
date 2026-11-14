@@ -133,7 +133,7 @@ test.describe('product-flow smoke contracts', () => {
         .fill('30')
     }
     await page
-      .getByLabel('Offer A employer pension annual (EUR)')
+      .getByLabel('Offer A employer occupational pension annual (EUR)')
       .fill('1200.05')
     await page.getByRole('button', { name: 'Add benefit to Offer A' }).click()
     await page
@@ -180,10 +180,12 @@ test.describe('product-flow smoke contracts', () => {
     const net = table.getByRole('row', { name: /^Annual base-pay net/ })
     const originalNet = await net.innerText()
     await page
-      .getByLabel('Offer A employer pension annual (EUR)')
+      .getByLabel('Offer A employer occupational pension annual (EUR)')
       .fill('90071992547409.91')
     await expect(
-      table.getByRole('row', { name: /^Employer pension contribution/ }),
+      table.getByRole('row', {
+        name: /^Employer occupational pension contribution/,
+      }),
     ).toContainText('€90,071,992,547,409.91')
     expect(await net.innerText()).toBe(originalNet)
     expect(
@@ -214,7 +216,7 @@ test.describe('product-flow smoke contracts', () => {
         .getByText('Offer B', { exact: true }),
     ).toBeVisible()
     const pensionAmount = table
-      .getByRole('row', { name: /^Employer pension contribution/ })
+      .getByRole('row', { name: /^Employer occupational pension contribution/ })
       .getByText('€90,071,992,547,409.91', { exact: true })
     expect(
       await pensionAmount.evaluate((amount) => {
@@ -242,7 +244,7 @@ test.describe('product-flow smoke contracts', () => {
     })
     for (const pension of ['90071992547409.90', '45035996273704.95']) {
       await page
-        .getByLabel('Offer B employer pension annual (EUR)')
+        .getByLabel('Offer B employer occupational pension annual (EUR)')
         .fill(pension)
       for (const width of [621, 768]) {
         await page.setViewportSize({ width, height: 900 })

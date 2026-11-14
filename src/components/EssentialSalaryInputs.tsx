@@ -340,7 +340,58 @@ export function EssentialSalaryInputs() {
             details.
           </p>
         </div>
-        <div className="np-field salary-gross-field">
+        <div
+          className="salary-actions"
+          role="group"
+          aria-label="Private sharing"
+        >
+          <p>
+            Share only the 2026 year, frequency and selected federal state. Your
+            gross pay, tax class, birth date, church-tax status, children,
+            health insurance and bonuses are never included in the link.
+          </p>
+          <button
+            type="button"
+            className="np-button-secondary"
+            onClick={() => {
+              setShareUrl(
+                createShareableSalaryUrl(window.location.href, {
+                  year: '2026',
+                  period: draft.period,
+                  ...(draft.federalState
+                    ? { federalState: draft.federalState }
+                    : {}),
+                }),
+              )
+            }}
+          >
+            Create privacy-safe link
+          </button>
+          {shareUrl !== '' && (
+            <div className="np-field">
+              <label htmlFor="np-share-url">
+                Shareable settings link (select and copy)
+              </label>
+              <input
+                id="np-share-url"
+                type="text"
+                readOnly
+                value={shareUrl}
+                onFocus={(event) => {
+                  event.target.select()
+                }}
+              />
+            </div>
+          )}
+          <button
+            type="button"
+            className="np-button-secondary"
+            onClick={resetAll}
+          >
+            Clear shared settings and reset
+          </button>
+        </div>
+        <div className="np-field">
           <label htmlFor="np-gross">Gross salary (EUR)</label>
           <input
             id="np-gross"
@@ -375,7 +426,7 @@ export function EssentialSalaryInputs() {
           {fieldError('period')}
         </div>
         <div className="np-field">
-          <label htmlFor="np-year">Tax year</label>
+          <label htmlFor="np-year">Calculation year</label>
           <select
             id="np-year"
             aria-invalid={submitted && Boolean(fieldErrors.year)}

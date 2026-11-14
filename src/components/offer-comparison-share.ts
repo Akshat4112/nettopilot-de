@@ -59,7 +59,7 @@ const rows: readonly ShareRow[] = [
     format: formatComparisonWeeklyDays,
   },
   {
-    label: 'Employer pension contribution — annual',
+    label: 'Employer occupational pension contribution — annual',
     metric: 'pension',
     format: formatComparisonEuro,
   },
@@ -116,7 +116,7 @@ export function formatOfferComparisonShareText(
     '',
     'Basis: admitted 2026 recurring base-pay estimates; annual work and commute',
     'follow the 52-week/paid-vacation model. Additional compensation may be',
-    'unsupported. Pension and benefit values stay separate from payroll net.',
+    'unsupported. Occupational pension and benefit values stay outside payroll net.',
     'Remote allowances and home-office expenses are excluded from net amounts.',
     'Sharing this text reveals the figures above. It does not include the',
     'underlying birth date, tax class, or health-insurance profile.',

@@ -83,7 +83,9 @@ describe('NP-UX-008 one comparison calculation action', () => {
       '40',
     )
     await user.type(
-      screen.getByLabelText('Offer A employer pension annual (EUR)'),
+      screen.getByLabelText(
+        'Offer A employer occupational pension annual (EUR)',
+      ),
       '-1',
     )
     await user.click(
@@ -93,7 +95,7 @@ describe('NP-UX-008 one comparison calculation action', () => {
       screen.getByLabelText('Offer A working time and vacation'),
     ).toHaveAttribute('aria-invalid', 'true')
     expect(
-      screen.getByLabelText('Offer A pension and benefits inputs'),
+      screen.getByLabelText('Offer A occupational pension and benefits inputs'),
     ).toHaveAttribute('aria-invalid', 'true')
     expect(offerResult('A')).toHaveTextContent(
       'Estimated annual recurring net pay',
@@ -105,7 +107,9 @@ describe('NP-UX-008 one comparison calculation action', () => {
       screen.getByRole('region', { name: 'Offer comparison summary' }),
     )
     expect(
-      summary.getByRole('row', { name: /^Employer pension contribution/ }),
+      summary.getByRole('row', {
+        name: /^Employer occupational pension contribution/,
+      }),
     ).toHaveTextContent('Unavailable')
     expect(
       summary.getByRole('row', { name: /^Annual contractual work hours/ }),

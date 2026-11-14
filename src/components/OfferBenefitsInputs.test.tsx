@@ -11,20 +11,26 @@ describe('NP-CMP-009 pension and benefits', () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
     await openOfferCategories(user, 'Pension and benefits')
     await user.type(
-      screen.getByLabelText('Offer A employer pension annual (EUR)'),
+      screen.getByLabelText(
+        'Offer A employer occupational pension annual (EUR)',
+      ),
       '1200.05',
     )
     await user.selectOptions(
-      screen.getByLabelText('Offer A pension certainty'),
+      screen.getByLabelText('Offer A occupational pension certainty'),
       'conditional',
     )
     await user.type(
-      screen.getByLabelText('Offer A pension eligibility or vesting note'),
+      screen.getByLabelText(
+        'Offer A occupational pension eligibility or vesting note',
+      ),
       'After probation',
     )
     await user.click(
       within(
-        screen.getByLabelText('Offer A pension and benefits inputs'),
+        screen.getByLabelText(
+          'Offer A occupational pension and benefits inputs',
+        ),
       ).getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
@@ -45,9 +51,11 @@ describe('NP-CMP-009 pension and benefits', () => {
     )
     const summary = within(
       within(
-        screen.getByLabelText('Offer A pension and benefits inputs'),
+        screen.getByLabelText(
+          'Offer A occupational pension and benefits inputs',
+        ),
       ).getByRole('region', {
-        name: 'Offer A pension and benefits summary',
+        name: 'Offer A occupational pension and benefits summary',
       }),
     )
     expect(summary.getByText(/1,200.05/)).toBeInTheDocument()
@@ -62,16 +70,20 @@ describe('NP-CMP-009 pension and benefits', () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
     await openOfferCategories(user, 'Pension and benefits')
     await user.selectOptions(
-      screen.getByLabelText('Offer A pension certainty'),
+      screen.getByLabelText('Offer A occupational pension certainty'),
       'conditional',
     )
     await user.type(
-      screen.getByLabelText('Offer A pension eligibility or vesting note'),
+      screen.getByLabelText(
+        'Offer A occupational pension eligibility or vesting note',
+      ),
       'After probation',
     )
     await user.click(
       within(
-        screen.getByLabelText('Offer A pension and benefits inputs'),
+        screen.getByLabelText(
+          'Offer A occupational pension and benefits inputs',
+        ),
       ).getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
@@ -88,11 +100,13 @@ describe('NP-CMP-009 pension and benefits', () => {
       'Training',
     )
     expect(
-      screen.getByLabelText('Offer B pension eligibility or vesting note'),
+      screen.getByLabelText(
+        'Offer B occupational pension eligibility or vesting note',
+      ),
     ).toHaveValue('After probation')
-    expect(screen.getByLabelText('Offer B pension certainty')).toHaveValue(
-      'conditional',
-    )
+    expect(
+      screen.getByLabelText('Offer B occupational pension certainty'),
+    ).toHaveValue('conditional')
     await user.clear(screen.getByLabelText('Offer B benefit 1 label'))
     await user.type(
       screen.getByLabelText('Offer B benefit 1 label'),
@@ -107,12 +121,16 @@ describe('NP-CMP-009 pension and benefits', () => {
     const { user } = renderWithUser(<OfferComparisonInputs />)
     await openOfferCategories(user, 'Pension and benefits')
     await user.type(
-      screen.getByLabelText('Offer A employer pension annual (EUR)'),
+      screen.getByLabelText(
+        'Offer A employer occupational pension annual (EUR)',
+      ),
       '1200.05',
     )
     await user.click(
       within(
-        screen.getByLabelText('Offer A pension and benefits inputs'),
+        screen.getByLabelText(
+          'Offer A occupational pension and benefits inputs',
+        ),
       ).getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
@@ -135,20 +153,26 @@ describe('NP-CMP-009 pension and benefits', () => {
       screen.queryByLabelText('Offer B benefit 1 label'),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByLabelText('Offer B employer pension annual (EUR)'),
+      screen.getByLabelText(
+        'Offer B employer occupational pension annual (EUR)',
+      ),
     ).toHaveValue('')
     expect(
       within(
         within(
-          screen.getByLabelText('Offer B pension and benefits inputs'),
+          screen.getByLabelText(
+            'Offer B occupational pension and benefits inputs',
+          ),
         ).getByRole('region', {
-          name: 'Offer B pension and benefits summary',
+          name: 'Offer B occupational pension and benefits summary',
         }),
-      ).getByText(/Employer pension: Not specified/),
+      ).getByText(/Employer occupational pension: Not specified/),
     ).toBeInTheDocument()
     await user.click(
       within(
-        screen.getByLabelText('Offer A pension and benefits inputs'),
+        screen.getByLabelText(
+          'Offer A occupational pension and benefits inputs',
+        ),
       ).getByRole('button', { name: 'Remove Offer A benefit 1' }),
     )
     expect(
@@ -166,7 +190,9 @@ describe('NP-CMP-009 pension and benefits', () => {
       )
     await user.click(
       within(
-        screen.getByLabelText('Offer A pension and benefits inputs'),
+        screen.getByLabelText(
+          'Offer A occupational pension and benefits inputs',
+        ),
       ).getByRole('button', { name: 'Add benefit to Offer A' }),
     )
     await user.type(
@@ -197,9 +223,11 @@ describe('NP-CMP-009 pension and benefits', () => {
     )
     const summary = within(
       within(
-        screen.getByLabelText('Offer A pension and benefits inputs'),
+        screen.getByLabelText(
+          'Offer A occupational pension and benefits inputs',
+        ),
       ).getByRole('region', {
-        name: 'Offer A pension and benefits summary',
+        name: 'Offer A occupational pension and benefits summary',
       }),
     )
     expect(

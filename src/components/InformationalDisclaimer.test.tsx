@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { LanguageContext, type LanguageContextValue } from '../i18n/context'
 import { renderWithUser } from '../test/render'
 import { InformationalDisclaimer } from './InformationalDisclaimer'
@@ -7,7 +7,7 @@ import { InformationalDisclaimer } from './InformationalDisclaimer'
 function renderDisclaimer(locale: 'en' | 'de') {
   const language = {
     locale,
-    setLocale: () => {},
+    setLocale: vi.fn(),
     t: () => '',
     term: () => '',
   } as LanguageContextValue

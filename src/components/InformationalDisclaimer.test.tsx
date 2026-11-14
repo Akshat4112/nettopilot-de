@@ -32,10 +32,16 @@ describe('InformationalDisclaimer', () => {
       body: 'keine offizielle Gehaltsabrechnung',
       link: 'Berechnungsmethode und Einschränkungen lesen',
     },
-  ])('shows an accessible $locale disclaimer and methodology link', ({ locale, heading, body, link }) => {
-    renderDisclaimer(locale)
-    const notice = screen.getByRole('complementary', { name: heading })
-    expect(notice).toHaveTextContent(body)
-    expect(screen.getByRole('link', { name: link })).toHaveAttribute('href', '#methodology')
-  })
+  ])(
+    'shows an accessible $locale disclaimer and methodology link',
+    ({ locale, heading, body, link }) => {
+      renderDisclaimer(locale)
+      const notice = screen.getByRole('complementary', { name: heading })
+      expect(notice).toHaveTextContent(body)
+      expect(screen.getByRole('link', { name: link })).toHaveAttribute(
+        'href',
+        '#methodology',
+      )
+    },
+  )
 })

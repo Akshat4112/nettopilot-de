@@ -21,7 +21,9 @@ function renderDisclaimer(locale: 'en' | 'de') {
 describe('InformationalDisclaimer', () => {
   it('renders a safe English fallback in isolated result views without a language provider', () => {
     renderWithUser(<InformationalDisclaimer />)
-    expect(screen.getByRole('complementary', { name: 'About these estimates' })).toHaveTextContent('not an official payslip')
+    expect(
+      screen.getByRole('complementary', { name: 'About these estimates' }),
+    ).toHaveTextContent('not an official payslip')
   })
 
   it.each([

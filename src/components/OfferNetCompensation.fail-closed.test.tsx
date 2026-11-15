@@ -64,9 +64,10 @@ describe('NP-QA-022 one-sided payroll admission', () => {
       const monthlyDifference = results.queryByText(/Monthly net difference/)
       expect(annualDifference).not.toBeInTheDocument()
       expect(monthlyDifference).not.toBeInTheDocument()
-      expect(
-        results.getByText(/A net-pay difference is unavailable until both offers/),
-      ).toBeInTheDocument()
+      const unavailableDifference = results.getByText(
+        /A net-pay difference is unavailable until both offers/,
+      )
+      expect(unavailableDifference).toBeInTheDocument()
 
       await user.clear(blockedInput)
       await user.type(blockedInput, '48000')

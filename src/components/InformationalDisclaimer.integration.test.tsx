@@ -17,12 +17,18 @@ describe('NP-TRUST-004 result-journey integration', () => {
     expect(disclaimer).toContainElement(
       screen.getByRole('link', { name: 'Read calculation methodology and limitations' }),
     )
-    expect(calculate.compareDocumentPosition(disclaimer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(container.querySelectorAll('aside[aria-label="About these estimates"]')).toHaveLength(1)
+    expect(
+      calculate.compareDocumentPosition(disclaimer) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+    expect(
+      container.querySelectorAll('aside[aria-label="About these estimates"]'),
+    ).toHaveLength(1)
   })
 
   it('does not show the salary-results disclaimer before a calculation', () => {
     renderWithUser(<EssentialSalaryInputs />)
-    expect(screen.queryByRole('complementary', { name: 'About these estimates' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('complementary', { name: 'About these estimates' }),
+    ).not.toBeInTheDocument()
   })
 })

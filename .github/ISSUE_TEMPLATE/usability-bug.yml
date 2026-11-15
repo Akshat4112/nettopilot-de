@@ -44,3 +44,11 @@ body:
     attributes:
       label: Privacy-safe screenshots or notes
       description: Never attach real salary or identifying information.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      description: Confirm that your report and any attachments contain no personal payroll data or private security details.
+      options:
+        - label: I used only fictional or public reference data and removed identifying details and sensitive URL parameters from attachments.
+          required: true

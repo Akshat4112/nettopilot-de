@@ -60,8 +60,10 @@ describe('NP-QA-022 one-sided payroll admission', () => {
           name: `Offer ${blockedSide} net result`,
         }),
       ).toHaveTextContent('unavailable')
-      expect(results.queryByText(/Annual net difference/)).not.toBeInTheDocument()
-      expect(results.queryByText(/Monthly net difference/)).not.toBeInTheDocument()
+      const annualDifference = results.queryByText(/Annual net difference/)
+      const monthlyDifference = results.queryByText(/Monthly net difference/)
+      expect(annualDifference).not.toBeInTheDocument()
+      expect(monthlyDifference).not.toBeInTheDocument()
       expect(
         results.getByText(/A net-pay difference is unavailable until both offers/),
       ).toBeInTheDocument()
@@ -124,8 +126,10 @@ describe('NP-QA-022 one-sided payroll admission', () => {
           name: `Offer ${blockedSide} net result`,
         }),
       ).toHaveTextContent('unavailable')
-      expect(results.queryByText(/Annual net difference/)).not.toBeInTheDocument()
-      expect(results.queryByText(/Monthly net difference/)).not.toBeInTheDocument()
+      const annualDifference = results.queryByText(/Annual net difference/)
+      const monthlyDifference = results.queryByText(/Monthly net difference/)
+      expect(annualDifference).not.toBeInTheDocument()
+      expect(monthlyDifference).not.toBeInTheDocument()
       await user.clear(payment)
       expect(results.getByText(/Annual net difference/)).toBeInTheDocument()
     },

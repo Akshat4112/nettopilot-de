@@ -6,7 +6,7 @@ import { OfferComparisonInputs } from './OfferComparisonInputs'
 
 describe('NP-TRUST-004 result-journey integration', () => {
   it('keeps the disclaimer next to the comparison calculation area', () => {
-    const { container } = renderWithUser(<OfferComparisonInputs />)
+    renderWithUser(<OfferComparisonInputs />)
     const disclaimer = screen.getByRole('complementary', {
       name: 'About these estimates',
     })
@@ -17,7 +17,7 @@ describe('NP-TRUST-004 result-journey integration', () => {
       name: /Read calculation methodology/,
     })
     const documentOrder = calculate.compareDocumentPosition(disclaimer)
-    const notices = container.querySelectorAll('aside[aria-label="About these estimates"]')
+    const notices = screen.getAllByRole('complementary')
 
     expect(disclaimer).toHaveTextContent('not an official payslip')
     expect(disclaimer).toContainElement(methodologyLink)

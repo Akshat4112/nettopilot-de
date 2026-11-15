@@ -1,10 +1,8 @@
-import { readFileSync } from 'node:fs'
+import readme from '../README.md?raw'
+import app from './App.tsx?raw'
 import { describe, expect, it } from 'vitest'
 
 describe('README project-status accuracy', () => {
-  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8')
-  const app = readFileSync(new URL('./App.tsx', import.meta.url), 'utf8')
-
   it('describes the implemented preview without claiming foundation-only status', () => {
     expect(readme).toContain('Public preview, not a completed v1 release')
     expect(readme).not.toContain('calculator flows will be added')

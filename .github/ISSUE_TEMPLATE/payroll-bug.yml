@@ -50,3 +50,11 @@ body:
     attributes:
       label: Privacy-safe evidence
       description: Attach only redacted or synthetic screenshots; describe whether issue reproduces on the live site or main branch.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      description: Confirm that the report contains no personal payroll data or security vulnerability details.
+      options:
+        - label: I used only fictional or public reference data and removed identifying details from all attachments.
+          required: true

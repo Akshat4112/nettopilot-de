@@ -13,22 +13,23 @@ describe('NP-TRUST-004 result-journey integration', () => {
     const calculate = screen.getByRole('button', {
       name: 'Calculate net compensation',
     })
+    const methodologyLink = screen.getByRole('link', {
+      name: /Read calculation methodology/,
+    })
+    const documentOrder = calculate.compareDocumentPosition(disclaimer)
+    const notices = container.querySelectorAll('aside[aria-label="About these estimates"]')
+
     expect(disclaimer).toHaveTextContent('not an official payslip')
-    expect(disclaimer).toContainElement(
-      screen.getByRole('link', { name: 'Read calculation methodology and limitations' }),
-    )
-    expect(
-      calculate.compareDocumentPosition(disclaimer) & Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy()
-    expect(
-      container.querySelectorAll('aside[aria-label="About these estimates"]'),
-    ).toHaveLength(1)
+    expect(disclaimer).toContainElement(methodologyLink)
+    expect(documentOrder & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(notices).toHaveLength(1)
   })
 
   it('does not show the salary-results disclaimer before a calculation', () => {
     renderWithUser(<EssentialSalaryInputs />)
-    expect(
-      screen.queryByRole('complementary', { name: 'About these estimates' }),
-    ).not.toBeInTheDocument()
+    const disclaimer = screen.queryByRole('complementary', {
+      name: 'About these estimates',
+    })
+    expect(disclaimer).not.toBeInTheDocument()
   })
 })

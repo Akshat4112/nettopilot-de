@@ -7,25 +7,13 @@ for (const blockedSide of ['A', 'B'] as const) {
   }) => {
     await page.goto('./')
     for (const side of ['A', 'B']) {
-      await page
-        .getByRole('textbox', { name: `Offer ${side} gross salary (EUR)` })
-        .fill('48000')
+      await page.getByRole('textbox', { name: `Offer ${side} gross salary (EUR)` }).fill('48000')
     }
-    await page
-      .getByRole('combobox', { name: 'Comparison tax class' })
-      .selectOption('1')
-    await page
-      .getByRole('combobox', { name: 'Comparison federal state' })
-      .selectOption('DE-BW')
-    await page
-      .getByLabel('Comparison date of birth', { exact: true })
-      .fill('1990-01-01')
-    await page
-      .getByLabel(/Confirm shared standard payroll assumptions/)
-      .check()
-    await page
-      .getByRole('button', { name: 'Calculate net compensation' })
-      .click()
+    await page.getByRole('combobox', { name: 'Comparison tax class' }).selectOption('1')
+    await page.getByRole('combobox', { name: 'Comparison federal state' }).selectOption('DE-BW')
+    await page.getByLabel('Comparison date of birth', { exact: true }).fill('1990-01-01')
+    await page.getByLabel(/Confirm shared standard payroll assumptions/).check()
+    await page.getByRole('button', { name: 'Calculate net compensation' }).click()
 
     const results = page.getByRole('region', {
       name: 'Offer net compensation results',
@@ -58,25 +46,13 @@ for (const blockedSide of ['A', 'B'] as const) {
     await page.goto('./')
     await openOfferCategories(page, 'Cash compensation')
     for (const side of ['A', 'B']) {
-      await page
-        .getByRole('textbox', { name: `Offer ${side} gross salary (EUR)` })
-        .fill('48000')
+      await page.getByRole('textbox', { name: `Offer ${side} gross salary (EUR)` }).fill('48000')
     }
-    await page
-      .getByRole('combobox', { name: 'Comparison tax class' })
-      .selectOption('1')
-    await page
-      .getByRole('combobox', { name: 'Comparison federal state' })
-      .selectOption('DE-BW')
-    await page
-      .getByLabel('Comparison date of birth', { exact: true })
-      .fill('1990-01-01')
-    await page
-      .getByLabel(/Confirm shared standard payroll assumptions/)
-      .check()
-    await page
-      .getByRole('button', { name: 'Calculate net compensation' })
-      .click()
+    await page.getByRole('combobox', { name: 'Comparison tax class' }).selectOption('1')
+    await page.getByRole('combobox', { name: 'Comparison federal state' }).selectOption('DE-BW')
+    await page.getByLabel('Comparison date of birth', { exact: true }).fill('1990-01-01')
+    await page.getByLabel(/Confirm shared standard payroll assumptions/).check()
+    await page.getByRole('button', { name: 'Calculate net compensation' }).click()
 
     const results = page.getByRole('region', {
       name: 'Offer net compensation results',

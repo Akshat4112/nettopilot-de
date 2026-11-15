@@ -1,3 +1,4 @@
+import { InformationalDisclaimer } from './InformationalDisclaimer'
 import { useState } from 'react'
 import {
   optionalCategoryStatuses,
@@ -620,6 +621,7 @@ export function OfferComparisonInputs() {
           validateAdditionalPay(additional[1]).length === 0,
         ]}
       />
+      <InformationalDisclaimer />
       {checked && (
         <div className="offer-review">
           <p role="status" aria-label="Optional comparison input review">

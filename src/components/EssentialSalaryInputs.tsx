@@ -1,3 +1,4 @@
+import { InformationalDisclaimer } from './InformationalDisclaimer'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { focusDestination } from './focus-destination'
 import { AdvancedSalaryInputs } from './AdvancedSalaryInputs'
@@ -642,11 +643,14 @@ export function EssentialSalaryInputs() {
         </div>
       </form>
       {calculation !== null && (
-        <SalarySummary
-          result={calculation}
-          inputs={draft}
-          advancedInputs={advancedDraft}
-        />
+        <>
+          <SalarySummary
+            result={calculation}
+            inputs={draft}
+            advancedInputs={advancedDraft}
+          />
+          <InformationalDisclaimer />
+        </>
       )}
     </section>
   )

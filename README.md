@@ -9,9 +9,19 @@ NettoPilot DE is designed to help employees and job seekers understand what a gr
 
 ## Project status
 
-The project has entered engineering foundation work. A strict React, TypeScript
-and Vite application shell is available; calculation rules and user-facing
-calculator flows will be added through reviewed, task-scoped changes.
+**Public preview, not a completed v1 release.** The React/TypeScript app on
+GitHub Pages currently includes a 2026 German gross-to-net salary calculator,
+annual and monthly payroll breakdowns, and an A/B offer-comparison journey with
+salary, benefits and effective-hourly trade-offs. Unsupported inputs are
+identified rather than silently presented as valid payroll estimates.
+
+English and German can be selected in the interface; some German content is
+still being translated. Calculations are educational estimates with documented
+scope limits, not a final income-tax assessment or personalized advice. Review
+the [employment scope](docs/product/NP-PD-003-v1-employment-scope.md),
+[calculation methodology](docs/research/NP-RS-002-bmf-payroll-tax-algorithm.md)
+and [privacy model](docs/product/NP-PD-007-privacy-model.md) before relying on
+results. The public preview is not a claim of full feature or language parity.
 
 ## Product principles
 
